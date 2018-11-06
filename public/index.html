@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Dig In</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="jquery-3.3.1.min.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <script src="js/bootstrap.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.10/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.10/angular-route.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.10/angular-cookies.js"></script>
+  <script src="app.js"></script>
+  <script src="register.js"></script>
+  <script src="login.js"></script>
+  <script src="restaurants.js"></script>
+  <script src="menu.js"></script>
+  <script src="restservice.js"></script>
+  <script src="sharedservice.js"></script>
+
+  <style>
+    /* Remove the navbar's default rounded borders and increase the bottom margin */ 
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+    
+  </style>
+</head>
+
+<body ng-app="app" ng-controller="ctrl" data-ng-init="init()">
+
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark ">
+    <a class="navbar-brand" href="#">Dig In</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="navbar-nav">
+        <li class="nav-item active"><a class="nav-link" href="#/restaurants">Home</a></li>
+      </ul>
+      <ul class="navbar-nav ml-auto justify-content-end" ng-hide="loggedin">
+        <li class="nav-item"><a class="nav-link" href="#/login"><span class="fa fa-sign-in"></span> Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="#/register"><span class="fa fa-user"></span> Register</a></li>
+
+      </ul>
+      <ul class="navbar-nav ml-auto justify-content-end" ng-show="loggedin">
+
+        <li class="nav-item"><a class="nav-link" href="#" ng-click="logout()"><span class="glyphicon glyphicon-sign-out"></span> Logout</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-shopping-cart"></span> Cart</a></li>
+
+      </ul>
+    </div>
+
+  </nav>
+
+  <div class="container">
+    <div ng-view>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>

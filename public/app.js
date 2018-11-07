@@ -57,7 +57,7 @@ angular.module('app', ['ngRoute', 'ngCookies'])
             }
         }
         $scope.logout = function () {
-            $cookies.remove('usr');
+            
             shared.logout();
             $location.path('/')
         }

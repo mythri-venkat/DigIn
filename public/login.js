@@ -3,8 +3,8 @@ angular.module('app').controller('loginctrl', ['$scope','$location','$cookies','
     $scope.password="";
     $scope.login = function(){
         var usr = {username:$scope.username};
-        $cookies.putObject('usr',usr);
-        shared.login();
+        
+        shared.login(usr);
         alert("Login Successful");
         $location.path('/');
     }

@@ -6,7 +6,6 @@ angular.module('app')
 
             var observelogin = function () {
                 $scope.loggedin = shared.isloggedIn();
-    
             }
             shared.registerobserver(observelogin);
             $scope.$on('$routeChangeSuccess', function () {
@@ -15,8 +14,6 @@ angular.module('app')
                 for (var i = 0; i < $scope.restaurant.items.length; i++) {
                     $scope.quantity.push(1);
                 }
-                console.log($scope.restaurant);
-
             })
             $scope.isvalid = function (idx) {
 

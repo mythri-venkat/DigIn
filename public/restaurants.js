@@ -4,7 +4,12 @@ angular.module('app')
     
 
     $scope.$on('$routeChangeSuccess',function(){
-        $scope.restaurants = restaurant.getAll();   
+       restaurant.getAll().then(function(response){
+           $scope.restaurants = response;
+           if(response==[]){
+               alert("No restaurants found");
+           }
+       });   
              
     })
 
@@ -19,7 +24,7 @@ angular.module('app')
     }
 
     $scope.menu=function(idx){
-        $location.path('restaurants/'+$scope.restaurants[idx].id);
+        $location.path('restaurants/'+idx);
     }
 
 }])

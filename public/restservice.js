@@ -1,11 +1,16 @@
 angular.module('app')
-    .service('restaurant', function ($http) {
+    .service('restaurant',['$http', function ($http) {
+        var url = "http://127.0.0.1:5001/"
         var rests = [
             {
                 id: 1,
                 name: 'rest1',
                 img: "imgs/1.jpg",
+                address:"wsvwe,wefc,wedf,wewevweddc.",
                 description: "awesome pizzas",
+                tags: "askj asjjk aslkl adcadc",
+                "timing-start": "9:00 AM",
+                "timing-end": "9:00 PM",
                 items: [{
                     "id": "ITEM12",
                     "restId": "REST1234",
@@ -46,6 +51,10 @@ angular.module('app')
                 id: 2,
                 name: 'rest2',
                 img: "imgs/2.jpg",
+                address:"wsvwe,wefc,wedf,wewevweddc.",
+                tags: "askj asjjk aslkl adcadc",
+                "timing-start": "9:00 AM",
+                "timing-end": "9:00 PM",
                 description: "mouth watering burgers",
                 items: [
                     {
@@ -70,26 +79,34 @@ angular.module('app')
             }
         ];
         this.getAll = function () {
-            return rests;
+            return $http.get(url+"restaurants").then(function(response){
+                rests=response.data;
+                return rests;
+            },function(error){
+                console.log(error);
+                return [];
+            });
+            
         }
         this.getRestaurant = function (id) {
-            return rests[id - 1];
+            
+            return rests[id];
         }
-    })
+    }])
     .service('cart', function () {
         var items = {};
-        var restaurant={};
+        var restaurant = {};
         this.addItem = function (it, qty) {
             if (items[it.id]) {
-                items[it.id].quantity+=qty;
+                items[it.id].quantity += qty;
             }
-            else{
+            else {
                 items[it.id] = { item: it, quantity: qty };
             }
             console.log(items);
         }
-        this.removeItem = function(idx){
-            if(items[idx]){
+        this.removeItem = function (idx) {
+            if (items[idx]) {
                 delete items[idx];
                 console.log(items);
             }

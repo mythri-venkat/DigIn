@@ -34,26 +34,40 @@ angular.module('app')
                         return response.data;
                     }
                     else {
-                        return [];
+                        return false;
                     }
                 },
                 function (error) {
-                    return [];
+                    return false;
                 })
 
         };
 
         this.getUser = function(){
+
             var usr = $cookies.getObject('usr');
+            //console.log(usr);
             this.user = usr;
             return usr;
         }
 
         this.register =function(usr) {
+            return $http({
+                method: 'POST',
+                url: strurl + 'register',
+                data: usr
+            }).then(
+                function (response) {
+                    return response;
+                },
+                function (error) {
+                    return error;
+                })
 
         }
 
         this.logout=function(usr) {
+        
             $cookies.remove('usr');
             _loggedin = false;
             notify();

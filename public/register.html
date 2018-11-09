@@ -1,29 +1,33 @@
 <div class="row">
     <div class="col-lg-4 offset-4">
         <div class="form-group text-center">
-            <label class="radio-inline ml-1"><input type="radio" name="type" ng-model="type" value="1">Customer</label>
+            <label class="radio-inline ml-1"><input type="radio" name="type" ng-model="user.type" value="customer">Customer</label>
             |
-            <label class="radio-inline ml-1"><input type="radio" name="type" ng-model="type" value="2">Restaurant</label>
+            <label class="radio-inline ml-1"><input type="radio" name="type" ng-model="user.type" value="restaurant">Restaurant</label>
         </div>
-        <div class="form-group" ng-show="type==1">
+        <div class="form-group">
             <label for="firstname">First Name:</label>
-            <input type="text" class="form-control" id="firstname" ng-model="firstname">
+            <input type="text" class="form-control" id="firstname" ng-model="user.firstname">
         </div>
-        <div class="form-group" ng-show="type==1">
+        <div class="form-group">
             <label for="lastname">Last Name:</label>
-            <input type="text" class="form-control" id="lastname" ng-model="lastname">
+            <input type="text" class="form-control" id="lastname" ng-model="user.lastname">
         </div>
-        <div class="form-group" ng-show="type==2">
+        <div class="form-group" ng-show="user.type=='restaurant'">
             <label for="restname">Restaurant Name:</label>
-            <input type="text" class="form-control" id="restname" ng-model="restname">
+            <input type="text" class="form-control" id="restname" ng-model="user.restname">
+        </div>
+        <div class="form-group">
+            <label for="emailid">Email:</label>
+            <input type="text" class="form-control" id="emailid" ng-model="user.email">
         </div>
         <div class="form-group">
             <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" ng-model="username">
+            <input type="text" class="form-control" id="username" ng-model="user.username">
         </div>
         <div class="form-group">
             <label for="pwd">Password:</label>
-            <input type="password" class="form-control" id="pwd" ng-model="pwd">
+            <input type="password" class="form-control" id="pwd" ng-model="user.password">
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-primary" ng-click="register()">Register</button>

@@ -8,6 +8,8 @@ orders = [{
 		"status":"Paid",
 		"userId":"USER1234",
 		"totalAmount":1000,
+		"date":"12-1-2018",
+		"time":"18:00",
 		"orderItems":[{
 			"id":"ORIT1",
 			"itemId":"ITEM12",
@@ -41,6 +43,8 @@ orders = [{
 		"id":"ORDR2",
 		"status":"Ordered",
 		"userId":"USER1234",
+		"date":"12-1-2018",
+		"time":"18:00",
 		"totalAmount":500,
 		"orderItems":[{
 			"id":"OR2T1",
@@ -246,12 +250,38 @@ users = [
 		"id":"user3",
 		"first_name":"f_name3",
 		"last_name":"l_name3",
-		"role":"restaurant",
+		"role":"customer",
 		"username":"username3",
 		"password":"username3",
 		"email":"madslfj@akdfjh.com",
 		"phone":"154545",
 		"address":"akdsfajsdfjjd",
+	},
+	{
+		"id":"user4",
+		"first_name":"f_name4",
+		"last_name":"l_name4",
+		"role":"restaurant",
+		"restId":"REST1234",
+		"username":"username4",
+		"password":"username4",
+		"email":"madslfj@akdfjh.com",
+		"phone":"154545",
+		"address":"akdsfajsdfjjd",
+
+	},
+	{
+		"id":"user5",
+		"first_name":"f_name5",
+		"last_name":"l_name5",
+		"role":"restaurant",
+		"restId":"REST22345",
+		"username":"username5",
+		"password":"username5",
+		"email":"madslfj@akdfjh.com",
+		"phone":"154545",
+		"address":"akdsfajsdfjjd",
+		
 	}
 ]
 class Restaurants(Resource):
@@ -296,8 +326,34 @@ class Login(Resource):
 				return user,200
 		return "user not found",404
 
+class Register(Resource):
+	def post(self):
+		args = request.get_json(force=True)
+		for user in users:
+			if(args["username"] == user["username"]):
+				return "username already exists",404
+		users.append(args)
+
+class RestaurantOrders(Resource):
+	def get(self,rest_id=None):
+		print rest_id
+		if rest_id == None:
+			return "Id required",404
+		else:
+			result=[]
+			count = 0
+			for order in orders:
+				for orderitem in order["orderItems"]:
+					for item in orderitem["items"]:
+						if item["restId"]==(rest_id):
+							result.append(order)
+							count+=1
+			return {"count":count,"orders":result},200
+
 
 api.add_resource(Restaurants, "/restaurants/<string:name>","/restaurants")
 api.add_resource(Orders, "/orders/<string:id>","/orders")
 api.add_resource(Login,"/login")
+api.add_resource(Register,"/register")
+api.add_resource(RestaurantOrders,"/orders/restaurant/<string:rest_id>")
 app.run(debug=True, port=5001)

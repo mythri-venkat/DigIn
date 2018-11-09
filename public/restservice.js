@@ -562,21 +562,22 @@ angular.module('app')
 
         this.getRestaurantOrders = function (id,offset,limit) {
             
-            // return $http.get(strurl + "orders/restaurant/" + id)
-            //     .then(
-            //         function (response) {
-            //             if(response.status == '200'){
-            //                 return response.data;
-            //             }
-            //             else{
-            //                 return [];
-            //             }                     
-            //         },
-            //         function (error) {
+            return $http.get(strurl + "orders/restaurant/" + id)
+                .then(
+                    function (response) {
+                        if(response.status == '200'){
+                            console.log(response);
+                            return response.data;
+                        }
+                        else{
+                            return false;
+                        }                     
+                    },
+                    function (error) {
+                        return false;
+                    });
 
-            //         });
-
-            return {"count":orders.length,"orders":orders.slice(offset,offset+limit)};
+            //return {"count":orders.length,"orders":orders.slice(offset,offset+limit)};
         }
         // var obs=[];
 

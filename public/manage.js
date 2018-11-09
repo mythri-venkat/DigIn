@@ -1,5 +1,5 @@
 angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'shared', function ($scope, orderservice, shared) {
-    $scope.orders = []
+    $scope.orders = [];
     $scope.notfound = false;
     $scope.showdetails = [];
     $scope.numPerPage = 10;
@@ -14,20 +14,28 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
     });
 
     $scope.getOrders = function(){
-        var data = orderservice.getRestaurantOrders(shared.getUser().id,($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage);
-        
-        if (!data) {
-            $scope.notfound = true;
-        }
-        else {
-            $scope.noOfPages = Math.ceil(data["count"]/$scope.numPerPage);
-            $scope.orders = data["orders"];
-            $scope.notfound = false;
-            $scope.showdetails=[];
-            for (var i = 0; i < $scope.orders.length; i++) {
-                $scope.showdetails.push(false);
+        orderservice.getRestaurantOrders(shared.getUser().restId,($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage)
+        .then(function(data){
+            if (!data || data == []) {
+                $scope.notfound = true;
             }
-        }
+            else {
+                //console.log()
+                // $scope.noOfPages = Math.ceil(data["count"]/$scope.numPerPage);
+                // $scope.orders = data["orders"];
+                $scope.noOfPages = Math.ceil(data.count/$scope.numPerPage);
+                $scope.orders = data.orders;
+                $scope.notfound = false;
+                $scope.showdetails=[];
+                for (var i = 0; i < $scope.orders.length; i++) {
+                    $scope.showdetails.push(false);
+                }
+            }
+
+        })
+
+        
+        
     }
 
     $scope.$watch('currentPage',$scope.getOrders);

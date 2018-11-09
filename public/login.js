@@ -14,7 +14,7 @@ angular.module('app').controller('loginctrl', ['$scope', '$location', '$cookies'
                     $location.path('/restaurants');
                 }
                 else if(response.role == 'restaurant'){
-                    $location.path('/restaurants');
+                    $location.path('/manage');
                 }                
             }
             else{

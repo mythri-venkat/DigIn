@@ -39,7 +39,7 @@ angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.paginat
         var usr = $cookies.getObject('usr');
 
         if (!usr){
-            $location.path('/restaurants');
+            $location.path('/');
 
         }
 
@@ -49,15 +49,24 @@ angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.paginat
 
         var observelogin = function () {
             $scope.loggedin = shared.isloggedIn();
+            if($scope.loggedin){
+                $scope.role = shared.getUser().role;
+            }
+            
+            
 
         }
+        $scope.loggedin=false;
+        $scope.role = 'customer';
         shared.registerobserver(observelogin);
         $scope.init = function () {
             
             var usr = $cookies.getObject('usr');
+            
 
             if (usr) {
                 $scope.loggedin = true;
+                $scope.role = usr.role;
                 
             }
             else {

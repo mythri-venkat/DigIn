@@ -1,0 +1,6 @@
+<div ><ul class="pagination">
+  <li class="page-item" ng-class="{disabled: noPrevious()}"><a  class="page-link" ng-click="selectPrevious()"><span class="fa fa-caret-left"></span></a></li>
+  <li ng-repeat="page in pages" ng-class="{active: isActive(page)}" class="page-item"><a class="page-link" ng-click="selectPage(page)">{{page}}</a></li>
+  <li ng-class="{disabled: noNext()}" class="page-item"><a class="page-link" ng-click="selectNext()"><span class="fa fa-caret-right"></span></a></li>
+  </ul>
+</div>

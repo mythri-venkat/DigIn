@@ -71,17 +71,18 @@ orders = [{
 				"rating":2	
 			}]
 		}]
-}];
+}]
 restaurants = [
 	{
 		"id":"REST1234",
-		"name":"Restaurant 1",
+		"name":"Paradise",
 		"address":"Chennai,wsvwe,wefc,wedf,wewevweddc.",
 		"description":"sckn dlkcm a;cm;a, ;oo dcjn dwsc",
 		"tags":"askj asjjk aslkl adcadc",
 		"timing-start":"9:00 AM",
 		"timing-end":"9:00 PM",
 		"image":"imgs/1.jpg",
+		"rating":4,
 		"items":[{
 			"id":"ITEM12",
 			"restId":"REST1234",
@@ -122,13 +123,14 @@ restaurants = [
 	},
 	{
 		"id":"REST22345",
-		"name":"Restaurant 2",
+		"name":"Dominos",
 		"address":"Chennai,wsvwe,wefc,wedf,wewevweddc.",
 		"description":"sckn dlkcm a;cm;a, ;oo dcjn dwsc",
 		"tags":"askj asjjk aslkl adcadc",
 		"timing-start":"9:00 AM",
 		"timing-end":"9:00 PM",
 		"image":"imgs/11.jpg",
+		"rating":3,
 		"items":[{
 			"id":"ITEM22",
 			"restId":"REST22345",
@@ -169,13 +171,14 @@ restaurants = [
 	},
 	{
 		"id":"REST22346",
-		"name":"Restaurant 2",
+		"name":"Pizza Hut",
 		"address":"Hyderabad",
 		"description":"sckn dlkcm a;cm;a, ;oo dcjn dwsc",
 		"tags":"askj asjjk aslkl adcadc",
 		"timing-start":"9:00 AM",
 		"timing-end":"9:00 PM",
 		"image":"imgs/15.jpg",
+		"rating":4,
 		"items":[{
 			"id":"ITEM32",
 			"restId":"REST22346",
@@ -215,6 +218,42 @@ restaurants = [
 		}]
 	}
 ]
+
+users = [
+	{
+		"id":"user1",
+		"first_name":"f_name",
+		"last_name":"l_name",
+		"role":"customer",
+		"username":"username1",
+		"password":"username1",
+		"email":"madslfj@akdfjh.com",
+		"phone":"154545",
+		"address":"akdsfajsdfjjd",
+	},
+	{
+		"id":"user2",
+		"first_name":"f_name2",
+		"last_name":"l_name2",
+		"role":"customer",
+		"username":"username2",
+		"password":"username2",
+		"email":"madslfj@akdfjh.com",
+		"phone":"154545",
+		"address":"akdsfajsdfjjd",
+	},
+	{
+		"id":"user3",
+		"first_name":"f_name3",
+		"last_name":"l_name3",
+		"role":"restaurant",
+		"username":"username3",
+		"password":"username3",
+		"email":"madslfj@akdfjh.com",
+		"phone":"154545",
+		"address":"akdsfajsdfjjd",
+	}
+]
 class Restaurants(Resource):
 	def get(self, name=None):
 		if (name is None):
@@ -239,7 +278,7 @@ class Restaurants(Resource):
 class Orders(Resource):
 	def get(self, id=None):
 		if(id==None):
-			return []
+			return orders
 		else:
 			for order in orders:
 				if(id == order["id"]):
@@ -248,6 +287,17 @@ class Orders(Resource):
 	def post(self):
 		json_data = request.get_json(force=True)
 		return json_data,200
+
+class Login(Resource):
+	def post(self):
+		args = request.get_json(force=True)
+		for user in users:
+			if(args["username"] == user["username"]):
+				return user,200
+		return "user not found",404
+
+
 api.add_resource(Restaurants, "/restaurants/<string:name>","/restaurants")
 api.add_resource(Orders, "/orders/<string:id>","/orders")
+api.add_resource(Login,"/login")
 app.run(debug=True, port=5001)

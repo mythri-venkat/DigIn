@@ -1,38 +1,54 @@
 <style>
-    img{
+    img {
         width: 320px;
         height: 250px;
     }
+    .unchecked{
+        color:wheat;
+    }
+    .checked{
+        color: orange;
+    }
 </style>
 
-<div class="row">
+<div class="row mt-5 mb-5">
+    <div class="col-md-4 offset-4">
+        <input type="text" class="form-control" ng-model="searchRest.name" placeholder="Search for Restaurants">
+    </div>
+</div>
+
+<div class="row margin-view">
     <div class="col-lg-8 offset-2">
+
         <div ng-repeat="rest in restaurants" ng-if="$index%3==0" class="row">
-        
-            <div class="col-md-4 mb-3">
+
+            <div class="col-md-4 mb-3" ng-if="isvalid($index)">
                 <div class="card" ng-click="menu($index)">
                     <img class="card-img-top" ng-src="{{restaurants[$index].image}}">
                     <div class="card-block">
                         <h4 class="card-title">{{restaurants[$index].name}}</h4>
                         <p class="card-text">{{restaurants[$index].description}}</p>
+                        <div class="card-footer"><small class="text-muted" ng-bind-html="ratingStr(restaurants[$index].rating)"></small></div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4" ng-if="isvalid($index+1)">
+            <div class="col-md-4 mb-3" ng-if="isvalid($index+1)">
                 <div class="card" ng-click="menu($index+1)">
                     <img class="card-img-top" ng-src="{{restaurants[$index+1].image}}">
                     <div class="card-block">
                         <h4 class="card-title">{{restaurants[$index+1].name}}</h4>
                         <p class="card-text">{{restaurants[$index+1].description}}</p>
+                        <div class="card-footer"><small class="text-muted" ng-bind-html="ratingStr(restaurants[$index+1].rating)"></small></div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4" ng-if="isvalid($index+2)">
+            <div class="col-md-4 mb-3" ng-if="isvalid($index+2)">
                 <div class="card" ng-click="menu($index+2)">
                     <img class="card-img-top" ng-src="{{restaurants[$index+2].image}}">
                     <div class="card-block">
                         <h4 class="card-title">{{restaurants[$index+2].name}}</h4>
                         <p class="card-text">{{restaurants[$index+2].description}}</p>
+                        <div class="card-footer"><small class="text-muted" ng-bind-html="ratingStr(restaurants[$index+2].rating)"></small></div>
                     </div>
                 </div>
             </div>

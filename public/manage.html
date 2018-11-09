@@ -1,0 +1,93 @@
+<div class="row mt-5 mb-5">
+    <div class="col-md-4 offset-4">
+        
+            <input type="text" class="form-control" ng-model="searchOrder" placeholder="Search for orders">
+            
+        
+    </div>
+</div>
+<div class="row justify-content-center margin-view">
+    <div class="col-md-8">
+
+        <label ng-show="notfound">No orders found</label>
+        
+        <div class="list-group">
+            <div class="list-group-item" ng-repeat="order in orders | filter:searchOrder">
+                <div class="row" ng-click="show($index)">
+                    <div class="col-md-12">
+                        <label> <small> OrderId </small>: <b>{{order.id}}</b> </label>
+                        <span class="badge badge-info">{{order.status}}</span>
+                        <div class="float-right">
+                            <label> <small>Cost</small> : <b>{{order.totalAmount}}</b> </label>
+                            <span class="fa fa-caret-right"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row bg-light" style="margin-bottom:-12px;margin-left:-20px;margin-right:-20px;padding:10px"
+                    ng-if="showdetails[$index]">
+                    <div class="col-md-12">
+                        <div class="row text-center">
+                            <div class="col-md-6 offset-3">
+
+                                <div class="dropdown">
+                                    Change Status:
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{order.status}}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#">Preparing</a>
+                                        <a class="dropdown-item" href="#">On the way</a>
+                                        <a class="dropdown-item" href="#">Delivered</a>
+                                        <a class="dropdown-item" href="#">Cancel</a>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                        <div class="row mt-4 text-center">
+                            <div class="col-md-6 offset-3">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Item Name</th>
+                                            <th>Quantity</th>
+                                            <th>Rate</th>
+                                            <th>Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in order.orderItems">
+                                            <td>{{item.id}}</td>
+                                            <td>{{item.items[0].name}}</td>
+                                            <td>{{item.qtyOrdered}}</td>
+                                            <td>{{item.items[0].price}}</td>
+                                            <td>{{item.qtyOrdered*item.items[0].price}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        
+        
+    </div>
+    
+
+</div>
+<div class="row justify-content-center text-center mt-5">
+        <pagination num-pages="noOfPages" current-page="currentPage" class="pagination-small"></pagination>
+
+</div>
+

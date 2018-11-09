@@ -1,4 +1,4 @@
-angular.module('app', ['ngRoute', 'ngCookies'])
+angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.pagination'])
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider
             .when('/login', {
@@ -21,6 +21,15 @@ angular.module('app', ['ngRoute', 'ngCookies'])
                 controller:'menuctrl',
                 caseInsensitiveMatch:true
                 
+            })
+            
+            .when('/manage',{
+                templateUrl:'manage.html',
+                controller:'managectrl',
+                caseInsensitiveMatch:true                
+            })
+            .when('/',{
+                templateUrl:'search.html'
             })
             .otherwise({
                 redirectTo: '/'

@@ -26,6 +26,8 @@
   <script src="sharedservice.js"></script>
   <script src="manage.js"></script>
   <script src="search.js"></script>
+  <script src="orders.js"></script>
+  <script src="cart.js"></script>
 
   <style>
     /* Remove the navbar's default rounded borders and increase the bottom margin */ 
@@ -35,6 +37,9 @@
     }
     .margin-view{
       margin-top: 50px;
+    }
+    html,body{
+      height: 100%;
     }
     
   </style>
@@ -52,7 +57,7 @@
       <ul class="navbar-nav">
           <li class="nav-item active"><a class="nav-link" href="#/">Home</a></li>
         <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/restaurants">Restaurants</a></li>
-        <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/manage"> Past Orders</a></li>
+        <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/orders"> Past Orders</a></li>
         
         <li class="nav-item" ng-show="loggedin && (role=='restaurant')"><a class="nav-link" href="#/manage"> Manage</a></li>
         
@@ -64,7 +69,7 @@
       </ul>
       <ul class="navbar-nav ml-auto justify-content-end" ng-show="loggedin">
           
-        <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#"><span class="fa fa-shopping-cart"></span> Cart</a></li>
+        <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/cart"><span class="fa fa-shopping-cart"></span> Cart</a></li>
         <li class="nav-item"><a class="nav-link" href="#" ng-click="logout()"><span class="glyphicon glyphicon-sign-out"></span> Logout</a></li>
         
 
@@ -73,8 +78,8 @@
 
   </nav>
 
-  <div class="container-fluid">
-    <div class="row">
+  <div class="container-fluid" style="height:100%">
+    <div class="row" style="height:100%">
       <div class="col-md-12">
           <div ng-view>
 

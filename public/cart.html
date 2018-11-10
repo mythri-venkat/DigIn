@@ -1,0 +1,64 @@
+<style>
+    .avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.avatar-restaurant {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 0px;
+}
+</style>
+<div class="row" style="height:100%" ng-init="onload">
+    <div class="col-md-12">
+            <div class="row mt-5 mb-5 ">
+                    <div class="col-md-5 offset-1 bg-light mr-2 ">
+                        <h3>Delivery address</h3>
+                        <label>{{deliveryaddr}}</label>
+                    </div>
+                    <div class="col-md-5 bg-light ml-1 mr-1">
+                        <h3>Payment Method</h3>
+                        <label><input type="radio" checked> <span class="fa fa-money"></span> Cash On Delivery</label>
+                    </div>
+                </div>
+                
+                <div class="row mt-5 mb-5 pt-2 pb-4">
+                    <div class="col-md-10 p-5 offset-1 bg-light">
+                
+                        <div class="row m-3 text-left justify-content-start ">
+                            <div class="col-md-12">
+                                <img ng-src="{{restaurant.image}}" src="imgs/1.jpg" class="avatar-restaurant">
+                            
+                                <label>{{restaurant.name}}</label>
+                           
+                                <button class="btn btn-success float-right">Place Order</button>
+                            </div>
+                
+                        </div>
+                        <h3>Your Order</h3>
+                        <table class="table mt-2">
+                            <tbody>
+                                <tr ng-repeat="(key,value) in cartItems">
+                                    <td>
+                                        <img ng-src="{{value.item.image}}" src="imgs/1.jpg" class="avatar">
+                                    </td>
+                                    <td>{{value.item.name}}</td>
+                                    <td>{{value.quantity}}</td>
+                                    <td>x</td>
+                                    <td>{{value.item.price}}</td>
+                                    <td>=</td>
+                                    <td>{{value.quantity*value.item.price}}</td>
+                                    <td><button class="btn btn-danger" ng-click="remove(key)"><span class="fa fa-trash"></span></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                
+                
+                
+                </div>
+    </div>
+</div>

@@ -2,6 +2,7 @@ angular.module('app').controller('loginctrl', ['$scope', '$location', '$cookies'
     $scope.username = "";
     $scope.password = "";
     $scope.loginfail=false;
+    
     $scope.login = function () {
         var usr = { username: $scope.username, password: $scope.password };
 

@@ -1,5 +1,25 @@
 <!-- Masthead -->
-<header class="masthead text-white text-center" style="margin-left:-15px;margin-right:-15px;">
+
+<style>
+    .card{
+
+    }
+    
+    .card-img-top {
+        
+        height: 240px;
+    }
+    .unchecked{
+        color:wheat;
+    }
+    .checked{
+        color: orange;
+    }
+
+
+</style>
+
+<header class="masthead text-white text-center" style="margin-left:-15px;margin-right:-15px;padding-top: 175px;padding-bottom: 175px;">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
@@ -10,10 +30,10 @@
                 <form>
                     <div class="form-row">
                         <div class="col-12 col-md-9 mb-2 mb-md-0">
-                            <input id="headValue" type="text" class="form-control form-control-lg" placeholder="Search a food...">
+                            <input id="headValue" type="text" ng-model="searchval" class="form-control form-control-lg" placeholder="Search a food...">
                         </div>
                         <div class="col-12 col-md-3">
-                            <button type="submit" id="headButton" onclick="loadHome()" class="btn btn-block btn-lg btn-primary">Try
+                            <button type="submit" id="headButton" ng-click="getRestaurants(searchval)" class="btn btn-block btn-lg btn-primary">Try
                                 !</button>
                         </div>
                     </div>
@@ -23,8 +43,49 @@
     </div>
 </header>
 
-<div class="container text-center">
-        <h3>THE BAND</h3>
-        <p><em>We love music!</em></p>
-        <p>We have created a fictional band website. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-</div>
+
+<div class="row margin-view text-center" style="margin-top:30px">
+        <div class="col-lg-8 offset-2">
+            <label ng-show="notfound">No Results</label>
+            <div ng-repeat="rest in restaurants" ng-if="$index%3==0" class="row">
+    
+                <div class="col-md-4 mb-3" ng-if="isvalid($index)">
+                    <div class="card" ng-click="menu($index)">
+                        <img class="card-img-top" ng-src="{{restaurants[$index].image}}">
+                        <div class="card-block">
+                            <h4 class="card-title">{{restaurants[$index].name}}</h4>
+                            <p class="card-text">{{restaurants[$index].description}}</p>
+                            <div class="card-footer"><small class="text-muted" ng-bind-html="ratingStr(restaurants[$index].rating)"></small></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3" ng-if="isvalid($index+1)">
+                    <div class="card" ng-click="menu($index+1)">
+                        <img class="card-img-top" ng-src="{{restaurants[$index+1].image}}">
+                        <div class="card-block">
+                            <h4 class="card-title">{{restaurants[$index+1].name}}</h4>
+                            <p class="card-text">{{restaurants[$index+1].description}}</p>
+                            <div class="card-footer"><small class="text-muted" ng-bind-html="ratingStr(restaurants[$index+1].rating)"></small></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3" ng-if="isvalid($index+2)">
+                    <div class="card" ng-click="menu($index+2)">
+                        <img class="card-img-top" ng-src="{{restaurants[$index+2].image}}">
+                        <div class="card-block">
+                            <h4 class="card-title">{{restaurants[$index+2].name}}</h4>
+                            <p class="card-text">{{restaurants[$index+2].description}}</p>
+                            <label class="card-text" ng-if="searchitems($index+2) != ''"><i>{{searchitems($index+2)}}</i></label>
+                            <div class="card-footer">
+                                <small class="text-muted" ng-bind-html="ratingStr(restaurants[$index+2].rating)"></small>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+    
+        </div>
+    </div>
+    

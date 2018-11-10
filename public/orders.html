@@ -1,0 +1,101 @@
+<style>
+    .avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+</style>
+<div class="row mt-5 mb-5">
+    <div class="col-md-4 offset-4">
+
+        <input type="text" class="form-control" ng-model="searchOrder" placeholder="Search for orders">
+
+
+    </div>
+</div>
+<div class="row justify-content-center margin-view">
+    <div class="col-md-8">
+
+        <label ng-show="notfound">No orders found</label>
+        <table class="table table-hover" ng-hide="notfound">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Id</th>
+                    <th>Restaurant Name</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <div>
+                    <tr ng-repeat="order in orders | filter:searchOrder" ng-click="show($index)">
+                        <td ng-hide="showdetails[$index]"><img ng-src="{{order.imagesrc}}" src="imgs/1.jpg" class="avatar"></td>
+                        <td ng-hide="showdetails[$index]">{{order.id}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.RestaurantName}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.status}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.date}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.time}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.totalAmount}}</td>
+
+                        <!-- </tr> -->
+                        <!-- <tr class="bg-light" > -->
+                        <td class="bg-light" colspan="7" ng-click="show($index)" ng-show="showdetails[$index]">
+                            <div class="col-md-12">
+                                
+                                <div class="row text-center">
+                                    <div class="col-md-3 text-left">Id:<b>{{order.id}}</b></div>
+                                    <div class="col-md-6">
+                                        <b>Details</b>
+                                    </div>
+                                    <div class="col-md-3 text-right">
+                                        <span class="fa fa-close" ng-click="show($index)"></span>
+                                    </div>
+
+                                </div>
+                                <div class="row mt-4 text-center">
+                                    <div class="col-md-6 offset-3">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Item Name</th>
+                                                    <th>Quantity</th>
+                                                    <th>Rate</th>
+                                                    <th>Cost</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="item in order.orderItems">
+                                                    <td>{{item.id}}</td>
+                                                    <td>{{item.items[0].name}}</td>
+                                                    <td>{{item.qtyOrdered}}</td>
+                                                    <td>{{item.items[0].price}}</td>
+                                                    <td>{{item.qtyOrdered*item.items[0].price}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+
+                </div>
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>
+
+<div class="footer navbar fixed-bottom text-center justify-content-center">
+        <pagination num-pages="noOfPages" current-page="currentPage" class="pagination-small"></pagination>
+
+</div>

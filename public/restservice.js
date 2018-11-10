@@ -78,16 +78,41 @@ angular.module('app')
                 ]
             }
         ];
-        this.getAll = function () {
+        this.getAll = function (offset,limit) {
             return $http.get(url+"restaurants").then(function(response){
-                rests=response.data;
-                return rests;
+                if(response.status == '200'){
+                    rests=response.data.restaurants;
+                    return response.data;
+                }
+                else{
+                    return false
+                }
+                
             },function(error){
                 console.log(error);
-                return [];
+                return false;
             });
             
         }
+        this.search = function (name) {
+            console.log(name);
+            console.log(url+"restaurants/"+name)
+            return $http.get(url+"restaurants/"+name).then(function(response){
+                if(response.status == '200'){
+                    rests=response.data.restaurants;
+                    return response.data;
+                }
+                else{
+                    return false
+                }
+                
+            },function(error){
+                console.log(error);
+                return false;
+            });
+            
+        }
+
         this.getRestaurant = function (id) {
             
             return rests[id];
@@ -96,7 +121,13 @@ angular.module('app')
     .service('cart', function () {
         var items = {};
         var restaurant = {};
-        this.addItem = function (it, qty) {
+        this.addItem = function (rest,it, qty) {
+            if(restaurant!={} && rest.id != restaurant.id)
+            {
+                alert("items from previous restaurant will be cleared");
+                restaurant = rest;
+                items={};
+            }
             if (items[it.id]) {
                 items[it.id].quantity += qty;
             }
@@ -108,8 +139,17 @@ angular.module('app')
         this.removeItem = function (idx) {
             if (items[idx]) {
                 delete items[idx];
-                console.log(items);
+                if(items == {}){
+                    restaurant={};
+                }
+                //console.log(items);
             }
+        }
+        this.getItems = function(){
+            return items;
+        }
+        this.getRestaurant = function(){
+            return restaurant;
         }
     })
     .service('orderservice', ['$http', function ($http) {
@@ -187,380 +227,13 @@ angular.module('app')
                     "rating": 2
                 }]
             }]
-        },
-        {
-            "id": "ORDR1",
-            "status": "Paid",
-            "userId": "USER1234",
-            "totalAmount": 1000,
-            "date":"12-12-2018",
-            "time":"19:00",
-            "orderItems": [{
-                "id": "ORIT1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 4,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "ORIT2",
-                "itemId": "ITEM13",
-                "qtyOrdered": 5,
-                "items": [{
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "images3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 120,
-                    "availability": 8,
-                    "rating": 5
-                }]
-            }]
-        },
-        {
-            "id": "ORDR1",
-            "status": "Paid",
-            "userId": "USER1234",
-            "totalAmount": 1000,
-            "date":"12-12-2018",
-            "time":"19:00",
-            "orderItems": [{
-                "id": "ORIT1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 4,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "ORIT2",
-                "itemId": "ITEM13",
-                "qtyOrdered": 5,
-                "items": [{
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "images3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 120,
-                    "availability": 8,
-                    "rating": 5
-                }]
-            }]
-        },
-        {
-            "id": "ORDR1",
-            "status": "Paid",
-            "userId": "USER1234",
-            "totalAmount": 1000,
-            "date":"12-12-2018",
-            "time":"19:00",
-            "orderItems": [{
-                "id": "ORIT1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 4,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "ORIT2",
-                "itemId": "ITEM13",
-                "qtyOrdered": 5,
-                "items": [{
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "images3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 120,
-                    "availability": 8,
-                    "rating": 5
-                }]
-            }]
-        },
-        {
-            "id": "ORDR1",
-            "status": "Paid",
-            "userId": "USER1234",
-            "totalAmount": 1000,
-            "date":"12-12-2018",
-            "time":"19:00",
-            "orderItems": [{
-                "id": "ORIT1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 4,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "ORIT2",
-                "itemId": "ITEM13",
-                "qtyOrdered": 5,
-                "items": [{
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "images3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 120,
-                    "availability": 8,
-                    "rating": 5
-                }]
-            }]
-        },
-        {
-            "id": "ORDR1",
-            "status": "Paid",
-            "userId": "USER1234",
-            "totalAmount": 1000,
-            "date":"12-12-2018",
-            "time":"19:00",
-            "orderItems": [{
-                "id": "ORIT1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 4,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "ORIT2",
-                "itemId": "ITEM13",
-                "qtyOrdered": 5,
-                "items": [{
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "images3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 120,
-                    "availability": 8,
-                    "rating": 5
-                }]
-            }]
-        },
-        {
-            "id": "ORDR1",
-            "status": "Paid",
-            "userId": "USER1234",
-            "totalAmount": 1000,
-            "date":"12-12-2018",
-            "time":"19:00",
-            "orderItems": [{
-                "id": "ORIT1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 4,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "ORIT2",
-                "itemId": "ITEM13",
-                "qtyOrdered": 5,
-                "items": [{
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "images3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 120,
-                    "availability": 8,
-                    "rating": 5
-                }]
-            }]
-        },
-        {
-            "id": "ORDR1",
-            "status": "Paid",
-            "userId": "USER1234",
-            "totalAmount": 1000,
-            "date":"12-12-2018",
-            "time":"19:00",
-            "orderItems": [{
-                "id": "ORIT1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 4,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "ORIT2",
-                "itemId": "ITEM13",
-                "qtyOrdered": 5,
-                "items": [{
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "images3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 120,
-                    "availability": 8,
-                    "rating": 5
-                }]
-            }]
-        },
-        {
-            "id": "ORDR1",
-            "status": "Paid",
-            "userId": "USER1234",
-            "totalAmount": 1000,
-            "date":"12-12-2018",
-            "time":"19:00",
-            "orderItems": [{
-                "id": "ORIT1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 4,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "ORIT2",
-                "itemId": "ITEM13",
-                "qtyOrdered": 5,
-                "items": [{
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "images3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 120,
-                    "availability": 8,
-                    "rating": 5
-                }]
-            }]
-        },
-        {
-            "id": "ORDR1",
-            "status": "Paid",
-            "userId": "USER1234",
-            "totalAmount": 1000,
-            "date":"12-12-2018",
-            "time":"19:00",
-            "orderItems": [{
-                "id": "ORIT1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 4,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "ORIT2",
-                "itemId": "ITEM13",
-                "qtyOrdered": 5,
-                "items": [{
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "images3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 120,
-                    "availability": 8,
-                    "rating": 5
-                }]
-            }]
-        },
-        {
-            "id": "ORDR1",
-            "status": "Paid",
-            "userId": "USER1234",
-            "totalAmount": 1000,
-            "date":"12-12-2018",
-            "time":"19:00",
-            "orderItems": [{
-                "id": "ORIT1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 4,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "ORIT2",
-                "itemId": "ITEM13",
-                "qtyOrdered": 5,
-                "items": [{
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "images3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 120,
-                    "availability": 8,
-                    "rating": 5
-                }]
-            }]
         }
     ];
 
         this.getRestaurantOrders = function (id,offset,limit) {
+            if(!id){
+                return false;
+            }
             
             return $http.get(strurl + "orders/restaurant/" + id)
                 .then(
@@ -579,6 +252,27 @@ angular.module('app')
 
             //return {"count":orders.length,"orders":orders.slice(offset,offset+limit)};
         }
+
+        this.getCustomerOrders = function(id,offset,limit){
+            
+            return $http.get(strurl + "orders/customer/" + id)
+                .then(
+                    function (response) {
+                        if(response.status == '200'){
+                            console.log(response);
+                            return response.data;
+                        }
+                        else{
+                            return false;
+                        }                     
+                    },
+                    function (error) {
+                        return false;
+                    });
+
+        }
+
+    
         // var obs=[];
 
         // this.registerobserver = function(cb,rest_id){

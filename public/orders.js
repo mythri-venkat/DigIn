@@ -1,4 +1,4 @@
-angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'shared', function ($scope, orderservice, shared) {
+angular.module('app').controller('ordersctrl', ['$scope', 'orderservice', 'shared', function ($scope, orderservice, shared) {
     $scope.orders = [];
     $scope.notfound = false;
     $scope.showdetails = [];
@@ -14,7 +14,7 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
     });
 
     $scope.getOrders = function(){
-        orderservice.getRestaurantOrders(shared.getUser().restId,($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage)
+        orderservice.getCustomerOrders(shared.getUser().id,($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage)
         .then(function(data){
             if (!data || data == []) {
                 $scope.notfound = true;

@@ -22,14 +22,25 @@ angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.paginat
                 caseInsensitiveMatch:true
                 
             })
-            
+            .when('/cart',{
+                templateUrl:'cart.html',
+                controller:'cartctrl',
+                caseInsensitiveMatch:true
+            })
             .when('/manage',{
                 templateUrl:'manage.html',
                 controller:'managectrl',
                 caseInsensitiveMatch:true                
             })
+            .when('/orders',{
+                templateUrl:'orders.html',
+                controller:'ordersctrl',
+                caseInsensitiveMatch:true
+            })
             .when('/',{
-                templateUrl:'search.html'
+                templateUrl:'search.html',
+                controller:'searchctrl',
+                caseInsensitiveMatch:true
             })
             .otherwise({
                 redirectTo: '/'

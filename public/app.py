@@ -225,7 +225,7 @@ restaurants = [
 
 users = [
 	{
-		"id":"user1",
+		"id":"USER1234",
 		"first_name":"f_name",
 		"last_name":"l_name",
 		"role":"customer",
@@ -287,7 +287,7 @@ users = [
 class Restaurants(Resource):
 	def get(self, name=None):
 		if (name is None):
-			return restaurants
+			return {"count":len(restaurants),"restaurants": restaurants},200
 		else:
 			restaurantsTemp =  copy.deepcopy(restaurants) 
 			searchedRestaurants = []
@@ -302,7 +302,7 @@ class Restaurants(Resource):
 					if(len(searchedItems)>0):
 						restaurant["items"] = searchedItems
 						searchedRestaurants.append(restaurant)
-			return searchedRestaurants,200
+			return {"count":len(searchedRestaurants),"restaurants": searchedRestaurants},200
 		return "Restaurant not found", 404	
 			
 class Orders(Resource):
@@ -341,14 +341,25 @@ class RestaurantOrders(Resource):
 			return "Id required",404
 		else:
 			result=[]
-			count = 0
 			for order in orders:
 				for orderitem in order["orderItems"]:
 					for item in orderitem["items"]:
 						if item["restId"]==(rest_id):
 							result.append(order)
 							count+=1
-			return {"count":count,"orders":result},200
+			return {"count":len(result),"orders":result},200
+
+class CustomerOrders(Resource):
+	def get(self,id=None):
+		print id
+		if id == None:
+			return "Id required",404
+		else:
+			result=[]
+			for order in orders:
+				if order["userId"]==id:
+					result.append(order)
+			return {"count":len(result),"orders":result},200
 
 
 api.add_resource(Restaurants, "/restaurants/<string:name>","/restaurants")
@@ -356,4 +367,5 @@ api.add_resource(Orders, "/orders/<string:id>","/orders")
 api.add_resource(Login,"/login")
 api.add_resource(Register,"/register")
 api.add_resource(RestaurantOrders,"/orders/restaurant/<string:rest_id>")
+api.add_resource(CustomerOrders,"/orders/customer/<string:id>")
 app.run(debug=True, port=5001)

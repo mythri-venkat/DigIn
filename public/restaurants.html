@@ -1,6 +1,6 @@
 <style>
     img {
-        width: 320px;
+        
         height: 250px;
     }
     .unchecked{
@@ -17,9 +17,9 @@
     </div>
 </div>
 
-<div class="row margin-view">
+<div class="row margin-view text-center">
     <div class="col-lg-8 offset-2">
-
+        <label ng-show="notfound">No Results</label>
         <div ng-repeat="rest in restaurants" ng-if="$index%3==0" class="row">
 
             <div class="col-md-4 mb-3" ng-if="isvalid($index)">
@@ -56,4 +56,9 @@
         </div>
 
     </div>
+</div>
+
+<div class="footer navbar fixed-bottom text-center justify-content-center">
+        <pagination num-pages="noOfPages" current-page="currentPage" class="pagination-small"></pagination>
+
 </div>

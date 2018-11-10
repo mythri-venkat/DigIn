@@ -1,7 +1,7 @@
 angular.module('app')
     .controller('menuctrl', ['$scope', '$routeParams', '$location', 'restaurant', 'cart','shared',
         function ($scope, $routeParams, $location, restaurant, cart,shared) {
-            $scope.restaurant = [];
+            $scope.restaurant = {};
             $scope.quantity = [];
 
             var observelogin = function () {
@@ -25,7 +25,7 @@ angular.module('app')
                 }
             }
             $scope.add = function (idx) {
-                cart.addItem($scope.restaurant.items[idx],$scope.quantity[idx]);
+                cart.addItem($scope.restaurant,$scope.restaurant.items[idx],$scope.quantity[idx]);
                 $scope.quantity[idx]=1;
             }
             $scope.remove = function(idx){

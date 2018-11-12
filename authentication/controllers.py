@@ -24,12 +24,12 @@ def login():
             login_user(user)
             #flash('Thanks for logging in, {}'.format(current_user.email))
             print (user.as_dict())
-            result = json.dumps( user.as_dict())
-            result["role"]="customer"
-            return result
+            result = user.as_dict()
+            result['role']='customer'
+            return json.dumps(result)
         else:
             errorMsg = 'Invalid Login! Try Again.'
-    return render_template('register.html', headerTitle='DigIn - Login', errorMessage=errorMsg)
+    # return render_template('register.html', headerTitle='DigIn - Login', errorMessage=errorMsg)
 
 
 @app.route('/register', methods=['GET', 'POST'])

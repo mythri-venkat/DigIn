@@ -49,6 +49,7 @@ angular.module('app')
 
             cart.getItems().then(function (response) {
                 if (response) {
+                    console.log(response);
                     $scope.cartItems = response;
                     $scope.restaurant = cart.getRestaurant();
                 }

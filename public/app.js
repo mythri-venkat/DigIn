@@ -56,7 +56,7 @@ angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.paginat
 
     }])
 
-    .controller('ctrl', ['$scope', '$cookies', '$location', '$rootScope', 'shared', function ($scope, $cookies, $location, $rootScope, shared) {
+    .controller('ctrl', ['$scope', '$cookies', '$location', '$rootScope', 'shared','cart', function ($scope, $cookies, $location, $rootScope, shared,cart) {
 
         var observelogin = function () {
             $scope.loggedin = shared.isloggedIn();
@@ -90,6 +90,9 @@ angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.paginat
             shared.logout();
             $location.path('/')
         }
+
+        
+        $scope.itemcount = 0;
     }])
 
 

@@ -56,7 +56,7 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="navbar-nav">
           <li class="nav-item active"><a class="nav-link" href="#/">Home</a></li>
-        <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/restaurants">Restaurants</a></li>
+        <li class="nav-item" ><a class="nav-link" href="#/restaurants">Restaurants</a></li>
         <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/orders"> Past Orders</a></li>
         
         <li class="nav-item" ng-show="loggedin && (role=='restaurant')"><a class="nav-link" href="#/manage"> Manage</a></li>
@@ -69,7 +69,7 @@
       </ul>
       <ul class="navbar-nav ml-auto justify-content-end" ng-show="loggedin">
           
-        <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/cart"><span class="fa fa-shopping-cart"></span> Cart</a></li>
+        <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/cart"><span class="fa fa-shopping-cart"></span> Cart<span class="badge badge-danger"></span> </a></li>
         <li class="nav-item"><a class="nav-link" href="#" ng-click="logout()"><span class="glyphicon glyphicon-sign-out"></span> Logout</a></li>
         
 

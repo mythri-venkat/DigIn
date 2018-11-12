@@ -361,11 +361,27 @@ class CustomerOrders(Resource):
 					result.append(order)
 			return {"count":len(result),"orders":result},200
 
+class CartAdd(Resource):
+	def post(self):
+		args = request.get_json(force=True)
+		print args
+		return "success",200
 
-api.add_resource(Restaurants, "/restaurants/<string:name>","/restaurants")
+
+class CartDelete(Resource):
+	def post(self):
+		args = request.get_json(force=True)
+		print args
+		return "success",200
+
+
+
+api.add_resource(Restaurants, "/restaurants/<string:name>","/")
 api.add_resource(Orders, "/orders/<string:id>","/orders")
 api.add_resource(Login,"/login")
 api.add_resource(Register,"/register")
 api.add_resource(RestaurantOrders,"/orders/restaurant/<string:rest_id>")
 api.add_resource(CustomerOrders,"/orders/customer/<string:id>")
+api.add_resource(CartAdd,"/cart/add")
+api.add_resource(CartDelete,"cart/delete")
 app.run(debug=True, port=5001)

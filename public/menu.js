@@ -25,10 +25,10 @@ angular.module('app')
                 }
             }
             $scope.add = function (idx) {
-                cart.addItem($scope.restaurant,$scope.restaurant.items[idx],$scope.quantity[idx]);
+                cart.addItem(idx,$scope.restaurant,shared.getUser().id,$scope.restaurant.items[idx],$scope.quantity[idx]);
                 $scope.quantity[idx]=1;
             }
             $scope.remove = function(idx){
-                cart.removeItem($scope.restaurant.items[idx].id);
+                cart.removeItem(idx,$scope.restaurant.items[idx].id,shared.getUser().id);
             }
         }])

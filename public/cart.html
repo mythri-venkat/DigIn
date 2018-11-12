@@ -14,51 +14,128 @@
 </style>
 <div class="row" style="height:100%" ng-init="onload">
     <div class="col-md-12">
-            <div class="row mt-5 mb-5 ">
-                    <div class="col-md-5 offset-1 bg-light mr-2 ">
-                        <h3>Delivery address</h3>
-                        <label>{{deliveryaddr}}</label>
+        <div class="row mt-5 mb-5 ">
+            <div class="col-md-5 offset-1 bg-light mr-2 ">
+                <h3>Delivery address</h3>
+                <label>{{deliveryaddr}}</label>
+            </div>
+            <div class="col-md-5 bg-light ml-1 mr-1">
+                <h3>Payment Method</h3>
+                <label><input type="radio" checked> <span class="fa fa-money"></span> Cash On Delivery</label>
+            </div>
+        </div>
+
+        <div class="row mt-5 mb-5 pt-2 pb-4">
+            <div class="col-md-10 p-5 offset-1 bg-light">
+
+                <div class="row m-3 text-left justify-content-start ">
+                    <div class="col-md-12">
+                        <img ng-src="{{restaurant.image}}" src="imgs/1.jpg" class="avatar-restaurant">
+
+                        <label>{{restaurant.name}}</label>
+
+                        <button ng-click="makePayment()" class="btn btn-primary float-right">Make Payment</button>
                     </div>
-                    <div class="col-md-5 bg-light ml-1 mr-1">
-                        <h3>Payment Method</h3>
-                        <label><input type="radio" checked> <span class="fa fa-money"></span> Cash On Delivery</label>
-                    </div>
+
                 </div>
-                
-                <div class="row mt-5 mb-5 pt-2 pb-4">
-                    <div class="col-md-10 p-5 offset-1 bg-light">
-                
-                        <div class="row m-3 text-left justify-content-start ">
-                            <div class="col-md-12">
-                                <img ng-src="{{restaurant.image}}" src="imgs/1.jpg" class="avatar-restaurant">
-                            
-                                <label>{{restaurant.name}}</label>
-                           
-                                <button class="btn btn-success float-right">Place Order</button>
-                            </div>
-                
-                        </div>
-                        <h3>Your Order</h3>
-                        <table class="table mt-2">
-                            <tbody>
-                                <tr ng-repeat="(key,value) in cartItems">
-                                    <td>
-                                        <img ng-src="{{value.item.image}}" src="imgs/1.jpg" class="avatar">
-                                    </td>
-                                    <td>{{value.item.name}}</td>
-                                    <td>{{value.quantity}}</td>
-                                    <td>x</td>
-                                    <td>{{value.item.price}}</td>
-                                    <td>=</td>
-                                    <td>{{value.quantity*value.item.price}}</td>
-                                    <td><button class="btn btn-danger" ng-click="remove(key)"><span class="fa fa-trash"></span></button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                
-                
-                
-                </div>
+                <h3 class="mt-4">Your Order</h3>
+                <table class="table mt-4">
+                    <tbody>
+                        <tr ng-repeat="value in cartItems">
+                            <td>
+                                <img ng-src="{{value.item.image}}" src="imgs/1.jpg" class="avatar">
+                            </td>
+                            <td>{{value.item.name}}</td>
+                            <td>{{value.quantity}}</td>
+                            <td>x</td>
+                            <td>{{value.item.price}}</td>
+                            <td>=</td>
+                            <td>{{value.quantity*value.item.price}}</td>
+                            <td><button class="btn btn-danger" ng-click="remove($index)"><span class="fa fa-trash"></span></button></td>
+                        </tr>
+                    </tbody>
+                    <tfoot ng-if="isvalid()">
+                        <tr>
+                            <td colspan="4">Tax</td>
+                            <td>{{restaurant.tax}}</td>
+                            <td>{{gettax()}} </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">Total</td>
+                            <td>{{gettotal()}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="orderModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Receipt</h5>
+                <button type="button" class="close" data-dismiss="modal" ng-click="showorderid=!showorderid" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>OrderId : {{$order.id}}</p>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>{{value.item.name}}</td>
+                            <td>{{value.quantity}}</td>
+                            <td>x</td>
+                            <td>{{value.item.price}}</td>
+                            <td>=</td>
+                            <td>{{value.quantity*value.item.price}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot ng-if="isvalid()">
+                        <tr>
+                            <td colspan="4">Tax</td>
+                            <td>{{restaurant.tax}}</td>
+                            <td>{{gettax()}} </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">Total</td>
+                            <td>{{gettotal()}}</td>
+                        </tr>
+                    </tfoot>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="payModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" ng-click="showorderid=!showorderid" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" disabled class="form-control" ng-model = "finaltotal">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" ng-click="placeOrder()">Pay</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>

@@ -14,6 +14,13 @@ import json
 
 mod_client = Blueprint('client', __name__)
 
+def enum(**enums):
+    return type('Enum', (), enums)
+
+Orders = enum(ORDER_CREATED=1, ORDER_PROCESS=2, ORDER_FINISHED=3, ORDER_CANCEL=4)
+
+print(Orders.ORDER_CREATED)
+
 #To display the home page after retrieval from database
 #, methods=['GET', 'POST']
 

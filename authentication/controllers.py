@@ -1,6 +1,6 @@
 from flask import url_for, render_template, redirect, flash, g, Blueprint, request, jsonify
 from flask_login import login_required, logout_user, login_user, current_user
-from FoodOrderClient import app, db
+from DigIn import app, db
 from .models import Users
 import json
 

@@ -1,4 +1,4 @@
-from FoodOrderClient import db
+from DigIn import db
 from passlib.hash import argon2
 
 

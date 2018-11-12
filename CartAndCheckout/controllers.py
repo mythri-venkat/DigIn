@@ -6,7 +6,7 @@ import datetime
 from datetime import datetime as dt
 from datetime import timedelta
 
-from FoodOrderClient import db, app
+from DigIn import db, app
 # import helper
 
 from .models import Restaurant, FoodItem, Cart

@@ -120,6 +120,7 @@ angular.module('app')
     }])
     .service('cart',['$http', function ($http) {
         var items = {};
+
         var restaurant = {};
         var strurl = "http://127.0.0.1:5001/"
         this.addItem = function (idx,rest, custid, it, qty) {
@@ -150,11 +151,16 @@ angular.module('app')
                 .then(
                     function (response) {
                         if (response.status == '200') {
+                            
                             if (items[idx]) {
                                 items[idx].quantity += qty;
                             }
                             else {
                                 items[idx] = { item: it, quantity: qty };
+                            }
+                            for(var i=0;i<items.length;i++){
+                                console.log(items[i]);
+
                             }
                         }
                         else {
@@ -207,6 +213,7 @@ angular.module('app')
 
 
         }
+        
         this.getRestaurant = function () {
             return restaurant;
         }

@@ -79,7 +79,7 @@ angular.module('app')
             }
         ];
         this.getAll = function (offset, limit) {
-            return $http.get(url+'restaurants').then(function (response) {
+            return $http.get(url + 'restaurants').then(function (response) {
                 if (response.status == '200') {
                     rests = response.data.restaurants;
                     return response.data;
@@ -107,7 +107,7 @@ angular.module('app')
                 }
 
             }, function (error) {
-                console.log(error);
+                alert(error);
                 return false;
             });
 
@@ -118,102 +118,142 @@ angular.module('app')
             return rests[id];
         }
     }])
-    .service('cart',['$http', function ($http) {
+    .service('cart', ['$http', function ($http) {
         var items = {};
-
+        var vm = this;
+        var it;
+        var qty;
+        var idx;
         var restaurant = {};
+        this.itemCount = 0;
         var strurl = "http://127.0.0.1:5001/"
-        this.addItem = function (idx,rest, custid, it, qty) {
-            // console.log(restaurant)
-            // console.log(rest)
-            if (restaurant.id != undefined && rest.id != restaurant.id) {
+        var obs=[];
+        this.registerobserver=function(cb){
+            obs.push(cb);
+
+        }
+        function notify(){
+            for(var i=0;i<obs.length;i++){
+                obs[i]();
+            }
+        }
+        this.addItem = function (idx1, rest, custid, it1, qty1) {
+          
+            idx = idx1;
+            it = it1;
+            qty = qty1;
+            if (restaurant.rest_id != undefined && rest.rest_id != restaurant.rest_id) {
                 alert("items from previous restaurant will be cleared");
                 restaurant = rest;
-                items = [];
-                for(var i=0;i<rest.items.length;i++){
-                    items.push({});
-                }
+                
+                items = {};
             }
-            if (restaurant.id == undefined) {
+            if (restaurant.rest_id == undefined) {
                 restaurant = rest;
-                items = [];
-                for(var i=0;i<rest.items.length;i++){
-                    items.push({});
-                }
+                items = {};
+                
             }
 
 
             $http({
                 method: 'POST',
                 url: strurl + 'cart/add',
-                data: { "product_id": it.id, "cust_id": custid, "quantity": qty }
+                data: { "product_id": it1.item_id, "cust_id": custid, "quantity": qty1 }
             })
-                .then(
-                    function (response) {
-                        if (response.status == '200') {
-                            
-                            if (items[idx]) {
-                                items[idx].quantity += qty;
-                            }
-                            else {
-                                items[idx] = { item: it, quantity: qty };
-                            }
-                            for(var i=0;i<items.length;i++){
-                                console.log(items[i]);
-
-                            }
-                        }
-                        else {
-                            alert("could not add item to cart");
-                        }
-                    },
+                .then(vm.addReponse,
                     function (error) {
                         alert(error);
                     }
                 )
             //console.log(items);
         }
-        this.removeItem = function (idx,cust_id,product_id) {
 
-            if (items[idx]) {
+        this.addReponse = function (response) {
+
+            if (response.status == '200') {
+                //console.log(items[idx])
+                
+                if (items[it.item_id]) {
+                    items[it.item_id].quantity += qty;
+                }
+                else {
+                    items[it.item_id]={ item: it, quantity: qty };
+                    vm.itemCount +=1;
+                   
+                    notify();
+                }
+                
+
+
+            }
+            else {
+                alert("could not add item to cart");
+            }
+
+
+        }
+
+        this.getCartItems = function () {
+            return items;
+        }
+
+
+        this.removeItem = function (cust_id, product_id) {
+            console.log(product_id);
+            console.log(Object.keys(items));
+            if (items[product_id]) {
                 $http({
                     method: 'POST',
                     url: strurl + "cart/delete",
-                    data:{"cust_id":cust_id,"product_id":product_id}
+                    data: { "cust_id": cust_id, "product_id": product_id }
                 })
                     .then(
                         function (response) {
                             if (response.status == "200") {
-                                items.splice(idx,1)
-                                if (items.length==0) {
+                                delete items[idx];
+                                vm.itemCount -=1;
+                                notify();
+                                if (items.length == 0) {
                                     restaurant = {};
                                 }
                             }
 
                         },
                         function (error) {
+                            alert(error);
 
                         }
                     )
                 //console.log(items);
             }
         }
-        this.getItems = function () {
+        this.getItems = function (id) {
 
-            return $http.get(strurl + 'cart').then(function (response) {
+            return $http.get(strurl+'cart/'+id).then(function (response) {
                 if (response.status == '200') {
-                    items = response.data;
-                    return response.data;
+                    restaurant = response.data.restaurant;
+                    
+                    cartitems = response.data.items;
+                    for(var i=0;i<cartitems.length;i++){
+                        items[cartitems[i].item.item_id]={item:cartitems[i].item,quantity:cartitems[i].quantity};
+                    }
+                    vm.itemCount = Object.keys(items).length;
+                    
+                    notify();
+                    return items;
                 }
                 else {
-                   
+                    
                     return false;
                 }
+            },function(error){
+                alert(error);
+                return false;
             })
 
 
         }
-        
+
         this.getRestaurant = function () {
             return restaurant;
         }
@@ -338,7 +378,11 @@ angular.module('app')
 
         }
 
-        this.placeOrder = function (custid, restid, cartitems) {
+        this.placeOrder = function (custid, restid, cart) {
+            cartitems = [];
+            angular.forEach(cart,function(value,key){
+                cartitems.push({item_id:key,quantity:value.quantity});
+            })
             return $http({
                 method: 'POST',
                 url: strurl + 'order',

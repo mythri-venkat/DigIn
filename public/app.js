@@ -59,6 +59,7 @@ angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.paginat
     .controller('ctrl', ['$scope', '$cookies', '$location', '$rootScope', 'shared','cart', function ($scope, $cookies, $location, $rootScope, shared,cart) {
 
         var observelogin = function () {
+            //console.log()
             $scope.loggedin = shared.isloggedIn();
             if($scope.loggedin){
                 $scope.role = shared.getUser().role;
@@ -67,9 +68,17 @@ angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.paginat
             
 
         }
+
+        $scope.itemCount = cart.itemCount;
+        var observecart = function(){
+            
+            $scope.itemCount = cart.itemCount;
+            console.log(cart.itemCount);
+        }
         $scope.loggedin=false;
         $scope.role = 'customer';
         shared.registerobserver(observelogin);
+        cart.registerobserver(observecart);
         $scope.init = function () {
             
             var usr = $cookies.getObject('usr');
@@ -88,11 +97,10 @@ angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.paginat
         $scope.logout = function () {
             
             shared.logout();
+            $scope.loggedin=false;
             $location.path('/')
         }
 
-        
-        $scope.itemcount = 0;
     }])
 
 

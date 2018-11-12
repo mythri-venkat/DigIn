@@ -41,7 +41,7 @@
                 <h3 class="mt-4">Your Order</h3>
                 <table class="table mt-4">
                     <tbody>
-                        <tr ng-repeat="value in cartItems">
+                        <tr ng-repeat="(key,value) in cartItems">
                             <td>
                                 <img ng-src="{{value.item.image}}" src="imgs/1.jpg" class="avatar">
                             </td>
@@ -51,18 +51,25 @@
                             <td>{{value.item.price}}</td>
                             <td>=</td>
                             <td>{{value.quantity*value.item.price}}</td>
-                            <td><button class="btn btn-danger" ng-click="remove($index)"><span class="fa fa-trash"></span></button></td>
+                            <td><button class="btn btn-danger" ng-click="remove(value.item.item_id)"><span class="fa fa-trash"></span></button></td>
                         </tr>
                     </tbody>
                     <tfoot ng-if="isvalid()">
                         <tr>
-                            <td colspan="4">Tax</td>
+                            <td></td>
+                            <td colspan="2">Tax</td>
+                            <td>x</td>
                             <td>{{restaurant.tax}}</td>
+                            <td>=</td>
                             <td>{{gettax()}} </td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td colspan="5">Total</td>
+                            <td></td>
+                            <td colspan="4">Total</td>
+                            <td>=</td>
                             <td>{{gettotal()}}</td>
+                            <td></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -79,17 +86,22 @@
 <div class="modal" tabindex="-1" role="dialog" id="orderModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header text-center">
                 <h5 class="modal-title">Receipt</h5>
+
                 <button type="button" class="close" data-dismiss="modal" ng-click="showorderid=!showorderid" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <p>OrderId : {{$order.id}}</p>
+            <div class="modal-body text-center">
+                <p>Thank You! Order again or visit Us!</p>
+                <p>{{restaurant.address}}</p>
+                <hr>
+                <p class="text-center">OrderId : {{orderId}}</p>
+
                 <table class="table">
                     <tbody>
-                        <tr>
+                        <tr ng-repeat="(key,value) in cartItems">
                             <td>{{value.item.name}}</td>
                             <td>{{value.quantity}}</td>
                             <td>x</td>
@@ -130,7 +142,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="text" disabled class="form-control" ng-model = "finaltotal">
+                <input type="text" disabled class="form-control" ng-model="finaltotal">
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success" ng-click="placeOrder()">Pay</button>

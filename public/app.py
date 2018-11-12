@@ -341,6 +341,7 @@ class RestaurantOrders(Resource):
 			return "Id required",404
 		else:
 			result=[]
+			count = 0
 			for order in orders:
 				for orderitem in order["orderItems"]:
 					for item in orderitem["items"]:
@@ -383,5 +384,4 @@ api.add_resource(Register,"/register")
 api.add_resource(RestaurantOrders,"/orders/restaurant/<string:rest_id>")
 api.add_resource(CustomerOrders,"/orders/customer/<string:id>")
 api.add_resource(CartAdd,"/cart/add")
-api.add_resource(CartDelete,"cart/delete")
 app.run(debug=True, port=5001)

@@ -82,4 +82,35 @@ class Cart(db.Model, TOJSON):
     def json(self):
         return to_json(self, self.__class__)
 
+class Order(db.Model, TOJSON):
+    __tablename__ = 'order'
+
+    order_id = db.Column(db.Integer, primary_key=True)
+    custid =  db.Column(db.Integer, db.ForeignKey('user.id'))
+    #delivery address
+    address = db.Column(db.String(255))
+    #order purchase date
+    date_purchased = db.Column(db.DateTime )
+    orderstatus = db.Column(db.Integer, nullable = False)
+    date_finished = db.Column(db.DateTime )
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__)
+
+class OrderItem(db.Model, TOJSON):
+    __tablename__ = 'orderitem'
+
+    orderitem_id = db.Column(db.Integer, primary_key=True)
+    order_id =  db.Column(db.Integer, db.ForeignKey('order.order_id'))
+    fooditem_id = db.Column(db.Integer, db.ForeignKey('FoodItem.item_id'))
+    #delivery address
+    item_name = db.Column(db.String(255), nullable=False)
+    #order purchase date
+    item_description =  db.Column(db.String(255) )
+
+    @property
+    def json(self):
+        return to_json(self, self.__class__)
+
 

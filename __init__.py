@@ -16,7 +16,7 @@ database_file = "sqlite:///{}".format(os.path.join(project_dir, "Restaurant.sqli
 
 def init_db(db):
     from authentication.models import Users
-    from .CartAndCheckout.models import Restaurant, FoodItem, Cart
+    from .CartAndCheckout.models import Restaurant, FoodItem, Cart , Order,OrderItem
 
    # db.drop_all()
 

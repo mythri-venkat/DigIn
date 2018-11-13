@@ -42,16 +42,28 @@ angular.module('app')
             return rests[id];
         }
     }])
-    .service('cart', ['$http', function ($http) {
+    .service('cart', ['$http','shared', function ($http,shared) {
         var items = {};
         var vm = this;
-        var it;
-        var qty;
-        var idx;
+        
         var restaurant = {};
         this.itemCount = 0;
         var strurl = "http://127.0.0.1:5001/"
         var obs = [];
+
+        var loginwatch = function(){
+            if(shared.isloggedIn()){
+                this.getItems(shared.getUser().id);
+            }
+            else{
+                vm.itemCount = 0;
+                notify();
+            }
+            
+        }
+
+        shared.registerobserver(loginwatch);
+
         this.registerobserver = function (cb) {
             obs.push(cb);
 
@@ -63,9 +75,6 @@ angular.module('app')
         }
         this.addItem = function (idx1, rest, custid, it1, qty1) {
 
-            idx = idx1;
-            it = it1;
-            qty = qty1;
             if (restaurant.rest_id != undefined && rest.rest_id != restaurant.rest_id) {
                 alert("items from previous restaurant will be cleared");
                 restaurant = rest;
@@ -188,6 +197,9 @@ angular.module('app')
                 //console.log(items);
             }
         }
+
+        
+
         this.getItems = function (id) {
 
             return $http.get(strurl + 'cart/' + id).then(function (response) {
@@ -366,13 +378,17 @@ angular.module('app')
 
         }
 
-        this.changeOrderStatus = function (orderid, stat) {
+        this.changeStatus = function (orderid, stat) {
             return $http({
-                method: 'POST',
-                url: strurl + 'order/status',
-                data: { order_id: orderid, status: stat }
+                method: 'PUT',
+                url: strurl + 'order/'+orderid,
+                data: {status: stat }
             }).then(function (response) {
+                if(response.status == '200')
                 return response.data;
+                else{
+                    return false;
+                }
 
             }, function (error) {
                 alert(error);

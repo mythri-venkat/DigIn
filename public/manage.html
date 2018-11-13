@@ -15,6 +15,7 @@
                 <tr>
                     <th>Id</th>cd 
                     <th>Customer Name</th>
+                    <th>Customer Address</th>
                     <th>Status</th>
                     <th>Date</th>
                     <th>Time</th>
@@ -26,7 +27,8 @@
                 <div >
                     <tr ng-repeat="order in orders | filter:searchOrder" ng-click="show($index)" >
                         <td ng-hide="showdetails[$index]">{{order.id}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.CustomerName}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.user.name}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.user.address}}</td>
                         <td ng-hide="showdetails[$index]">{{order.status}}</td>
                         <td ng-hide="showdetails[$index]">{{order.date}}</td>
                         <td ng-hide="showdetails[$index]">{{order.time}}</td>
@@ -52,13 +54,13 @@
                                             Change Status:
                                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                {{order.status}}
+                                                {{statusEnum[order.status]}}
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="#" >Preparing</a>
-                                                <a class="dropdown-item" href="#">On the way</a>
-                                                <a class="dropdown-item" href="#">Delivered</a>
-                                                <a class="dropdown-item" href="#">Cancel</a>
+                                                <a class="dropdown-item" href="#" ng-click="changeStatus($index,1)">Preparing</a>
+                                                <a class="dropdown-item" href="#" ng-click="changeStatus($index,2)">On the way</a>
+                                                <a class="dropdown-item" href="#" ng-click="changeStatus($index,3)">Delivered</a>
+                                                <a class="dropdown-item" href="#" ng-click="changeStatus($index,4)">Cancel</a>
                                             </div>
 
                                         </div>

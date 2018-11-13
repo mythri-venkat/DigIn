@@ -96,10 +96,14 @@ angular.module('app')
 
                     }
                     else {
-                        $('#orderModal').modal('show');
-                        console.log("error");
+                       
+                        alert("Order could not be placed!");
+                        
                         //alert("Could not place order!");
                     }
+                },function(error){
+                    alert("Order could not be placed!");
+                    console.log(error);
                 })
         }
     }])

@@ -1,41 +1,49 @@
 <div class="row">
     <div class="col-lg-4 offset-4">
-        <div class="form-group text-center">
-            <label class="radio-inline ml-1"><input type="radio" name="role" ng-model="user.role" value="customer">Customer</label>
-            |
-            <label class="radio-inline ml-1"><input type="radio" name="role" ng-model="user.role" value="restaurant">Restaurant</label>
-        </div>
-        <div class="form-group">
-            <label for="firstname">First Name:</label>
-            <input type="text" class="form-control" id="firstname" ng-model="user.firstname">
-        </div>
-        <div class="form-group">
-            <label for="lastname">Last Name:</label>
-            <input type="text" class="form-control" id="lastname" ng-model="user.lastname">
-        </div>
-        <div class="form-group" ng-show="user.role=='restaurant'">
-            <label for="restname">Restaurant Name:</label>
-            <input type="text" class="form-control" id="restname" ng-model="user.restname">
-        </div>
-        <div class="form-group">
-            <label for="address">Address:</label>
-            <input type="text" class="form-control" id="address" ng-model="user.address">
-        </div>
-        <div class="form-group">
-            <label for="emailid">Email:</label>
-            <input type="text" class="form-control" id="emailid" ng-model="user.email">
-        </div>
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" ng-model="user.username">
-        </div>
-        <div class="form-group">
-            <label for="pwd">Password:</label>
-            <input type="password" class="form-control" id="pwd" ng-model="user.password">
-        </div>
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary" ng-click="register()">Register</button>
-        </div>
+        <form name="userForm">
+            <div class="form-group text-center">
+
+                <label class="radio-inline ml-1"><input type="radio" name="role" ng-model="user.role" value="customer">Customer</label>
+                |
+                <label class="radio-inline ml-1"><input type="radio" name="role" ng-model="user.role" value="restaurant">Restaurant</label>
+            </div>
+            <div class="form-group">
+                <label for="firstname">First Name:</label>
+                <input type="text" class="form-control" id="firstname" ng-model="user.firstname">
+            </div>
+            <div class="form-group">
+                <label for="lastname">Last Name:</label>
+                <input type="text" class="form-control" id="lastname" ng-model="user.lastname">
+            </div>
+            <div class="form-group" ng-show="user.role=='restaurant'">
+                <label for="restname">Restaurant Name:</label>
+                <input type="text" class="form-control" id="restname" ng-model="user.restname" ng-required="true">
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" class="form-control" id="address" ng-model="user.address" ng-required="true">
+            </div>
+            <div class="form-group">
+                <label for="emailid">Email:</label>
+                <input type="email" name="email" class="form-control" ng-model="user.email" ng-required="true">
+
+                    <p class="help text-danger text-center" ng-show="userForm.email.$error.email">
+                        Not valid email!</p>
+                
+            </div>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" ng-model="user.username" ng-required="true">
+            </div>
+            <div class="form-group">
+                <label for="pwd">Password:</label>
+                <input type="password" class="form-control" name="pwd" ng-model="user.password" ng-required="true" ng-minlength="6">
+                <p ng-show="userForm.pwd.$error.minlength" class="help text-danger text-center">Password is too short.</p>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary" ng-click="register()" ng-disabled="userForm.$invalid">Register</button>
+            </div>
+        </form>
 
     </div>
 </div>

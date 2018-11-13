@@ -30,7 +30,7 @@
 
                 <div class="row m-3 text-left justify-content-start ">
                     <div class="col-md-12">
-                        <img ng-src="{{restaurant.image}}" src="imgs/1.jpg" class="avatar-restaurant">
+                        <img ng-src="{{restaurant.image_url}}" src="imgs/1.jpg" class="avatar-restaurant">
 
                         <label>{{restaurant.name}}</label>
 
@@ -43,7 +43,7 @@
                     <tbody>
                         <tr ng-repeat="(key,value) in cartItems">
                             <td>
-                                <img ng-src="{{value.item.image}}" src="imgs/1.jpg" class="avatar">
+                                <img ng-src="{{value.item.image_url}}" src="imgs/1.jpg" class="avatar">
                             </td>
                             <td>{{value.item.name}}</td>
                             <td>{{value.quantity}}</td>

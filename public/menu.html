@@ -14,7 +14,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3 offset-2">
-                        <img class="img-fluid" ng-src="{{restaurant.image}}">
+                        <img class="img-fluid" ng-src="{{restaurant.image_url}}">
 
                     </div>
                     <div class="col-lg-5">
@@ -28,7 +28,7 @@
                             <p>{{restaurant.description}}</p>
                         </div>
                         <div class="row">
-                            Opens:{{restaurant['timing-start']}}  | Closes:{{restaurant['timing-end']}}
+                            Opens:{{restaurant.open_time}}  | Closes:{{restaurant.end_time}}
                         </div>
 
                     </div>
@@ -46,7 +46,7 @@
 
             <div class="col-md-4 mb-3">
                 <div class="card">
-                    <img class="card-img-top" ng-src="{{restaurant.items[$index].image}}">
+                    <img class="card-img-top" ng-src="{{restaurant.items[$index].image_url}}">
                     <div class="card-body">
                         <h4 class="card-title">{{restaurant.items[$index].name}}</h4>
                         <p class="text-muted justify-content-end">Cost:{{restaurant.items[$index].price}}</p>
@@ -61,7 +61,7 @@
             </div>
             <div class="col-md-4" ng-if="isvalid($index+1)">
                 <div class="card">
-                    <img class="card-img-top" ng-src="{{restaurant.items[$index+1].image}}">
+                    <img class="card-img-top" ng-src="{{restaurant.items[$index+1].image_url}}">
                     <div class="card-body">
                         <h4 class="card-title">{{restaurant.items[$index+1].name}}</h4>
                         <p class="text-muted justify-content-end">Cost:{{restaurant.items[$index+1].price}}</p>
@@ -77,7 +77,7 @@
             </div>
             <div class="col-md-4" ng-if="isvalid($index+2)">
                 <div class="card">
-                    <img class="card-img-top" ng-src="{{restaurant.items[$index+2].image}}">
+                    <img class="card-img-top" ng-src="{{restaurant.items[$index+2].image_url}}">
                     <div class="card-body">
                         <h4 class="card-title">{{restaurant.items[$index+2].name}}</h4>
                         <p class="text-muted justify-content-end">Cost:{{restaurant.items[$index+2].price}}</p>

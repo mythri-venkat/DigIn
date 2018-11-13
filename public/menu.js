@@ -11,6 +11,7 @@ angular.module('app')
             $scope.$on('$routeChangeSuccess', function () {
                 observelogin();
                 $scope.restaurant = restaurant.getRestaurant($routeParams.id);
+
                 for (var i = 0; i < $scope.restaurant.items.length; i++) {
                     $scope.quantity.push(1);
                 }

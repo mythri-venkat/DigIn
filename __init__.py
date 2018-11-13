@@ -29,7 +29,7 @@ def init_db(db):
     db.Model.save = save
 
 
-app = Flask(__name__)
+app = Flask(__name__,static_folder='public')
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 app.secret_key = os.urandom(24)
 #app.config.from_object('client_config')

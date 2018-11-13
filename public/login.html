@@ -1,20 +1,22 @@
 <div class="row margin-view">
     <div class="col-md-4 offset-4">
-
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" ng-model="username">
-        </div>
-        <div class="form-group">
-            <label for="pwd">Password:</label>
-            <input type="password" class="form-control" id="pwd" ng-model="pwd">
-        </div>
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary" ng-click="login()">Log In</button>
-        </div>
-        <div class="text-center">
-            <label class="text-danger" ng-show="loginfail">Login failed!</label>
-        </div>
+        <form name="userForm">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" ng-model="username"  ng-required="true">
+            </div>
+            <div class="form-group">
+                <label for="pwd">Password:</label>
+                <input type="password" class="form-control" name="pwd" ng-model="pwd"ng-required="true" ng-minlength="6">
+                <p ng-show="userForm.pwd.$error.minlength" class="help text-danger text-center">Password is too short.</p>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary" ng-click="login()">Log In</button>
+            </div>
+            <div class="text-center">
+                <label class="text-danger" ng-show="loginfail" ng-disabled="">Login failed!</label>
+            </div>
+        </form>
 
     </div>
 </div>

@@ -24,7 +24,7 @@
 
             <div class="col-md-4 mb-3" ng-if="isvalid($index)">
                 <div class="card" ng-click="menu($index)">
-                    <img class="card-img-top" ng-src="{{restaurants[$index].image}}">
+                    <img class="card-img-top" ng-src="{{restaurants[$index].image_url}}">
                     <div class="card-block">
                         <h4 class="card-title">{{restaurants[$index].name}}</h4>
                         <p class="card-text">{{restaurants[$index].description}}</p>
@@ -34,7 +34,7 @@
             </div>
             <div class="col-md-4 mb-3" ng-if="isvalid($index+1)">
                 <div class="card" ng-click="menu($index+1)">
-                    <img class="card-img-top" ng-src="{{restaurants[$index+1].image}}">
+                    <img class="card-img-top" ng-src="{{restaurants[$index+1].image_url}}">
                     <div class="card-block">
                         <h4 class="card-title">{{restaurants[$index+1].name}}</h4>
                         <p class="card-text">{{restaurants[$index+1].description}}</p>
@@ -44,7 +44,7 @@
             </div>
             <div class="col-md-4 mb-3" ng-if="isvalid($index+2)">
                 <div class="card" ng-click="menu($index+2)">
-                    <img class="card-img-top" ng-src="{{restaurants[$index+2].image}}">
+                    <img class="card-img-top" ng-src="{{restaurants[$index+2].image_url}}">
                     <div class="card-block">
                         <h4 class="card-title">{{restaurants[$index+2].name}}</h4>
                         <p class="card-text">{{restaurants[$index+2].description}}</p>

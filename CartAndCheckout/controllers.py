@@ -1,6 +1,6 @@
 from sqlalchemy import and_, func, between
 from flask_login import login_required, current_user
-from flask import Flask, render_template, redirect, url_for, session, g, Blueprint, request, jsonify, url_for
+from flask import Flask, render_template, redirect, url_for, session, g, Blueprint, request, jsonify, url_for,send_from_directory
 
 import datetime
 from datetime import datetime as dt
@@ -27,6 +27,12 @@ print "order creation status" ,(Orders.ORDER_CREATED)
 
 #To display the home page after retrieval from database
 #, methods=['GET', 'POST']
+
+@app.route('/<path:path>')
+def send_html(path):
+    print path
+    return send_from_directory(app.static_folder, path)
+
 
 @app.route('/restaurants', methods=['GET', 'POST'])
 # @login_required

@@ -9,7 +9,14 @@ angular.module('app').controller('registerctrl', ['$scope','$location','shared',
         username:"",
         restname:""
     };
+
+
+    
     $scope.register = function(){
+        if($scope.user.password.length < 6){
+            $scope.validpwd = false;
+            return;
+        }
         console.log($scope.user);
 
         shared.register($scope.user).then(function(response){
@@ -24,4 +31,4 @@ angular.module('app').controller('registerctrl', ['$scope','$location','shared',
         });
        
     }
-}]);
+}])

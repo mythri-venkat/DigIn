@@ -18,7 +18,7 @@ angular.module('app')
                 callb = restaurant.search(name);
             }
             else{
-                callb = restaurant.getAll();
+                callb = restaurant.getAll(0,3);
                 showfew=true;
             }
         

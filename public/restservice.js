@@ -2,11 +2,20 @@ angular.module('app')
     .service('restaurant', ['$http', function ($http) {
         var url = "http://127.0.0.1:5001/"
 
+        var rests=[]
+
         this.getAll = function (offset, limit) {
             return $http.get(url + 'restaurants').then(function (response) {
                 if (response.status == '200') {
-                    rests = response.data.restaurants;
-                    return response.data;
+                    if (response.data.restaurants)
+                        rests = response.data.restaurants;
+                    cnt = 20
+                    if (response.data.count)
+                        cnt = response.data.count
+
+                    
+                    return { count: cnt, 'restaurants': rests.splice(offset, offset + limit) };
+                    
                 }
                 else {
                     return false
@@ -37,32 +46,45 @@ angular.module('app')
 
         }
 
+        this.getRestFromUserId = function(id){
+            return $http.get(strurl+"restaurant/userid/"+id).then(function(response){
+                if(response.status =='200'){
+                    return response.data;
+                }
+                else{
+                    return false;
+                }
+
+            },function(error){
+                console.log(error);
+            })
+        }
         this.getRestaurant = function (id) {
 
             return rests[id];
         }
     }])
-    .service('cart', ['$http','shared', function ($http,shared) {
+    .service('cart', ['$http', 'shared', function ($http, shared) {
         var items = {};
         var vm = this;
-        
+
         var restaurant = {};
         this.itemCount = 0;
         var strurl = "http://127.0.0.1:5001/"
         var obs = [];
         var it;
         var qty;
-        var loginwatch = function(){
-            if(shared.isloggedIn() && shared.getUser().role == 'customer'){
-                vm.getItems(shared.getUser().id).then(function(response){
+        var loginwatch = function () {
+            if (shared.isloggedIn() && shared.getUser().role == 'customer') {
+                vm.getItems(shared.getUser().id).then(function (response) {
                     console.log("items loaded");
                 })
             }
-            else{
+            else {
                 vm.itemCount = 0;
                 notify();
             }
-            
+
         }
 
         shared.registerobserver(loginwatch);
@@ -77,8 +99,8 @@ angular.module('app')
             }
         }
         this.addItem = function (idx1, rest, custid, it1, qty1) {
-            it=it1;
-            qty=qty1;
+            it = it1;
+            qty = qty1;
             if (restaurant.rest_id != undefined && rest.rest_id != restaurant.rest_id) {
                 alert("items from previous restaurant will be cleared");
                 restaurant = rest;
@@ -87,11 +109,11 @@ angular.module('app')
                 this.clearCart(custid).then(function (response) {
                     console.log(response);
 
-                    if (response == "success"){
-                       
+                    if (response == "success") {
+
                         addtocart(it1, custid, qty1);
                     }
-                        
+
                 }, function (error) {
                     alert("server error,cart clear" + error)
                 })
@@ -156,19 +178,19 @@ angular.module('app')
 
             })
                 .then(function (response) {
-                    if(response.data == "success"){
-                        items={};
+                    if (response.data == "success") {
+                        items = {};
                         vm.itemCount = 0;
                         notify();
                     }
-                    else{
+                    else {
                         return false;
                     }
                     return response.data;
 
                 }, function (error) {
                     //alert("server error" + error);
-                    console.log("server error"+error);
+                    console.log("server error" + error);
                     return false;
                 });
         }
@@ -208,7 +230,7 @@ angular.module('app')
             }
         }
 
-        
+
 
         this.getItems = function (id) {
 
@@ -244,6 +266,7 @@ angular.module('app')
     .service('orderservice', ['$http', function ($http) {
         this.id = 0;
         var strurl = "http://127.0.0.1:5001/"
+
         var orders = [{
             "id": "ORDR1",
             "status": "Paid",
@@ -319,15 +342,33 @@ angular.module('app')
         }
         ];
 
+        this.revenue = function(){
+            var revenue =0;
+            if(orders){
+                for(var i=0;i<orders.length;i++){
+                    if(orders[i].status == '3')
+                    revenue+=orders[i].totalAmount;
+                }
+            }
+            return revenue;
+        }
+
         this.getRestaurantOrders = function (id, offset, limit) {
-            
+
 
             return $http.get(strurl + "orders/restaurant/" + id)
                 .then(
                     function (response) {
                         if (response.status == '200') {
                             console.log(response);
-                            return response.data;
+                            if (response.data.orders)
+                                orders = response.data.orders;
+                            cnt = 20
+                            if (response.data.count)
+                                cnt = response.data.count
+
+
+                            return { count: cnt, 'orders': orders };
                         }
                         else {
                             return false;
@@ -341,13 +382,20 @@ angular.module('app')
         }
 
         this.getCustomerOrders = function (id, offset, limit) {
-
+            
             return $http.get(strurl + "orders/customer/" + id)
                 .then(
                     function (response) {
                         if (response.status == '200') {
                             console.log(response);
-                            return response.data;
+                            if (response.data.orders)
+                                orders = response.data.orders;
+                            cnt = 20
+                            if (response.data.count)
+                                cnt = response.data.count
+
+
+                            return { count: cnt, 'orders': order.splice(offset, offset + limit) };
                         }
                         else {
                             return false;
@@ -389,12 +437,12 @@ angular.module('app')
         this.changeStatus = function (orderid, stat) {
             return $http({
                 method: 'PUT',
-                url: strurl + 'order/'+orderid,
-                data: {status: stat }
+                url: strurl + 'order/' + orderid,
+                data: { status: stat }
             }).then(function (response) {
-                if(response.status == '200')
-                return response.data;
-                else{
+                if (response.status == '200')
+                    return response.data;
+                else {
                     return false;
                 }
 

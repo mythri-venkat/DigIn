@@ -9,7 +9,7 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
     $scope.Filter = {}
     $scope.Filter.status = '';
     $scope.statusEnum = { 1:"Order Placed",2:"Processing",3:"Delivered",4:"Cancelled"};
-    
+    $scope.orderCount = 0;
     $scope.$on('$routeChangeSuccess', function () {
         //console.log(shared.getUser().id);
         //console.log(user);
@@ -27,6 +27,7 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
                 //console.log()
                 // $scope.noOfPages = Math.ceil(data["count"]/$scope.numPerPage);
                 // $scope.orders = data["orders"];
+                $scope.orderCount = data.count;
                 $scope.noOfPages = Math.ceil(data.count/$scope.numPerPage);
                 $scope.orders = data.orders;
                 //console.log($scope.orders);
@@ -60,6 +61,10 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
             alert("order status could not be changed");
 
         })
+    }
+
+    $scope.getRevenue = function(){
+        return orderservice.revenue();
     }
 
     $scope.show = function (idx) {

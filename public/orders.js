@@ -14,6 +14,7 @@ angular.module('app').controller('ordersctrl', ['$scope', 'orderservice', 'share
     });
 
     $scope.getOrders = function(){
+        if(shared.getUser().role == 'customer')
         orderservice.getCustomerOrders(shared.getUser().id,($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage)
         .then(function(data){
             if (!data || data == []) {

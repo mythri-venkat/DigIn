@@ -84,6 +84,7 @@ angular.module('app')
         }
 
         $scope.redirect = function(){
+
             $('#orderModal').modal('hide');
             $location.path("/");
         }

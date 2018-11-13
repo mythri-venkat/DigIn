@@ -1,83 +1,7 @@
 angular.module('app')
     .service('restaurant', ['$http', function ($http) {
         var url = "http://127.0.0.1:5001/"
-        var rests = [
-            {
-                id: 1,
-                name: 'rest1',
-                img: "imgs/1.jpg",
-                address: "wsvwe,wefc,wedf,wewevweddc.",
-                description: "awesome pizzas",
-                tags: "askj asjjk aslkl adcadc",
-                "timing-start": "9:00 AM",
-                "timing-end": "9:00 PM",
-                items: [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "imgs/3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "cost": 100,
-                    "availability": 10
-                }, {
-                    "id": "ITEM123",
-                    "restId": "REST1234",
-                    "name": "Item2",
-                    "image": "imgs/4.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "cost": 190,
-                    "availability": 5
-                },
-                {
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "imgs/11.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "cost": 120,
-                    "availability": 8
-                },
-                {
-                    "id": "ITEM125",
-                    "restId": "REST1234",
-                    "name": "Item4",
-                    "image": "imgs/12.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "cost": 150,
-                    "availability": 7
-                }]
-            },
-            {
-                id: 2,
-                name: 'rest2',
-                img: "imgs/2.jpg",
-                address: "wsvwe,wefc,wedf,wewevweddc.",
-                tags: "askj asjjk aslkl adcadc",
-                "timing-start": "9:00 AM",
-                "timing-end": "9:00 PM",
-                description: "mouth watering burgers",
-                items: [
-                    {
-                        "id": "ITEM124",
-                        "restId": "REST1234",
-                        "name": "Item 3",
-                        "image": "imgs/11.jpg",
-                        "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                        "cost": 120,
-                        "availability": 8
-                    },
-                    {
-                        "id": "ITEM125",
-                        "restId": "REST1234",
-                        "name": "Item4",
-                        "image": "imgs/12.jpg",
-                        "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                        "cost": 150,
-                        "availability": 7
-                    }
-                ]
-            }
-        ];
+
         this.getAll = function (offset, limit) {
             return $http.get(url + 'restaurants').then(function (response) {
                 if (response.status == '200') {
@@ -118,16 +42,28 @@ angular.module('app')
             return rests[id];
         }
     }])
-    .service('cart', ['$http', function ($http) {
+    .service('cart', ['$http','shared', function ($http,shared) {
         var items = {};
         var vm = this;
-        var it;
-        var qty;
-        var idx;
+        
         var restaurant = {};
         this.itemCount = 0;
         var strurl = "http://127.0.0.1:5001/"
         var obs = [];
+
+        var loginwatch = function(){
+            if(shared.isloggedIn()){
+                this.getItems(shared.getUser().id);
+            }
+            else{
+                vm.itemCount = 0;
+                notify();
+            }
+            
+        }
+
+        shared.registerobserver(loginwatch);
+
         this.registerobserver = function (cb) {
             obs.push(cb);
 
@@ -139,9 +75,6 @@ angular.module('app')
         }
         this.addItem = function (idx1, rest, custid, it1, qty1) {
 
-            idx = idx1;
-            it = it1;
-            qty = qty1;
             if (restaurant.rest_id != undefined && rest.rest_id != restaurant.rest_id) {
                 alert("items from previous restaurant will be cleared");
                 restaurant = rest;
@@ -149,16 +82,25 @@ angular.module('app')
                 items = {};
                 this.clearCart(custid).then(function (response) {
                     console.log(response);
-                    //if (response == "success")
+
+                    if (response == "success"){
+                        vm.itemCount = 0;
+                        notify();
                         addtocart(it1, custid, qty1);
+                    }
+                        
                 }, function (error) {
                     alert("server error,cart clear" + error)
                 })
             }
-            if (restaurant.rest_id == undefined) {
+            else if (restaurant.rest_id == undefined) {
                 restaurant = rest;
                 items = {};
                 addtocart(it1, custid, qty1);
+            }
+            else {
+                addtocart(it1, custid, qty1);
+
             }
 
             //console.log(items);
@@ -205,13 +147,18 @@ angular.module('app')
 
 
         this.clearCart = function (id) {
-            return $http.get(strurl + "cart/clear/" + id)
+            return $http({
+                method: 'DELETE',
+                url: strurl + "cart/" + id,
+
+            })
                 .then(function (response) {
+                   
                     return response.data;
 
                 }, function (error) {
-                    alert("server error" + error);
-                    console.log(error);
+                    //alert("server error" + error);
+                    console.log("server error"+error);
                     return false;
                 });
         }
@@ -219,7 +166,7 @@ angular.module('app')
         this.getCartItems = function () {
             return items;
         }
-        
+
 
         this.removeItem = function (cust_id, product_id) {
             console.log(product_id);
@@ -250,6 +197,9 @@ angular.module('app')
                 //console.log(items);
             }
         }
+
+        
+
         this.getItems = function (id) {
 
             return $http.get(strurl + 'cart/' + id).then(function (response) {
@@ -428,15 +378,19 @@ angular.module('app')
 
         }
 
-        this.changeOrderStatus = function(orderid,stat){
+        this.changeStatus = function (orderid, stat) {
             return $http({
-                method:'POST',
-                url:strurl+'order/status',
-                data:{order_id:orderid,status:stat}
-            }).then(function(response){
+                method: 'PUT',
+                url: strurl + 'order/'+orderid,
+                data: {status: stat }
+            }).then(function (response) {
+                if(response.status == '200')
                 return response.data;
+                else{
+                    return false;
+                }
 
-            },function(error){
+            }, function (error) {
                 alert(error);
             })
         }

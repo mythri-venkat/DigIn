@@ -34,7 +34,7 @@ def show_home():
     print "Show Home"
     restaurant_objs = Restaurant.query.filter().all()
     rest_count = Restaurant.query.count()
-    print rest_count
+    # print rest_count
     s = json.dumps([r.as_dict() for r in restaurant_objs])
     #print (s)
     restaurants = []
@@ -59,6 +59,22 @@ def show_home():
     # ret_Data
     return (json.dumps({"counts": len(restaurants), "restaurants": restaurants, "role": 'customer'}), 200)
 
+@app.route("/cart/<id>",methods=['DELETE'])
+def clearCart(id):
+    print request.method
+    
+    if(request.method ==  'DELETE'):
+        try:        
+            db.session.query(Cart).filter(Cart.user_id==id).delete()
+            db.session.commit()
+            return "success",200
+        except Exception as e:
+            print eif
+            db.session.rollback()
+            return "failure",404
+    else:
+        return "wrong method",404
+
 
 # display the cart but it needs login
 @app.route("/cart/<cur_id>", methods=['GET', 'POST'])
@@ -76,12 +92,12 @@ def cart(cur_id):
     #     "rest_id": 1,
     # }, "quantity": 4}]})
     print "cur_id"
-    print cur_id
-    print (request.get_json())
+    # print cur_id
+    # print (request.get_json())
     user = Users.query.filter_by(id=cur_id).first()
     if user is not None:  # and user.authenticate(password):
-        print user.email
-        print (request.get_json())
+        # print user.email
+        # print (request.get_json())
         user.authenticated = True
         # cur_id = user.id
         carts = Cart.query.filter_by(user_id=cur_id).all()
@@ -90,7 +106,7 @@ def cart(cur_id):
         restid = None
         for curcart in carts:
             cur_prod = curcart.product_id
-            print "cartid id", curcart.id," product id", curcart.product_id
+            # print "cartid id", curcart.id," product id", curcart.product_id
             cur_item = FoodItem.query.filter_by(item_id=cur_prod).first()
             if restid is None:
                 restid = cur_item.rest_id
@@ -99,11 +115,11 @@ def cart(cur_id):
             totalPrice = totalPrice + (item_quantity * price)
             prod_json = cur_item.as_dict()
             Items.append({"item": prod_json, "quantity": item_quantity})
-            print (Items)
+            # print (Items)
         curRestaurant = Restaurant.query.filter_by(rest_id=restid).first()
         rest_json = curRestaurant.as_dict()
         resultJson = { "restaurant": rest_json,"items":Items}
-        print resultJson
+        # print resultJson
         return json.dumps({ "restaurant": rest_json,"items":Items} )
     else:
         # ask user to login before it is able to see the cart as cart is for any user
@@ -200,4 +216,4 @@ def OrderAdd():
             curItem = OrderItem( order_id = cur_order_id, fooditem_id = cur_item_id, item_quantity = cur_item_quantity)
             db.session.add(curItem)
     db.session.commit()
-    return cur_order_id
+    return str(cur_order_id)

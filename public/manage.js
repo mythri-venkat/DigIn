@@ -5,6 +5,8 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
     $scope.numPerPage = 10;
     $scope.noOfPages = 1;
     $scope.currentPage = 1;
+
+    $scope.statusEnum = { 1:"Order Placed",2:"Processing",3:"Delivered",4:"Cancelled"};
     
     $scope.$on('$routeChangeSuccess', function () {
         //console.log(shared.getUser().id);
@@ -41,7 +43,22 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
 
     $scope.$watch('currentPage',$scope.getOrders);
 
+    $scope.changeStatus = function(idx,stat){
+        
+        orderservice.changeStatus($scope.orders[idx].id, stat).then(function(response){
+            if(response){
+                $scope.orders[idx].status = stat;
+            }
+            else{
+                alert("order status could not be changed");
 
+            }
+                        
+        },function(error){
+            alert("order status could not be changed");
+
+        })
+    }
 
     $scope.show = function (idx) {
         var b = $scope.showdetails[idx];

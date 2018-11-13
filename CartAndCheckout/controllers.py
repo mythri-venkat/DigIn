@@ -11,6 +11,7 @@ from DigIn import db, app
 
 from .models import Restaurant, FoodItem, Cart
 import json
+from ..authentication.models import Users
 
 mod_client = Blueprint('client', __name__)
 
@@ -63,7 +64,8 @@ def show_home():
 @app.route("/cart/<cur_id>", methods=['GET', 'POST'])
 # @login_required
 def cart(cur_id):
-    from ..authentication.models import Users
+    print "In cart"
+    #
     # return json.dumps({"restaurant":{"rest_id":1,"name":"Karachi Cafe","address":"gachibowli"},"items":[{"item": {
     #     "description": "Cake",
     #     "image_url": "images1.jpg",
@@ -73,37 +75,49 @@ def cart(cur_id):
     #     "quantity": 10,
     #     "rest_id": 1,
     # }, "quantity": 4}]})
+    print "cur_id"
+    print cur_id
+    print (request.get_json())
     user = Users.query.filter_by(id=cur_id).first()
     if user is not None:  # and user.authenticate(password):
+        print user.email
+        print (request.get_json())
         user.authenticated = True
         # cur_id = user.id
         carts = Cart.query.filter_by(user_id=cur_id).all()
-        user_json = user.json()
         totalPrice = 0
-        Cart = []
         Items = []
-        totalprice = 0
-
-        for cart in carts:
-            id = cart.id
-            cur_prod = cart.product_id
-            cur_item = FoodItem.query.filter_by(item_id=cur_prod).all()
+        restid = None
+        for curcart in carts:
+            cur_prod = curcart.product_id
+            print "cartid id", curcart.id," product id", curcart.product_id
+            cur_item = FoodItem.query.filter_by(item_id=cur_prod).first()
+            if restid is None:
+                restid = cur_item.rest_id
             price = cur_item.price
-            item_quantity = cart.quantity
-            totalprice = totalprice + (item_quantity * price)
+            item_quantity = curcart.quantity
+            totalPrice = totalPrice + (item_quantity * price)
             prod_json = cur_item.as_dict()
             Items.append({"item": prod_json, "quantity": item_quantity})
-
+            print (Items)
+        curRestaurant = Restaurant.query.filter_by(rest_id=restid).first()
+        rest_json = curRestaurant.as_dict()
+        resultJson = { "restaurant": rest_json,"items":Items}
+        print resultJson
+        return json.dumps({ "restaurant": rest_json,"items":Items} )
     else:
         # ask user to login before it is able to see the cart as cart is for any user
         render_template("login.html")
-    return json.dumps(Items)
+
+
 
 
 @app.route("/cart/add", methods=['GET', 'POST'])
 # @login_required
 def addToCart():
     from ..authentication.models import Users
+    print "cart/add"
+    print (request.get_json())
     cust_id = request.get_json()['cust_id']
     user = Users.query.filter_by(id=cust_id).first()
     if user is None:
@@ -112,8 +126,7 @@ def addToCart():
         productId = int(request.get_json()['product_id'])
         product_count = request.get_json()['quantity']
         curid = user.id
-        getProduct = Cart.query.filter_by(
-            user_id=curid, product_id=productId).first()
+        getProduct = Cart.query.filter_by(user_id=curid, product_id=productId).first()
         # if no product is present for given user id and product id
         # create a new cart and and add to it
         if(getProduct is None):
@@ -141,17 +154,21 @@ def removeFromCart():
         redirect(url_for('restaurants'))
     else:
         productId = int(request.get_json()['product_id'])
-        delet_prod_cnt = int(request.get_json()['quantity'])
+        # we are just deleting the product not decrearing quantity
+        #hence we are able to find a product we will just remove it
+        #decreasing quantity need to implement later
+        #delet_prod_cnt = int(request.get_json()['quantity'])
         #id  = user.id
         getProduct = Cart.query.filter_by(user_id=cust_id, product_id=productId).first()
         # if no product is present for given user id and product id
         # create a new cart and and add to it
-        if(getProduct is None):
+        if(getProduct is not None):
             # Print Error login
-            print "Error"
-        else:
+            #print "Error"
+        #else:
             # else increment the qunatity and commit the session
-            getProduct.quantity = getProduct.quantity - delet_prod_cnt
+            #getProduct.quantity = getProduct.quantity - delet_prod_cnt
+            db.session.delete(getProduct)
             db.session.commit()
 
-    return redirect(url_for('restaurants'))
+    return "SUCCESS"

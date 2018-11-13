@@ -68,11 +68,11 @@ class FoodItem(db.Model, TOJSON):
 
 
 
+#from ..authentication.models import Users
+
 class Cart(db.Model, TOJSON):
     __tablename__ = 'cart'
 
-    from authentication.models import Users
-    
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('FoodItem.item_id'))
@@ -112,5 +112,3 @@ class OrderItem(db.Model, TOJSON):
     @property
     def json(self):
         return to_json(self, self.__class__)
-
-

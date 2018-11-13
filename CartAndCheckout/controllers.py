@@ -9,7 +9,7 @@ from datetime import timedelta
 from DigIn import db, app
 # import helper
 
-from .models import Restaurant, FoodItem, Cart
+from .models import Restaurant, FoodItem, Cart, Order, OrderItem
 import json
 from ..authentication.models import Users
 
@@ -23,7 +23,7 @@ def enum(**enums):
 
 Orders = enum(ORDER_CREATED=1, ORDER_PROCESS=2, ORDER_FINISHED=3, ORDER_CANCEL=4)
 
-print(Orders.ORDER_CREATED)
+print "order creation status" ,(Orders.ORDER_CREATED)
 
 #To display the home page after retrieval from database
 #, methods=['GET', 'POST']
@@ -59,21 +59,6 @@ def show_home():
     # ret_Data
     return (json.dumps({"counts": len(restaurants), "restaurants": restaurants, "role": 'customer'}), 200)
 
-
-@app.route("/cart/clear/<id>",methods=['GET','POST'])
-def clearCart(id):
-    try:
-        db.session.query(Cart).filter(Cart.user_id==id).delete()
-        # cartitems = Cart.query.filter_by(user_id=id).all().delete()
-        db.session.commit()
-        return "success",200
-    except Exception as e:
-        print e
-        db.session.rollback()
-        return "failure",404
-        
-        
-    
 
 # display the cart but it needs login
 @app.route("/cart/<cur_id>", methods=['GET', 'POST'])
@@ -186,4 +171,33 @@ def removeFromCart():
             db.session.delete(getProduct)
             db.session.commit()
 
+    return "SUCCESS"
+
+
+
+@app.route("/order", methods=['GET', 'POST'])
+# @login_required
+def OrderAdd():
+    if request.method == 'POST':
+        getJson = request.get_json()
+        print ("order " ,getJson)
+        cur_cust_id = request.get_json()['custId']
+        #cur_rest_id = request.get_json()['rest_id']
+        allItemslist = request.get_json()['items']
+        purchase_dtime = dt.now()
+        purchase_dtime = dt.strptime(purchase_dtime.strftime('%Y-%m-%d %H:%M'), '%Y-%m-%d %H:%M')
+        orderCur = None
+        orderCur = Order(custid=cur_cust_id, date_purchased= purchase_dtime , orderstatus=Orders.ORDER_CREATED)
+        if orderCur is None:
+            print "Creation failed"
+        db.session.add(orderCur)
+        db.session.flush()
+        print "orderId" , orderCur.order_id
+        cur_order_id = orderCur.order_id
+        for cartItem in allItemslist:
+            cur_item_id  =  cartItem['item_id']
+            cur_item_quantity  =  cartItem['quantity']
+            curItem = OrderItem( order_id = cur_order_id, fooditem_id = cur_item_id, item_quantity = cur_item_quantity)
+            db.session.add(curItem)
+    db.session.commit()
     return "SUCCESS"

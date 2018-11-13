@@ -104,10 +104,7 @@ class OrderItem(db.Model, TOJSON):
     orderitem_id = db.Column(db.Integer, primary_key=True)
     order_id =  db.Column(db.Integer, db.ForeignKey('order.order_id'))
     fooditem_id = db.Column(db.Integer, db.ForeignKey('FoodItem.item_id'))
-    #delivery address
-    item_name = db.Column(db.String(255), nullable=False)
-    #order purchase date
-    item_description =  db.Column(db.String(255) )
+    item_quantity = db.Column(db.Integer, nullable=False)
 
     @property
     def json(self):

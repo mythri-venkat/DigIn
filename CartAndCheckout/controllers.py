@@ -117,8 +117,7 @@ def addToCart():
         # if no product is present for given user id and product id
         # create a new cart and and add to it
         if(getProduct is None):
-            cartNew = Cart(user_id=user.id, product_id=productId,
-                           quantity=product_count)
+            cartNew = Cart(user_id=user.id, product_id=productId, quantity=product_count)
             db.session.add(cartNew)
             db.session.commit()
         else:
@@ -142,9 +141,9 @@ def removeFromCart():
         redirect(url_for('restaurants'))
     else:
         productId = int(request.get_json()['product_id'])
+        delet_prod_cnt = int(request.get_json()['quantity'])
         #id  = user.id
-        getProduct = Cart.query.filter_by(
-            user_id=cust_id, product_id=productId).first()
+        getProduct = Cart.query.filter_by(user_id=cust_id, product_id=productId).first()
         # if no product is present for given user id and product id
         # create a new cart and and add to it
         if(getProduct is None):
@@ -152,8 +151,7 @@ def removeFromCart():
             print "Error"
         else:
             # else increment the qunatity and commit the session
-            db.session.query(Foo).filter_by(
-                user_id=id, product_id=productId).delete()
+            getProduct.quantity = getProduct.quantity - delet_prod_cnt
             db.session.commit()
 
     return redirect(url_for('restaurants'))

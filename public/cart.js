@@ -1,5 +1,5 @@
 angular.module('app')
-    .controller('cartctrl', ['$scope', 'cart', 'shared', 'orderservice', function ($scope, cart, shared, orderservice) {
+    .controller('cartctrl', ['$scope', 'cart', 'shared', 'orderservice','$location', function ($scope, cart, shared, orderservice,$location) {
 
         $scope.deliveryaddr = "";
         $scope.cartItems = {};
@@ -82,6 +82,12 @@ angular.module('app')
 
             $('#payModal').modal('show');
         }
+
+        $scope.redirect = function(){
+            $('#orderModal').modal('hide');
+            $location.path("/");
+        }
+
         $scope.placeOrder = function () {
 
             $('#payModal').modal('hide');
@@ -93,6 +99,7 @@ angular.module('app')
                         
                         $scope.orderId = response;
                         $('#orderModal').modal('show');
+                        cart.clearCart();
 
                     }
                     else {

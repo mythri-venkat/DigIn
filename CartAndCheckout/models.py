@@ -43,6 +43,15 @@ class Restaurant(db.Model, TOJSON):
     open_time = db.Column(db.String(255) ) #, nullable=False)
     end_time = db.Column(db.String(255)) #,nullable=True)
     image_url = db.Column(db.String(255))
+
+    def __init__(self,name,address,description="",open_time="",end_time="",image_url=""):
+        self.name = name
+        self.address = address
+        self.description = description
+        self.open_time = open_time
+        self.end_time = end_time
+        self.image_url = image_url
+     
     @property
     def json(self):
         return to_json(self, self.__class__)

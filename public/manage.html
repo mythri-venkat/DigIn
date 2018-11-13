@@ -2,6 +2,20 @@
     <div class="col-md-4 offset-4">
 
         <input type="text" class="form-control" ng-model="searchOrder" placeholder="Search for orders">
+        <div class="dropdown">
+            Filter Status:
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                {{Filter.status}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" ng-click="Filter.status=''">All</a>
+                <a class="dropdown-item"  ng-click="Filter.status='Order Placed'">Order Placed</a>
+                <a class="dropdown-item"  ng-click="Filter.status='Processing'">Processing</a>
+                <a class="dropdown-item"  ng-click="Filter.status='Delivered'">Delivered</a>
+                <a class="dropdown-item"  ng-click="Filter.status='Cancelled'">Cancelled</a>
+            </div>
+        </div>
 
 
     </div>
@@ -13,29 +27,27 @@
         <table class="table table-hover" ng-hide="notfound">
             <thead>
                 <tr>
-                    <th>Id</th>cd 
-                    <th>Customer Name</th>
-                    <th>Customer Address</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Total</th>
+                    <th ng-click="orderFilter=order.id">Id</th>
+                    <th ng-click="orderFilter=order.user.name">Customer Name</th>
+                    <th ng-click="orderFilter=order.user.address">Customer Address</th>
+                    <th ng-click="orderFilter=order.status">Status</th>
+                    <th ng-click="orderFilter=order.date">Date</th>
+                    <th ng-click="orderFilter.order.totalAmount">Total</th>
                 </tr>
             </thead>
             <tbody>
-                
-                <div >
-                    <tr ng-repeat="order in orders | filter:searchOrder" ng-click="show($index)" >
+
+                <div>
+                    <tr ng-repeat="order in orders | filter:searchOrder | filter:Filter.status |orderBy : orderFilter " ng-click="show($index)">
                         <td ng-hide="showdetails[$index]">{{order.id}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.user.name}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.user.first_name order.user.last_name}}</td>
                         <td ng-hide="showdetails[$index]">{{order.user.address}}</td>
                         <td ng-hide="showdetails[$index]">{{order.status}}</td>
                         <td ng-hide="showdetails[$index]">{{order.date}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.time}}</td>
                         <td ng-hide="showdetails[$index]">{{order.totalAmount}}</td>
 
-                    <!-- </tr> -->
-                    <!-- <tr class="bg-light" > -->
+                        <!-- </tr> -->
+                        <!-- <tr class="bg-light" > -->
                         <td class="bg-light" colspan="6" ng-click="show($index)" ng-show="showdetails[$index]">
                             <div class="col-md-12">
                                 <!-- <div class="row text-center">
@@ -57,8 +69,8 @@
                                                 {{statusEnum[order.status]}}
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="#" ng-click="changeStatus($index,1)">Preparing</a>
-                                                <a class="dropdown-item" href="#" ng-click="changeStatus($index,2)">On the way</a>
+                                                <a class="dropdown-item" href="#" ng-click="changeStatus($index,1)">Order Placed</a>
+                                                <a class="dropdown-item" href="#" ng-click="changeStatus($index,2)">Processing</a>
                                                 <a class="dropdown-item" href="#" ng-click="changeStatus($index,3)">Delivered</a>
                                                 <a class="dropdown-item" href="#" ng-click="changeStatus($index,4)">Cancel</a>
                                             </div>
@@ -181,6 +193,6 @@
 
 </div>
 <div class="footer navbar fixed-bottom text-center justify-content-center">
-        <pagination num-pages="noOfPages" current-page="currentPage" class="pagination-small"></pagination>
+    <pagination num-pages="noOfPages" current-page="currentPage" class="pagination-small"></pagination>
 
 </div>

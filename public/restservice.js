@@ -50,10 +50,13 @@ angular.module('app')
         this.itemCount = 0;
         var strurl = "http://127.0.0.1:5001/"
         var obs = [];
-
+        var it;
+        var qty;
         var loginwatch = function(){
-            if(shared.isloggedIn()){
-                this.getItems(shared.getUser().id);
+            if(shared.isloggedIn() && shared.getUser().role == 'customer'){
+                vm.getItems(shared.getUser().id).then(function(response){
+                    console.log("items loaded");
+                })
             }
             else{
                 vm.itemCount = 0;
@@ -74,7 +77,8 @@ angular.module('app')
             }
         }
         this.addItem = function (idx1, rest, custid, it1, qty1) {
-
+            it=it1;
+            qty=qty1;
             if (restaurant.rest_id != undefined && rest.rest_id != restaurant.rest_id) {
                 alert("items from previous restaurant will be cleared");
                 restaurant = rest;
@@ -84,8 +88,7 @@ angular.module('app')
                     console.log(response);
 
                     if (response == "success"){
-                        vm.itemCount = 0;
-                        notify();
+                       
                         addtocart(it1, custid, qty1);
                     }
                         
@@ -153,7 +156,14 @@ angular.module('app')
 
             })
                 .then(function (response) {
-                   
+                    if(response.data == "success"){
+                        items={};
+                        vm.itemCount = 0;
+                        notify();
+                    }
+                    else{
+                        return false;
+                    }
                     return response.data;
 
                 }, function (error) {
@@ -180,7 +190,7 @@ angular.module('app')
                     .then(
                         function (response) {
                             if (response.status == "200") {
-                                delete items[idx];
+                                delete items[product_id];
                                 vm.itemCount -= 1;
                                 notify();
                                 if (items.length == 0) {
@@ -220,7 +230,7 @@ angular.module('app')
                     return false;
                 }
             }, function (error) {
-                alert(error);
+                //alert(error);
                 return false;
             })
 
@@ -310,9 +320,7 @@ angular.module('app')
         ];
 
         this.getRestaurantOrders = function (id, offset, limit) {
-            if (!id) {
-                return false;
-            }
+            
 
             return $http.get(strurl + "orders/restaurant/" + id)
                 .then(

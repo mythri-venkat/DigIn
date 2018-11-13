@@ -13,16 +13,24 @@ class Users(db.Model, TOJSON ):
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
+    username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
     authenticated = db.Column(db.Boolean, default=False)
+    role = db.Column(db.String(255),default="customer")
+    restname = db.Column(db.String,default="")
+    address = db.Column(db.String,nullable=True)
 
-    def __init__(self, first_name, last_name, email, password):
+    def __init__(self, first_name, last_name, email,username,password,address,role,restname):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
+        self.username = username
         self.password = password
+        self.address = address
+        self.restname = restname
+        self.role = role
 
     def authenticate(self, password):
         return argon2.verify(password, self.password)

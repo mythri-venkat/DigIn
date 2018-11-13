@@ -42,15 +42,26 @@ angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.paginat
                 controller:'searchctrl',
                 caseInsensitiveMatch:true
             })
+            .when('/search',{
+                templateUrl:'search.html',
+                controller:'searchctrl',
+                caseInsensitiveMatch:true
+            })
+            .when('',{
+                redirectTo:'/search'
+            })
             .otherwise({
-                redirectTo: '/'
+                redirectTo: '/search'
             })
     }])
-    .run(['$rootScope', '$location', '$cookies', function ($rootScope, $location, $cookies) {
+    .run(['$rootScope', '$location', '$cookies','$routeParams', function ($rootScope, $location, $cookies,$routeParams) {
         var usr = $cookies.getObject('usr');
 
         if (!usr){
-            $location.path('/');
+            var arr = {'/cart':"1","/manage":2,"/orders":3}
+            console.log(arr[$location.path()]);
+            if(arr[$location.path()] != undefined)
+                $location.path('/');
 
         }
 

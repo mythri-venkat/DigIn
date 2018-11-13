@@ -217,3 +217,16 @@ def OrderAdd():
             db.session.add(curItem)
     db.session.commit()
     return str(cur_order_id)
+
+@app.route("/orders/rest=<id>",methods=['GET'])
+def getorders(id):
+    order = {
+        "count":5,
+        "orders":[{
+            "rest_id":1,
+            "cust_id":5,
+            "date":"2-12-2018"
+        }]
+    }
+    return json.dumps(order)
+

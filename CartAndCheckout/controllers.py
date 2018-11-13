@@ -60,6 +60,21 @@ def show_home():
     return (json.dumps({"counts": len(restaurants), "restaurants": restaurants, "role": 'customer'}), 200)
 
 
+@app.route("/cart/clear/<id>",methods=['GET','POST'])
+def clearCart(id):
+    try:
+        db.session.query(Cart).filter(Cart.user_id==id).delete()
+        # cartitems = Cart.query.filter_by(user_id=id).all().delete()
+        db.session.commit()
+        return "success",200
+    except Exception as e:
+        print e
+        db.session.rollback()
+        return "failure",404
+        
+        
+    
+
 # display the cart but it needs login
 @app.route("/cart/<cur_id>", methods=['GET', 'POST'])
 # @login_required

@@ -1,6 +1,5 @@
-from DigIn import db
+from DigIn import db,bcrypt
 from passlib.hash import argon2
-
 
 class TOJSON():
     def as_dict(self):
@@ -27,18 +26,18 @@ class Users(db.Model, TOJSON ):
         self.last_name = last_name
         self.email = email
         self.username = username
-        self.password = password
+        self.password = bcrypt.generate_password_hash(password)
         self.address = address
         self.restname = restname
         self.role = role
 
     def authenticate(self, password):
-        return argon2.verify(password, self.password)
+        return bcrypt.check_password_hash(self.password,password)
 
     def change_password(self, old_password, new_password):
-        if not argon2.verify(old_password, self.password):
+        if not bcrypt.check_password_hash(self.password,old_password):
             return False
-        self.password = argon2.hash(new_password)
+        self.password = bcrypt.generate_password_hash(new_password)
         self.save()
         return True
 

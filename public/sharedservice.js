@@ -3,10 +3,10 @@ angular.module('app')
         var strurl = "http://127.0.0.1:5001/"
         let _loggedin = false;
         var obs = [];
-        this.user={};
-        this.isloggedIn=function() {
+        this.user = {};
+        this.isloggedIn = function () {
             var usr = $cookies.getObject('usr');
-            this.user=usr;
+            this.user = usr;
             if (usr) {
                 _loggedin = true;
 
@@ -17,7 +17,7 @@ angular.module('app')
             }
             return _loggedin;
         };
-        this.login=function(usr) {
+        this.login = function (usr) {
             return $http({
                 method: 'POST',
                 url: strurl + 'login',
@@ -43,7 +43,7 @@ angular.module('app')
 
         };
 
-        this.getUser = function(){
+        this.getUser = function () {
 
             var usr = $cookies.getObject('usr');
             //console.log(usr);
@@ -51,7 +51,7 @@ angular.module('app')
             return usr;
         }
 
-        this.register =function(usr) {
+        this.register = function (usr) {
             return $http({
                 method: 'POST',
                 url: strurl + 'register',
@@ -65,15 +65,40 @@ angular.module('app')
                 })
 
         }
+        this.changepassword = function (id,pass) {
+            
+            return $http({
+                method: 'POST',
+                url: strurl + 'change/'+id,
+                data: pass
+            }).then(function (response) {
+                if (response.status == '200') {
+                    this.user = response.data;
+                    $cookies.putObject('usr', response.data);
+                    _loggedin = true;
+                    notify();
+                    return true;
+                }
+                else {
+                    alert(response.data);
+                    return false;
+                }
 
-        this.logout=function(usr) {
-        
+            }, function (error) {
+                alert("server error:" + error);
+                console.log("server error:" + error);
+                return false;
+            })
+        }
+
+        this.logout = function (usr) {
+
             $cookies.remove('usr');
             _loggedin = false;
             notify();
 
         }
-        this.registerobserver=function(cb) {
+        this.registerobserver = function (cb) {
             obs.push(cb);
         };
         function notify() {
@@ -81,6 +106,6 @@ angular.module('app')
                 cb();
             });
         };
-       
+
 
     }])

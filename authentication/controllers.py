@@ -19,7 +19,7 @@ def login():
         user = Users.query.filter_by(username=user_name).first()
         print ( user_name, user_pwd)
         print user.as_dict()
-        if user is not None :#and user.authenticate(password):
+        if user is not None and user.authenticate(user_pwd):
             user.authenticated = True
             db.session.add(user)
             db.session.commit()
@@ -30,6 +30,7 @@ def login():
             return json.dumps(result)
         else:
             errorMsg = 'Invalid Login! Try Again.'
+            return "invalid credentials",400
     # return render_template('register.html', headerTitle='DigIn - Login', errorMessage=errorMsg)
 
 
@@ -67,6 +68,16 @@ def register():
         db.session.commit()
     #flash('User successfully registered')
     return "SUCCESS"
+
+@app.route('/change/<user_id>',methods=['POST'])
+def changepwd(user_id):
+    curr = Users.query.filter_by(id=user_id).first()
+    curpwd = request.get_json()['curr']
+    newpwd = request.get_json()['new']
+    if(curr.change_password(curpwd,newpwd)):
+        return json.dumps(curr.as_dict())
+    else:
+        return "Password incorrect",400
 
 
 @mod_auth.route('/logout')

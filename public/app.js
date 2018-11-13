@@ -50,6 +50,16 @@ angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.paginat
             .when('',{
                 redirectTo:'/search'
             })
+            .when('/editProfile',{
+                templateUrl:'restaurantdetail.html',
+                controller:'restdetailctrl',
+                caseInsensitiveMatch:true
+            })
+            .when('/changePassword',{
+                templateUrl:'changepassword.html',
+                controller:'changepwdctrl',
+                caseInsensitiveMatch:true
+            })
             .otherwise({
                 redirectTo: '/search'
             })

@@ -7,6 +7,8 @@ import atexit
 from datetime import datetime, timedelta
 import logging, requests
 import os
+from flask.ext.bcrypt import Bcrypt
+
 
 
 
@@ -32,6 +34,7 @@ def init_db(db):
 app = Flask(__name__,static_folder='public')
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
 app.secret_key = os.urandom(24)
+bcrypt = Bcrypt(app)
 #app.config.from_object('client_config')
 db = SQLAlchemy(app)
 

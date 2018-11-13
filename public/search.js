@@ -60,11 +60,15 @@ angular.module('app')
             
                 var ex = $filter('filter')($scope.restaurants[idx].items, $scope.searchval);
                 //console.log($scope.restaurants[idx]);
-                var res = 'Dishes     :     ';
+                var res = 'Dishes : ';
                 for(var i=0;i<ex.length;i++){
                     res+=ex[i].name+",";
                 }
+                if( res.indexOf(",")<0)
+                    return false;
                 res = res.substr(0,res.length-1);
+                //console.log(res);
+                
                 return res;
                 
             }

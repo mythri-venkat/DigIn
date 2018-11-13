@@ -55,6 +55,7 @@
                         <div class="card-block">
                             <h4 class="card-title">{{restaurants[$index].name}}</h4>
                             <p class="card-text">{{restaurants[$index].description}}</p>
+                            <label class="card-text" ng-if="searchitems($index) != ''"><i>{{searchitems($index)}}</i></label>
                             <div class="card-footer"><small class="text-muted" ng-bind-html="ratingStr(restaurants[$index].rating)"></small></div>
                         </div>
                     </div>
@@ -65,6 +66,7 @@
                         <div class="card-block">
                             <h4 class="card-title">{{restaurants[$index+1].name}}</h4>
                             <p class="card-text">{{restaurants[$index+1].description}}</p>
+                            <label class="card-text" ng-if="searchitems($index+1) != ''"><i>{{searchitems($index+1)}}</i></label>
                             <div class="card-footer"><small class="text-muted" ng-bind-html="ratingStr(restaurants[$index+1].rating)"></small></div>
                         </div>
                     </div>

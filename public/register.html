@@ -15,7 +15,7 @@
                 <label for="lastname">Last Name:</label>
                 <input type="text" class="form-control" id="lastname" ng-model="user.lastname">
             </div>
-            <div class="form-group" ng-show="user.role=='restaurant'">
+            <div class="form-group" ng-if="user.role=='restaurant'">
                 <label for="restname">Restaurant Name:</label>
                 <input type="text" class="form-control" id="restname" ng-model="user.restname" ng-required="true">
             </div>
@@ -37,7 +37,7 @@
             </div>
             <div class="form-group">
                 <label for="pwd">Password:</label>
-                <input type="password" class="form-control" name="pwd" ng-model="user.password" ng-required="true" ng-minlength="6">
+                <input type="password" class="form-control" name="pwd" ng-model="user.password" ng-required="true" ng-minlength="3">
                 <p ng-show="userForm.pwd.$error.minlength" class="help text-danger text-center">Password is too short.</p>
             </div>
             <div class="text-center">

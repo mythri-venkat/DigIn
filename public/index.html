@@ -10,24 +10,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="css/landing-page.css">
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.10/angular.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.10/angular-route.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.10/angular-cookies.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
   
-  <script src="pagination.js"></script>
-  <script src="app.js"></script>
-  <script src="register.js"></script>
-  <script src="login.js"></script>
-  <script src="restaurants.js"></script>
-  <script src="menu.js"></script>
-  <script src="restservice.js"></script>
-  <script src="sharedservice.js"></script>
-  <script src="manage.js"></script>
-  <script src="search.js"></script>
-  <script src="orders.js"></script>
-  <script src="cart.js"></script>
 
   <style>
     /* Remove the navbar's default rounded borders and increase the bottom margin */ 
@@ -59,7 +42,7 @@
         <li class="nav-item" ><a class="nav-link" href="#/restaurants">Restaurants</a></li>
         <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/orders"> Past Orders</a></li>
         
-        <li class="nav-item" ng-show="loggedin && (role=='restaurant')"><a class="nav-link" href="#/manage"> Manage</a></li>
+        <li class="nav-item" ng-show="loggedin && (role=='restaurant')"><a class="nav-link" href="#/manage"> Manage Orders</a></li>
         
       </ul>
       <ul class="navbar-nav ml-auto justify-content-end" ng-hide="loggedin">
@@ -68,8 +51,9 @@
 
       </ul>
       <ul class="navbar-nav ml-auto justify-content-end" ng-show="loggedin">
-          
-        <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/cart"><span class="fa fa-shopping-cart"></span> Cart <span class="badge badge-danger" ng-if="itemCount > 0">{{itemCount}}</span> </a></li>
+          <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/cart"><span class="fa fa-shopping-cart"></span> Cart <span class="badge badge-danger" ng-if="itemCount > 0">{{itemCount}}</span> </a></li>
+        <li class="nav-item" ng-show="loggedin && (role=='restaurant')"><a class="nav-link" href="#/editProfile"><span class="fa fa-edit"></span> Menu</a></li>
+        <li class="nav-item" ng-show="loggedin"><a class="nav-link" href="#/changepassword"><span class="fa fa-user"></span> Change Password</a></li>
         <li class="nav-item"><a class="nav-link" href="#" ng-click="logout()"><span class="glyphicon glyphicon-sign-out"></span> Logout</a></li>
         
 
@@ -90,6 +74,25 @@
     
 
   </div>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.10/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.10/angular-route.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.10/angular-cookies.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.js"></script>
+  
+  <script src="pagination.js"></script>
+  <script src="app.js"></script>
+  <script src="register.js"></script>
+  <script src="login.js"></script>
+  <script src="restaurants.js"></script>
+  <script src="menu.js"></script>
+  <script src="restservice.js"></script>
+  <script src="sharedservice.js"></script>
+  <script src="manage.js"></script>
+  <script src="search.js"></script>
+  <script src="orders.js"></script>
+  <script src="cart.js"></script>
+  <script src="changepassword.js"></script>
 
 </body>
 

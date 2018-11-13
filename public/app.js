@@ -98,6 +98,7 @@ angular.module('app', ['ngRoute', 'ngCookies','ngSanitize','ui.bootstrap.paginat
             
             shared.logout();
             $scope.loggedin=false;
+            cart.itemCount = 0;
             $location.path('/')
         }
 

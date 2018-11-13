@@ -200,4 +200,4 @@ def OrderAdd():
             curItem = OrderItem( order_id = cur_order_id, fooditem_id = cur_item_id, item_quantity = cur_item_quantity)
             db.session.add(curItem)
     db.session.commit()
-    return "SUCCESS"
+    return cur_order_id

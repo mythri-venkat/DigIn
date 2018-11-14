@@ -55,6 +55,11 @@ angular.module('app', ['ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap.pagin
                 controller: 'restdetailctrl',
                 caseInsensitiveMatch: true
             })
+            .when('/menuitem', {
+                templateUrl: 'menu_item.html',
+                controller: 'menuitemctrl',
+                caseInsensitiveMatch: true
+            })
             .when('/changePassword', {
                 templateUrl: 'changepassword.html',
                 controller: 'changepwdctrl',

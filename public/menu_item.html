@@ -1,0 +1,129 @@
+<style>
+    .avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+</style>
+
+<h4 class="text-center m-5">Menu</h4>
+
+<div class="row margin-view text m-5">
+    <div class="col-lg-8 offset-2 p-5">
+
+        <table class="table mt-4">
+            <thead>
+                <th></th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th></th>
+                <th></th>
+            </thead>
+            <tr ng-repeat="item in menuitems">
+                <td>
+                    <img ng-src="{{value.item.image_url}}" class="avatar">
+                </td>
+                <td>{{item.name}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.description}}</td>
+
+                <td><button class="btn btn-primary" ng-click="edit($index)"><span class="fa fa-edit"></span></button></td>
+
+                <td><button class="btn btn-danger" ng-click="remove($index)"><span class="fa fa-trash"></span></button></td>
+            </tr>
+            <tfoot>
+                <tr class="text-center justify-content-center">
+                    <td colspan="6">
+                        <button class="btn btn-success text-center" ng-click="showaddmodal()">Add</button>
+                    </td>
+                </tr>
+            </tfoot>
+
+        </table>
+
+
+
+    </div>
+</div>
+
+
+
+
+<div class="modal" tabindex="-1" role="dialog" id="addmodal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title">Add</h5>
+
+                <button type="button" class="close" data-dismiss="modal" ng-click="showorderid=!showorderid" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+
+
+
+                <div class="form-group">
+                    <label for="FoodItemName">Food Item Name:</label>
+                    <input type="text" class="form-control" id="itemname" ng-model="newitem.name" ng-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="Price">Price:</label>
+                    <input type="text" class="form-control" id="Price" ng-model="newitem.price">
+                </div>
+                <div class="form-group">
+                    <label for="Description">Description:</label>
+                    <input type="text" class="form-control" id="Description" ng-model="newitem.description">
+                </div>
+
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" ng-click="additem()">Submit</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal" tabindex="-1" role="dialog" id="editmodal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title">Edit</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+
+
+
+                <div class="form-group">
+                    <label for="FoodItemName">Food Item Name:</label>
+                    <input type="text" class="form-control" id="itemname" ng-model="newitem.name" ng-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="Price">Price:</label>
+                    <input type="text" class="form-control" id="Price" ng-model="newitem.price">
+                </div>
+                <div class="form-group">
+                    <label for="Description">Description:</label>
+                    <input type="text" class="form-control" id="Description" ng-model="newitem.description">
+                </div>
+
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" ng-click="edititem()">Submit</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>

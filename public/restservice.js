@@ -1,6 +1,63 @@
 angular.module('app')
     .service('restaurant', ['$http', function ($http) {
         var strurl = "http://127.0.0.1:5001/";
+
+        this.additem=function(custid,newitem){
+            return $http({
+                url:strurl+'menu/'+custid,
+                method:'POST',
+                data:newitem
+            }).then(function(response){
+                if(response.status =='200'){
+                    restaurant =response.data;
+       
+                }
+                else{
+                    alert("could not be added");
+                    return false;
+                }
+       
+            },function(error){
+                alert(error);
+            })
+        }
+       
+        this.edititem=function(item_id,newitem){
+            return $http({
+                url:strurl+'menu/'+item_id,
+                method:'POST',
+                data:newitem
+            }).then(function(response){
+                if(response.status =='200'){
+                    restaurant =response.data;
+                }
+                else{
+                    alert("could not be edited");
+                    return false;
+                }
+       
+            },function(error){
+                alert(error);
+            })
+        }
+
+        this.removeitem = function(item_id){
+            return $http({
+                url:strurl+'menu/'+item_id,
+                method:'DELETE',
+            }).then(function(response){
+                if(response.status =='200'){
+                    restaurant =response.data;
+                }
+                else{
+                    alert("could not be edited");
+                    return false;
+                }
+                
+            },function(error){
+                alert(error);
+            })
+        }
         
         this.editprofile = function(restid,custid,rest){
             console.log(rest);

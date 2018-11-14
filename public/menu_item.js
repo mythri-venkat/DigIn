@@ -60,10 +60,15 @@ angular.module('app')
             $scope.additem = function () {
             	restaurant.additem($scope.uid,$scope.newitem).then(function(response){
             		if(response){
-            			$scope.menuitems.push(response);
+						$scope.newitem.item_id = response;
+            			$scope.menuitems.push($scope.newitem);
             			$scope.newitem = {};
             			$('#addmodal').modal('hide');
-            		}
+					}
+					else{
+						alert("not able to add");
+						$('#addmodal').modal('hide');
+					}
             	})
             	// body...
             }

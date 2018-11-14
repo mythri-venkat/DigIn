@@ -9,8 +9,8 @@ angular.module('app')
                 data:newitem
             }).then(function(response){
                 if(response.status =='200'){
-                    restaurant =response.data;
-       
+                    
+                    return response.data;
                 }
                 else{
                     alert("could not be added");
@@ -29,7 +29,7 @@ angular.module('app')
                 data:newitem
             }).then(function(response){
                 if(response.status =='200'){
-                    restaurant =response.data;
+                    return response.data;
                 }
                 else{
                     alert("could not be edited");
@@ -47,7 +47,7 @@ angular.module('app')
                 method:'DELETE',
             }).then(function(response){
                 if(response.status =='200'){
-                    restaurant =response.data;
+                    return response.data;
                 }
                 else{
                     alert("could not be edited");

@@ -16,17 +16,21 @@ from ..authentication.models import Users
 
 mod_manager = Blueprint('restaurantmanager', __name__)
 
+def enum(**enums):
+    return type('Enum', (), enums)
+
+Orders = enum(ORDER_CREATED=1, ORDER_PROCESS=2, ORDER_FINISHED=3, ORDER_CANCEL=4)
 
 # display the orders based or customerId but it needs login
 @app.route("/orders/customer/<cust_id>", methods=['GET'])
 # @login_required
 def retrieveOrdersBasedOnCustomerId(cust_id):
-    print( "In cart")
+    print ("In cart")
     user = Users.query.filter_by(id=cust_id).first()
     if user is not None:
         user.authenticated = True
         # cur_id = user.id
-        orders = Order.query.filter_by(custid=cust_id).order_by(OrderCart.orderstatus).all()
+        orders = Order.query.filter_by(custid=cust_id).order_by(Orders.orderstatus).all()
         totalPrice = 0
         Ordersarr = []
         restid = None
@@ -57,10 +61,9 @@ def retrieveOrdersBasedOnRestaurantId(cur_id,rest_id):
     if user is not None:
         user.authenticated = True
         # cur_id = user.id
-
         restaurant = Restaurant.query.filter_by(rest_id=rest_id).first()
         if restaurant is not None:
-            orders = Order.query.filter_by(rest_id=rest_id).order_by(OrderCart.orderstatus).all()
+            orders = Order.query.filter_by(rest_id=rest_id).order_by(Orders.orderstatus).all()
             totalPrice = 0
             Ordersarr = []
             restid = None

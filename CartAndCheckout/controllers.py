@@ -10,7 +10,11 @@ import json
 from DigIn import db, app
 from .models import Restaurant, FoodItem, Cart, Order, OrderItem
 from ..authentication.models import Users
-import helper
+
+def enum(**enums):
+    return type('Enum', (), enums)
+
+Orders = enum(ORDER_CREATED=1, ORDER_PROCESS=2, ORDER_FINISHED=3, ORDER_CANCEL=4)
 
 mod_client = Blueprint('CartAndCheckout', __name__)
 

@@ -92,7 +92,7 @@ angular.module('app')
         $scope.placeOrder = function () {
 
             $('#payModal').modal('hide');
-            orderservice.placeOrder($scope.custId, $scope.restaurant.id, $scope.cartItems)
+            orderservice.placeOrder($scope.custId, $scope.restaurant.rest_id, $scope.cartItems)
 
                 .then(function (response) {
                     console.log(response);

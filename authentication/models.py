@@ -20,6 +20,7 @@ class Users(db.Model, TOJSON ):
     role = db.Column(db.String(255),default="customer")
     restname = db.Column(db.String,default="")
     address = db.Column(db.String,nullable=True)
+    rest_id = db.Column(db.Integer, db.ForeignKey('Restaurant.rest_id'),nullable=True) 
 
     def __init__(self, first_name, last_name, email,username,password,address,role,restname):
         self.first_name = first_name

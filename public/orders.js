@@ -21,7 +21,7 @@ angular.module('app').controller('ordersctrl', ['$scope', 'orderservice', 'share
                 $scope.notfound = true;
             }
             else {
-                //console.log()
+                console.log(data.orders);
                 // $scope.noOfPages = Math.ceil(data["count"]/$scope.numPerPage);
                 // $scope.orders = data["orders"];
                 $scope.noOfPages = Math.ceil(data.count/$scope.numPerPage);

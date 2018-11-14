@@ -44,11 +44,11 @@
             <thead>
                 <tr>
                     <th ng-click="orderFilter=order.id">Id</th>
-                    <th ng-click="orderFilter=order.user.name">Customer Name</th>
-                    <th ng-click="orderFilter=order.user.address">Customer Address</th>
+                    <th ng-click="orderFilter=order.customer.name">Customer Name</th>
+                    <th ng-click="orderFilter=order.customer.address">Customer Address</th>
                     <th ng-click="orderFilter=order.status">Status</th>
-                    <th ng-click="orderFilter=order.date">Date</th>
-                    <th ng-click="orderFilter.order.totalAmount">Total</th>
+                    <th ng-click="orderFilter=order.date_purchased">Order Date</th>
+                    <th ng-click="orderFilter.order.total_amount">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,12 +56,12 @@
                 <div>
                     <tr ng-repeat="order in orders | filter:searchOrder | filter:Filter.status |orderBy : orderFilter "
                         ng-click="show($index)">
-                        <td ng-hide="showdetails[$index]">{{order.id}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.user.first_name}} {{order.user.last_name}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.user.address}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.order_id}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.customer.first_name}} {{order.user.last_name}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.customer.address}}</td>
                         <td ng-hide="showdetails[$index]">{{order.status}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.date}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.totalAmount}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.date_purchased}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.total_amount}}</td>
 
                         <!-- </tr> -->
                         <!-- <tr class="bg-light" > -->
@@ -115,12 +115,12 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="item in order.orderItems">
-                                                    <td>{{item.id}}</td>
-                                                    <td>{{item.items[0].name}}</td>
-                                                    <td>{{item.qtyOrdered}}</td>
-                                                    <td>{{item.items[0].price}}</td>
-                                                    <td>{{item.qtyOrdered*item.items[0].price}}</td>
+                                                <tr ng-repeat="orderitem in order.items">
+                                                    <td>{{orderitem.item.item_id}}</td>
+                                                    <td>{{orderitem.item.name}}</td>
+                                                    <td>{{orderitem.quantity}}</td>
+                                                    <td>{{orderitem.item.price}}</td>
+                                                    <td>{{orderitem.quantity*orderitem.item.price}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>

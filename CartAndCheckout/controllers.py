@@ -11,6 +11,7 @@ from DigIn import db, app
 from .models import Restaurant, FoodItem, Cart, Order, OrderItem
 from ..authentication.models import Users
 
+
 def enum(**enums):
     return type('Enum', (), enums)
 
@@ -26,7 +27,6 @@ mod_client = Blueprint('CartAndCheckout', __name__)
 
 # To display the home page after retrieval from database
 # , methods=['GET', 'POST']
-
 
 
 @app.route('/<path:path>')
@@ -61,10 +61,10 @@ def show_home(searchName=None):
         for restaurant in restaurant_objs:
             rest_json = restaurant.as_dict()
             cur_rest_id = restaurant.rest_id
-            #print ("restaurant id : " , cur_rest_id)
+            # print ("restaurant id : " , cur_rest_id)
             item_objets = FoodItem.query.filter_by(rest_id=cur_rest_id).all()
             count = FoodItem.query.filter_by(rest_id=cur_rest_id).count()
-            #print ( "total items : " ,  count)
+            # print ( "total items : " ,  count)
             Items = []
             for item in item_objets:
                 # print ( "Item Name:" , item.name)
@@ -103,8 +103,8 @@ def show_home(searchName=None):
                 rest_json.update({'items': Items})
             restaurants.append(rest_json)
         # print "item search", restaurants
-        #restaurants.append("Karachi Cake")
-        #print item_objs
+        # restaurants.append("Karachi Cake")
+        # print item_objs
     print len(restaurants)
     return (json.dumps({"count": len(restaurants), "restaurants": restaurants, "role": 'customer'}), 200)
 
@@ -121,7 +121,6 @@ def getrest(id):
             # print ( "item_json " , item_json)
             items.append(item_json)
 
-        
         restdict.update({'items': items})
         print restdict
         return json.dumps(restdict)
@@ -151,6 +150,8 @@ def clearCart(id):
 # @login_required
 def cart(cur_id):
     user = Users.query.filter_by(id=cur_id).first()
+    if user is None or user.authenticated == False:
+        return "Not authorized", 400
     if user is not None:  # and user.authenticate(password):
         # print user.email
         # print (request.get_json())
@@ -190,8 +191,8 @@ def addToCart():
     print (request.get_json())
     cust_id = request.get_json()['cust_id']
     user = Users.query.filter_by(id=cust_id).first()
-    if user is None:
-        render_template("login.html")
+    if user is None or user.authenticated == False:
+        return "Not authorized", 400
     else:
         productId = int(request.get_json()['product_id'])
         product_count = request.get_json()['quantity']
@@ -222,25 +223,26 @@ def removeFromCart():
     from ..authentication.models import Users
     cust_id = request.get_json()['cust_id']
     user = Users.query.filter_by(id=cust_id).first()
-    if user is None:
-        redirect(url_for('restaurants'))
+    if user is None or user.authenticated == False:
+        return "Not authorized", 400
+
     else:
         productId = int(request.get_json()['product_id'])
         # we are just deleting the product not decrearing quantity
         # hence we are able to find a product we will just remove it
         # decreasing quantity need to implement later
-        #delet_prod_cnt = int(request.get_json()['quantity'])
-        #id  = user.id
+        # delet_prod_cnt = int(request.get_json()['quantity'])
+        # id  = user.id
         getProduct = Cart.query.filter_by(
             user_id=cust_id, product_id=productId).first()
         # if no product is present for given user id and product id
         # create a new cart and and add to it
         if(getProduct is not None):
             # Print Error login
-            #print "Error"
+            # print "Error"
             # else:
             # else increment the qunatity and commit the session
-            #getProduct.quantity = getProduct.quantity - delet_prod_cnt
+            # getProduct.quantity = getProduct.quantity - delet_prod_cnt
             db.session.delete(getProduct)
             db.session.commit()
 
@@ -250,42 +252,35 @@ def removeFromCart():
 @app.route("/order", methods=['GET', 'POST'])
 # @login_required
 def OrderAdd():
-    if request.method == 'POST':
-        getJson = request.get_json()
-        print ("order ", getJson)
-        cur_cust_id = request.get_json()['custId']
-        #cur_rest_id = request.get_json()['rest_id']
-        allItemslist = request.get_json()['items']
-        purchase_dtime = dt.now()
-        purchase_dtime = dt.strptime(purchase_dtime.strftime(
-            '%Y-%m-%d %H:%M'), '%Y-%m-%d %H:%M')
-        orderCur = None
-        orderCur = Order(custid=cur_cust_id, date_purchased=purchase_dtime,
-                         orderstatus=Orders.ORDER_CREATED)
-        if orderCur is None:
-            print "Creation failed"
-        db.session.add(orderCur)
-        db.session.flush()
-        print "orderId", orderCur.order_id
-        cur_order_id = orderCur.order_id
-        for cartItem in allItemslist:
-            cur_item_id = cartItem['item_id']
-            cur_item_quantity = cartItem['quantity']
-            curItem = OrderItem(
-                order_id=cur_order_id, fooditem_id=cur_item_id, item_quantity=cur_item_quantity)
-            db.session.add(curItem)
+    getJson = request.get_json()
+    print getJson
+    cur_cust_id = request.get_json()['custId']
+    user = Users.query.filter_by(id=cur_cust_id).first()
+    if user is None or user.authenticated == False:
+        return "Not authorized", 400
+    cur_rest_id = request.get_json()['restId']
+    allItemslist = request.get_json()['items']
+    purchase_dtime = dt.now()
+    purchase_dtime = dt.strptime(purchase_dtime.strftime(
+        '%Y-%m-%d %H:%M'), '%Y-%m-%d %H:%M')
+    orderCur = None
+    orderCur = Order(custid=cur_cust_id, rest_id=cur_rest_id, date_purchased= purchase_dtime, orderstatus=Orders.ORDER_CREATED, total_amount=0.0)
+    if orderCur is None:
+        print "Creation failed"
+    db.session.add(orderCur)
+    db.session.flush()
+    print "orderId", orderCur.order_id
+    cur_order_id = orderCur.order_id
+    totalAmount = 0.0
+    for cartItem in allItemslist:
+        cur_item_id = cartItem['item_id']
+        currentFoodItem = FoodItem.query.filter_by(
+            item_id=cur_item_id).first()
+        cur_item_quantity = cartItem['quantity']
+        totalAmount = float(
+            totalAmount + (float(cur_item_quantity)*currentFoodItem.price))
+        curItem = OrderItem(order_id=cur_order_id, fooditem_id = cur_item_id, item_quantity = cur_item_quantity)
+        db.session.add(curItem)
+    orderCur.total_amount = totalAmount
     db.session.commit()
     return str(cur_order_id)
-
-
-@app.route("/orders/rest=<id>", methods=['GET'])
-def getorders(id):
-    order = {
-        "count": 5,
-        "orders": [{
-            "rest_id": 1,
-            "cust_id": 5,
-            "date": "2-12-2018"
-        }]
-    }
-    return json.dumps(order)

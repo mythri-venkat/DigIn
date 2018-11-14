@@ -63,10 +63,14 @@ def register():
     db.session.add(cur_user)
     db.session.commit()
     if role == 'restaurant':
-        rest = Restaurant(restname,address)
-        db.session.add(rest)
+        rest = Restaurant.query.filter_by(name=restname,address=address).filter_by().first()
+        if rest is None:
+            rest = Restaurant(restname,address)
+            db.session.add(rest)
+            db.session.commit()
+        
+        cur_user.rest_id = rest.rest_id
         db.session.commit()
-    #flash('User successfully registered')
     return "SUCCESS"
 
 @app.route('/change/<user_id>',methods=['POST'])
@@ -80,13 +84,15 @@ def changepwd(user_id):
         return "Password incorrect",400
 
 
-@mod_auth.route('/logout')
-@login_required
-def logout():
-    user = current_user
+@app.route('/logout/<id>',methods=['GET'])
+# @login_required
+def logout(id):
+    user = Users.query.filter_by(id=id).first()
     user.authenticated = False
     db.session.add(user)
     db.session.commit()
-    logout_user()
-    flash('Goodbye!', 'info')
-    return redirect(url_for('authentication.login'))
+    return "SUCCESS"
+
+    # logout_user()
+    # flash('Goodbye!', 'info')
+    # return redirect(url_for('authentication.login'))

@@ -366,16 +366,16 @@ angular.module('app')
             return revenue;
         }
 
-        this.getRestaurantOrders = function (id, offset, limit) {
+        this.getRestaurantOrders = function (uid,id, offset, limit) {
 
-
-            return $http.get(strurl + "orders/restaurant/" + id)
+            
+            return $http.get(strurl + "orders/restaurant/"+uid+"/"+ id)
                 .then(
                     function (response) {
                         if (response.status == '200') {
                             console.log(response);
-                            if (response.data.orders)
-                                orders = response.data.orders;
+                            if (response.data.orderItems)
+                                orders = response.data.orderItems;
                             cnt = 20
                             if (response.data.count)
                                 cnt = response.data.count
@@ -401,14 +401,14 @@ angular.module('app')
                     function (response) {
                         if (response.status == '200') {
                             console.log(response);
-                            if (response.data.orders)
-                                orders = response.data.orders;
+                            if (response.data.orderItems)
+                                orders = response.data.orderItems;
                             cnt = 20
                             if (response.data.count)
                                 cnt = response.data.count
 
 
-                            return { count: cnt, 'orders': order.splice(offset, offset + limit) };
+                            return { count: cnt, 'orders': orders.splice(offset, offset + limit) };
                         }
                         else {
                             return false;
@@ -425,6 +425,7 @@ angular.module('app')
             angular.forEach(cart, function (value, key) {
                 cartitems.push({ item_id: key, quantity: value.quantity });
             })
+            console.log({ 'custId': custid, 'restId': restid, 'items': cartitems });
             return $http({
                 method: 'POST',
                 url: strurl + 'order',

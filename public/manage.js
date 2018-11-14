@@ -18,7 +18,7 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
     });
 
     $scope.getOrders = function(){
-        orderservice.getRestaurantOrders(shared.getUser().restId,($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage)
+        orderservice.getRestaurantOrders(shared.getUser().id, shared.getUser().rest_id,($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage)
         .then(function(data){
             if (!data || data == []) {
                 $scope.notfound = true;

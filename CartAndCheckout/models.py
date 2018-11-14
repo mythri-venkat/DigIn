@@ -77,7 +77,8 @@ class Order(db.Model, TOJSON):
     date_purchased = db.Column(db.DateTime )
     orderstatus = db.Column(db.Integer, nullable = False)
     date_finished = db.Column(db.DateTime )
-
+    total_amount = db.Column(db.Float,nullable=False)
+    rest_id = db.Column(db.Integer, db.ForeignKey('Restaurant.rest_id')) 
     @property
     def json(self):
         return to_json(self, self.__class__)

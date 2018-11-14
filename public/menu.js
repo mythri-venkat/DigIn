@@ -5,7 +5,7 @@ angular.module('app')
             $scope.quantity = [];
 
             var observelogin = function () {
-                $scope.loggedin = shared.isloggedIn();
+                $scope.loggedin = shared.isloggedIn() && (shared.getUser().role == 'customer');
             }
             shared.registerobserver(observelogin);
             $scope.$on('$routeChangeSuccess', function () {

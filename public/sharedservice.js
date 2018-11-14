@@ -65,11 +65,11 @@ angular.module('app')
                 })
 
         }
-        this.changepassword = function (id,pass) {
-            
+        this.changepassword = function (id, pass) {
+
             return $http({
                 method: 'POST',
-                url: strurl + 'change/'+id,
+                url: strurl + 'change/' + id,
                 data: pass
             }).then(function (response) {
                 if (response.status == '200') {
@@ -92,10 +92,21 @@ angular.module('app')
         }
 
         this.logout = function (usr) {
+            return $http.get(strurl + 'logout/' + usr.id).then(function (response) {
+                if (response.status == '200') {
+                    $cookies.remove('usr');
+                    _loggedin = false;
+                    notify();
+                    return true;
+                }
+                else{
+                    return false;
+                }
 
-            $cookies.remove('usr');
-            _loggedin = false;
-            notify();
+            }, function (error) {
+                return false;
+            });
+
 
         }
         this.registerobserver = function (cb) {

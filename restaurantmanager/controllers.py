@@ -27,8 +27,7 @@ Orders = enum(ORDER_CREATED=1, ORDER_PROCESS=2, ORDER_FINISHED=3, ORDER_CANCEL=4
 def retrieveOrdersBasedOnCustomerId(cust_id):
     print ("In cart")
     user = Users.query.filter_by(id=cust_id).first()
-    if user is not None:
-        user.authenticated = True
+    if user is not None and user.authenticated==True:
         # cur_id = user.id
         orders = Order.query.filter_by(custid=cust_id).order_by(Order.orderstatus).all()
         totalPrice = 0
@@ -41,14 +40,21 @@ def retrieveOrdersBasedOnCustomerId(cust_id):
             orderItemArr = []
             for orderItem in orderItems:
                 orderItemJSON = orderItem.as_dict()
-                orderItemArr.append(orderItemJSON)
+                fitem = FoodItem.query.filter_by(item_id=orderItem.fooditem_id).first()
+                orderItemArr.append({"item":fitem.as_dict(),"quantity":orderItem.item_quantity})
+
+            restaurant = Restaurant.query.filter_by(rest_id=order.rest_id).first()
+            rest=dict()
+            if restaurant is not None:
+                rest = restaurant.as_dict()
+
             orderJSON = order.as_dict()
-            orderJSON.update({'items': orderItemArr,'customer':user.as_dict()})
+            orderJSON.update({'items': orderItemArr,'customer':user.as_dict(),'restaurant':rest})
             Ordersarr.append(orderJSON)
-        return (json.dumps({"counts": len(Ordersarr), "orderItems": Ordersarr, "role": 'customer'}, default=str), 200)
+        return (json.dumps({"count": len(Ordersarr), "orderItems": Ordersarr, "role": 'customer'}, default=str), 200)
     else:
         # ask user to login before it is able to see the cart as cart is for any user
-        return "SUCCESS"
+        return "Failed",400
 
 
 
@@ -58,32 +64,34 @@ def retrieveOrdersBasedOnCustomerId(cust_id):
 def retrieveOrdersBasedOnRestaurantId(cur_id,rest_id):
     print( "In cart")
     user = Users.query.filter_by(id=cur_id).first()
-    if user is not None:
-        user.authenticated = True
-        # cur_id = user.id
+    if user is not None and user.authenticated == True:
+        
         restaurant = Restaurant.query.filter_by(rest_id=rest_id).first()
         if restaurant is not None:
-            orders = Order.query.filter_by(rest_id=rest_id).order_by(Orders.orderstatus).all()
+            orders = Order.query.filter_by(rest_id=rest_id).order_by(Order.orderstatus).all()
             totalPrice = 0
             Ordersarr = []
             restid = None
             for order in orders:
                 orderId = order.order_id
+                user = Users.query.filter_by(id=order.custid).first()
                 # print "cartid id", curcart.id," product id", curcart.product_id
                 orderItems = OrderItem.query.filter_by(order_id=orderId).all()
                 orderItemArr = []
                 for orderItem in orderItems:
                     orderItemJSON = orderItem.as_dict()
-                    orderItemArr.append(orderItemJSON)
+                    fitem = FoodItem.query.filter_by(item_id=orderItem.fooditem_id).first()
+                    orderItemArr.append({"item":fitem.as_dict(),"quantity":orderItem.item_quantity})
+
                 orderJSON = order.as_dict()
-                orderJSON.update({'items': orderItemArr,'restaurant':restaurant.as_dict()})
+                orderJSON.update({'items': orderItemArr,'restaurant':restaurant.as_dict(),'customer':user.as_dict()})
                 Ordersarr.append(orderJSON)
-            return (json.dumps({"counts": len(Ordersarr), "orderItems": Ordersarr, "role": 'customer'}, default=str), 200)
+            return (json.dumps({"count": len(Ordersarr), "orderItems": Ordersarr, "role": 'customer'}, default=str), 200)
         else:
-            return (json.dumps({"counts": 0, "orderItems": [], "role": 'customer'}, default=str), 200)
+            return (json.dumps({"count": 0, "orderItems": [], "role": 'customer'}, default=str), 200)
     else:
         # ask user to login before it is able to see the cart as cart is for any user
-        render_template("login.html")
+        return "failed"
 
 
 # UPDATE the order confirmation of status
@@ -112,9 +120,9 @@ def updateConfirmationOrderStatus(order_id):
 
                 orderJSON.update({'items': orderItemArr,'restaurant':restaurant.as_dict(),'customer':user.as_dict()})
                 Ordersarr.append(orderJSON)
-                return (json.dumps({"counts": len(Ordersarr), "orderItems": Ordersarr, "role": 'customer'}, default=str), 200)
+                return (json.dumps({"count": len(Ordersarr), "orderItems": Ordersarr, "role": 'customer'}, default=str), 200)
             else:
-                return (json.dumps({"counts": 0, "orderItems": [], "role": 'customer'}, default=str), 200)
+                return (json.dumps({"count": 0, "orderItems": [], "role": 'customer'}, default=str), 200)
         else:
             # ask user to login before it is able to see the cart as cart is for any user
             render_template("login.html")

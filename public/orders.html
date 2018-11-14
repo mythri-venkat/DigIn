@@ -36,7 +36,7 @@
                         <td ng-hide="showdetails[$index]"><img ng-src="{{order.image_url}}" src="imgs/1.jpg" class="avatar"></td>
                         <td ng-hide="showdetails[$index]">{{order.order_id}}</td>
                         <td ng-hide="showdetails[$index]">{{order.restaurant.name}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.orderstatus}}</td>
+                        <td ng-hide="showdetails[$index]">{{statusEnum[order.orderstatus]}}</td>
                         <td ng-hide="showdetails[$index]">{{order.date_purchased}}</td>
                         <td ng-hide="showdetails[$index]">{{order.total_amount}}</td>
 

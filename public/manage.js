@@ -48,9 +48,10 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
 
     $scope.changeStatus = function(idx,stat){
         
-        orderservice.changeStatus($scope.orders[idx].id, stat).then(function(response){
+        orderservice.changeStatus($scope.orders[idx].order_id, stat,shared.getUser().id).then(function(response){
             if(response){
-                $scope.orders[idx].status = stat;
+                $scope.orders[idx].orderstatus = stat;
+                alert("status changed successfully");
             }
             else{
                 alert("order status could not be changed");
@@ -62,10 +63,12 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
 
         })
     }
-
-    $scope.getRevenue = function(){
-        return orderservice.revenue();
+    $scope.totalrevenue = orderservice.revenue();
+    function watchrevenue() {
+        $scope.totalrevenue = orderservice.revenue();      
+        
     }
+    orderservice.registerwatchrevenue(watchrevenue);
 
     $scope.show = function (idx) {
         var b = $scope.showdetails[idx];

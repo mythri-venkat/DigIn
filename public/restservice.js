@@ -276,94 +276,37 @@ angular.module('app')
             return restaurant;
         }
     }])
-    .service('orderservice', ['$http', function ($http) {
+    .service('orderservice', ['$http','shared', function ($http,shared) {
         this.id = 0;
         var strurl = "http://127.0.0.1:5001/"
 
-        var orders = [{
-            "id": "ORDR1",
-            "status": "Paid",
-            "userId": "USER1234",
-            "totalAmount": 1000,
-            "date": "12-12-2018",
-            "time": "19:00",
-            "orderItems": [{
-                "id": "ORIT1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 4,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "ORIT2",
-                "itemId": "ITEM13",
-                "qtyOrdered": 5,
-                "items": [{
-                    "id": "ITEM124",
-                    "restId": "REST1234",
-                    "name": "Item 3",
-                    "image": "images3.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 120,
-                    "availability": 8,
-                    "rating": 5
-                }]
-            }]
-        }, {
-            "id": "ORDR2",
-            "status": "Ordered",
-            "userId": "USER1234",
-            "date": "12-12-2018",
-            "time": "19:00",
-            "totalAmount": 500,
-            "orderItems": [{
-                "id": "OR2T1",
-                "itemId": "ITEM12",
-                "qtyOrdered": 2,
-                "items": [{
-                    "id": "ITEM12",
-                    "restId": "REST1234",
-                    "name": "Item1",
-                    "image": "images1.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 100,
-                    "availability": 10,
-                    "rating": 4
-                }]
-            }, {
-                "id": "OR2T2",
-                "itemId": "ITEM125",
-                "qtyOrdered": 2,
-                "items": [{
-                    "id": "ITEM125",
-                    "restId": "REST1234",
-                    "name": "Item4",
-                    "image": "images4.jpg",
-                    "description": "sckn dlkcm a;cm;a, ;oo dcjn dwsc",
-                    "price": 150,
-                    "availability": 7,
-                    "rating": 2
-                }]
-            }]
-        }
-        ];
+        this.orders;
+        var vm = this;
 
         this.revenue = function(){
+        
             var revenue =0;
-            if(orders){
-                for(var i=0;i<orders.length;i++){
-                    if(orders[i].status == '3')
-                    revenue+=orders[i].totalAmount;
+            if(vm.orders && vm.orders.length > 0){
+                for(var i=0;i<vm.orders.length;i++){
+                    if(vm.orders[i].orderstatus == '3')
+                    revenue+=vm.orders[i].total_amount;
                 }
             }
+            else{
+                vm.getRestaurantOrders(shared.getUser().id,shared.getUser().rest_id,0,10);
+            }
             return revenue;
+        }
+
+        var obs=[];
+        this.registerwatchrevenue = function(cb){
+            obs.push(cb);
+        }
+
+        function notifyrevenue(){
+            for(var i=0;i<obs.length;i++){
+                obs[i]();
+            }
         }
 
         this.getRestaurantOrders = function (uid,id, offset, limit) {
@@ -375,13 +318,13 @@ angular.module('app')
                         if (response.status == '200') {
                             console.log(response);
                             if (response.data.orderItems)
-                                orders = response.data.orderItems;
+                            vm.orders = response.data.orderItems;
                             cnt = 20
                             if (response.data.count)
                                 cnt = response.data.count
 
-
-                            return { count: cnt, 'orders': orders };
+                            notifyrevenue();
+                            return { count: cnt, 'orders': vm.orders.splice(offset, offset + limit) };
                         }
                         else {
                             return false;
@@ -402,13 +345,13 @@ angular.module('app')
                         if (response.status == '200') {
                             console.log(response);
                             if (response.data.orderItems)
-                                orders = response.data.orderItems;
+                            vm.orders = response.data.orderItems;
                             cnt = 20
                             if (response.data.count)
                                 cnt = response.data.count
 
 
-                            return { count: cnt, 'orders': orders.splice(offset, offset + limit) };
+                            return { count: cnt, 'orders': vm.orders.splice(offset, offset + limit) };
                         }
                         else {
                             return false;
@@ -448,14 +391,25 @@ angular.module('app')
 
         }
 
-        this.changeStatus = function (orderid, stat) {
+        this.changeStatus = function (orderid, stat,cust_id) {
             return $http({
-                method: 'PUT',
-                url: strurl + 'order/' + orderid,
-                data: { status: stat }
+                method: 'POST',
+                url: strurl + 'orders/' + orderid,
+                data: { orderStatus: stat,custId:cust_id}
             }).then(function (response) {
                 if (response.status == '200')
+                {
+                    for(var i=0;i<vm.orders.length;i++){
+                        if(vm.orders[i].order_id == orderid){
+                            vm.orders[i].orderstatus = stat;
+                            
+                        }
+                    }
+                    notifyrevenue();
                     return response.data;
+
+                }
+                    
                 else {
                     return false;
                 }

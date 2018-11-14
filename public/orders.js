@@ -5,7 +5,7 @@ angular.module('app').controller('ordersctrl', ['$scope', 'orderservice', 'share
     $scope.numPerPage = 10;
     $scope.noOfPages = 1;
     $scope.currentPage = 1;
-    
+    $scope.statusEnum = { 1:"Order Placed",2:"Processing",3:"Delivered",4:"Cancelled"};
     $scope.$on('$routeChangeSuccess', function () {
         //console.log(shared.getUser().id);
         //console.log(user);

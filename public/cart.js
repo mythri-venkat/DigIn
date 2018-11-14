@@ -100,7 +100,7 @@ angular.module('app')
                         
                         $scope.orderId = response;
                         $('#orderModal').modal('show');
-                        cart.clearCart();
+                        cart.clearCart($scope.custId);
 
                     }
                     else {

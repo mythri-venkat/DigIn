@@ -103,26 +103,14 @@ def updateConfirmationOrderStatus(order_id):
         custId = request.get_json()['custId']
         orderStatus = request.get_json()['orderStatus']
         user = Users.query.filter_by(id=custId).first()
-        if user is not None:
-            user.authenticated = True
+        if user is not None and user.authenticated == True:
             order = Order.query.filter_by(order_id=order_id).first()
             orderItemArr = []
             if order is not None:
                 order.orderstatus = orderStatus
                 db.session.commit()
-                orderItems = OrderItem.query.filter_by(order_id=order_id).all()
-                Ordersarr = []
-                for orderItem in orderItems:
-                    orderItemJSON = orderItem.as_dict()
-                    orderItemArr.append(orderItemJSON)
-                orderJSON = order.as_dict()
-                restaurant = Restaurant.query.filter_by(rest_id=order.rest_id).first()
-
-                orderJSON.update({'items': orderItemArr,'restaurant':restaurant.as_dict(),'customer':user.as_dict()})
-                Ordersarr.append(orderJSON)
-                return (json.dumps({"count": len(Ordersarr), "orderItems": Ordersarr, "role": 'customer'}, default=str), 200)
+                return "success"
             else:
-                return (json.dumps({"count": 0, "orderItems": [], "role": 'customer'}, default=str), 200)
+                return "no order present",400
         else:
-            # ask user to login before it is able to see the cart as cart is for any user
-            render_template("login.html")
+            return "falied",400

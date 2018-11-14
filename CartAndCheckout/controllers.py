@@ -152,7 +152,7 @@ def cart(cur_id):
         return json.dumps({ "restaurant": rest_json,"items":Items} )
     else:
         # ask user to login before it is able to see the cart as cart is for any user
-        render_template("login.html")
+        return "SUCCESS"
 
 
 

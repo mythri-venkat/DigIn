@@ -48,7 +48,7 @@ def retrieveOrdersBasedOnCustomerId(cust_id):
         return (json.dumps({"counts": len(Ordersarr), "orderItems": Ordersarr, "role": 'customer'}), 200)
     else:
         # ask user to login before it is able to see the cart as cart is for any user
-        render_template("login.html")
+        return "SUCCESS"
 
 
 

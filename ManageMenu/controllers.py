@@ -50,7 +50,7 @@ def edit_profile(cust_id,rest_id):
 		return "failed",400
 
 
-@app.route('/menu/<userid>',methods=['GET','POST'])
+@app.route('/menu/<userid>',methods=['GET','POST'], endpoint='addToMenu')
 #@login_required
 def addToMenu(userid):
 	# cur_user_id = request.get_json()[userid]
@@ -132,32 +132,81 @@ def edit_item_profile(post_itemid):
 
 
 
+@app.route('/menu/<itemid>',methods=['GET','POST'], endpoint='deleteItem')
+#@login_required
+def deleteItem(itemid):
+	#cur_user_id = request.get_json()[userid]
+	curItem =  FoodItem.query.filter_by(item_id=itemid).first()
+	#Users.query.filter_by(id=cur_user_id).first()
+	if curItem is not None:
+		try:
+			db.session.delete(curItem)
+			db.session.commit()
+			return "SUCCESS", 200
+		except Exception as e:
+			print "EXCEPTION HAPPENED"
+			db.session.rollback()
+			return "failure", 404
+	else:
+		return "error", 404
 
-# #@login_required
-# def delete_menu_item(rest_id):
-#     if request.method == 'POST':
-#         getJson = request.get_json()
-#         if getJson is not None:
-#             try:
-#                 db.session.query(FoodItem).filter(FoodItem.item_id==request.get_json()['item_id']).delete()
-#                 print "Inside delete"
-#                 db.session.commit()
-#                 return "success", 200
-#             except Exception as e:
-#                 print eif
-#                 print "EXCEPTION HAPPENED"
-#                 db.session.rollback()
-#                 return "failure", 404
-#         else:
-#             return "error", 404
-#
-#
-#
-# #sends count of orders of the restraunt
-# #@login_required
-# def get_count(rest_id):
-#     orders = Order.query.filter_by(rest_id=rest_id).all()
-#     count=0
-#     for order in orders:
-#         count=count+1
-#     return count
+
+@app.route('/menu/<itemid>',methods=['GET','POST'], endpoint='editItem')
+#@login_required
+def editItem(itemid):
+	#cur_user_id = request.get_json()[userid]
+	curItem =  FoodItem.query.filter_by(item_id=itemid).first()
+	#Users.query.filter_by(id=cur_user_id).first()
+	if curItem is not None:
+		try:
+			db.session.delete(curItem)
+			db.session.commit()
+			return "SUCCESS", 200
+		except Exception as e:
+			print "EXCEPTION HAPPENED"
+			db.session.rollback()
+			return "failure", 404
+	else:
+		return "error", 404
+
+
+@app.route('/menu/edit/<post_itemid>',methods=['GET','POST'], endpoint='edit_item_profile')
+def edit_item_profile(post_itemid):
+	#print cust_id, rest_id
+	if request.method == 'POST':
+		getJson = request.get_json()
+		print "Recieved json" ,getJson
+		if getJson is not None and post_itemid is not None:
+			curItem = FoodItem.query.filter_by(item_id=post_itemid).first()
+			#print "user name" , curuser.username
+			if curItem is not None:
+				print FoodItem.as_dict()
+				if 'name' in getJson:
+					editName = request.get_json()['name']
+					if editName is not None:
+						curItem.name = editName
+				if 'price' in getJson:
+					editprice = request.get_json()['price']
+					if editprice is not None:
+						curItem.price = editprice
+				if 'quantity' in getJson:
+					editquantity = request.get_json()['quantity']
+					if editquantity is not None:
+						curItem.quantity = editquantity
+				if 'description' in getJson:
+					description = request.get_json()['description']
+					if description is not None:
+						curItem.description = description
+				if 'image_url' in getJson:
+					cururl = request.get_json()['image_url']
+					if cururl is not None:
+						curItem.image_url = cururl
+				db.session.commit()
+				return "SUCCESS" , 200
+			else:
+				return "failed",400
+		else:
+			#give error message
+			return "failed",400
+	else:
+		return "failed",400

@@ -65,14 +65,16 @@ log.addHandler(h)
 
 from .authentication.controllers import mod_auth
 from .CartAndCheckout.controllers import mod_client
+from .restaurantmanager.controllers import mod_manager
 #from .client.controllers import mod_client
 
 
-app.register_blueprint(mod_auth, url_prefix='/auth')
-app.register_blueprint(mod_client, url_prefix='/client')
+app.register_blueprint(mod_auth )#, url_prefix='/auth')
+app.register_blueprint(mod_client ) #, url_prefix='/client')
+app.register_blueprint(mod_manager)
 
 if __name__=="__main__":
-    app.run(host='127.0.0.1', port=5000)
+    app.run(host='127.0.0.1', port=5001)
 
 
 

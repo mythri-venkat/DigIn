@@ -18,15 +18,17 @@ class Restaurant(db.Model, TOJSON):
     open_time = db.Column(db.String(255) ) #, nullable=False)
     end_time = db.Column(db.String(255)) #,nullable=True)
     image_url = db.Column(db.String(255))
+    rating =  db.Column(db.Integer )
 
-    def __init__(self,name,address,description="",open_time="",end_time="",image_url=""):
+    def __init__(self,name,address,description="",open_time="",end_time="",image_url="", rating = None):
         self.name = name
         self.address = address
         self.description = description
         self.open_time = open_time
         self.end_time = end_time
         self.image_url = image_url
-     
+        self.rating = rating
+
     @property
     def json(self):
         return to_json(self, self.__class__)
@@ -78,7 +80,7 @@ class Order(db.Model, TOJSON):
     orderstatus = db.Column(db.Integer, nullable = False)
     date_finished = db.Column(db.DateTime )
     total_amount = db.Column(db.Float,nullable=False)
-    rest_id = db.Column(db.Integer, db.ForeignKey('Restaurant.rest_id')) 
+    rest_id = db.Column(db.Integer, db.ForeignKey('Restaurant.rest_id'))
     @property
     def json(self):
         return to_json(self, self.__class__)

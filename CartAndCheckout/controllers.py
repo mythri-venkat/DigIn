@@ -5,19 +5,11 @@ from flask import Flask, render_template, redirect, url_for, session, g, Bluepri
 import datetime
 from datetime import datetime as dt
 from datetime import timedelta
+import json
 
 from DigIn import db, app
-# import helper
-
 from .models import Restaurant, FoodItem, Cart, Order, OrderItem
-import json
 from ..authentication.models import Users
-
-mod_client = Blueprint('client', __name__)
-
-# To display the home page after retrieval from database
-# , methods=['GET', 'POST']
-
 
 def enum(**enums):
     return type('Enum', (), enums)
@@ -30,6 +22,11 @@ print "order creation status", (Orders.ORDER_CREATED)
 
 # To display the home page after retrieval from database
 # , methods=['GET', 'POST']
+mod_client = Blueprint('CartAndCheckout', __name__)
+
+# To display the home page after retrieval from database
+# , methods=['GET', 'POST']
+
 
 
 @app.route('/<path:path>')
@@ -182,7 +179,7 @@ def cart(cur_id):
         return json.dumps({"restaurant": rest_json, "items": Items})
     else:
         # ask user to login before it is able to see the cart as cart is for any user
-        render_template("login.html")
+        return "SUCCESS"
 
 
 @app.route("/cart/add", methods=['GET', 'POST'])

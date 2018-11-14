@@ -1,11 +1,28 @@
 angular.module('app')
     .service('restaurant', ['$http', function ($http) {
-        var url = "http://127.0.0.1:5001/"
-
+        var strurl = "http://127.0.0.1:5001/";
         
+        this.editprofile = function(restid,custid,rest){
+            console.log(rest);
+            return $http({
+                method:'POST',
+                url: strurl + 'restaurant/edit/'+custid+"/"+restid,
+                data:rest
+            }).then(function(response){
+                if(response.status =='200'){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            },function(error){
+                return false;
+
+            })
+        };
 
         this.getAll = function (offset, limit) {
-            return $http.get(url + 'restaurants').then(function (response) {
+            return $http.get(strurl + 'restaurants').then(function (response) {
                 if (response.status == '200') {
                     if (response.data.restaurants)
                         rests = response.data.restaurants;
@@ -29,8 +46,8 @@ angular.module('app')
         }
         this.search = function (name) {
             console.log(name);
-            console.log(url + "restaurants/" + name)
-            return $http.get(url + "restaurants/" + name).then(function (response) {
+            console.log(strurl + "restaurants/" + name)
+            return $http.get(strurl + "restaurants/" + name).then(function (response) {
                 if (response.status == '200') {
                     rests = response.data.restaurants;
                     return response.data;
@@ -46,22 +63,10 @@ angular.module('app')
 
         }
 
-        this.getRestFromUserId = function(id){
-            return $http.get(strurl+"restaurant/userid/"+id).then(function(response){
-                if(response.status =='200'){
-                    return response.data;
-                }
-                else{
-                    return false;
-                }
-
-            },function(error){
-                console.log(error);
-            })
-        }
+       
         this.getRestaurant = function (id) {
 
-            return $http.get(url+'restaurant/'+id).then(
+            return $http.get(strurl+'restaurant/'+id).then(
                 function(response){
                     if(response.status == '200'){
                         return response.data;

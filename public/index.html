@@ -52,7 +52,7 @@
       </ul>
       <ul class="navbar-nav ml-auto justify-content-end" ng-show="loggedin">
           <li class="nav-item" ng-show="loggedin && (role=='customer')"><a class="nav-link" href="#/cart"><span class="fa fa-shopping-cart"></span> Cart <span class="badge badge-danger" ng-if="itemCount > 0">{{itemCount}}</span> </a></li>
-        <li class="nav-item" ng-show="loggedin && (role=='restaurant')"><a class="nav-link" href="#/editProfile"><span class="fa fa-edit"></span> Menu</a></li>
+        <li class="nav-item" ng-show="loggedin && (role=='restaurant')"><a class="nav-link" href="#/editProfile"><span class="fa fa-edit"></span> Profile</a></li>
         <li class="nav-item" ng-show="loggedin"><a class="nav-link" href="#/changepassword"><span class="fa fa-user"></span> Change Password</a></li>
         <li class="nav-item"><a class="nav-link" href="#" ng-click="logout()"><span class="glyphicon glyphicon-sign-out"></span> Logout</a></li>
         
@@ -93,6 +93,7 @@
   <script src="orders.js"></script>
   <script src="cart.js"></script>
   <script src="changepassword.js"></script>
+  <script src="restaurantdetail.js"></script>
 
 </body>
 

@@ -55,15 +55,7 @@
                         </tr>
                     </tbody>
                     <tfoot ng-if="isvalid()">
-                        <tr>
-                            <td></td>
-                            <td colspan="2">Tax</td>
-                            <td>x</td>
-                            <td>{{restaurant.tax}}</td>
-                            <td>=</td>
-                            <td>{{gettax()}} </td>
-                            <td></td>
-                        </tr>
+                       
                         <tr>
                             <td></td>
                             <td colspan="4">Total</td>
@@ -111,11 +103,7 @@
                         </tr>
                     </tbody>
                     <tfoot>
-                        <tr>
-                            <td colspan="4">Tax</td>
-                            <td>{{restaurant.tax}}</td>
-                            <td>{{gettax()}} </td>
-                        </tr>
+                        
                         <tr>
                             <td colspan="5">Total</td>
                             <td>{{gettotal()}}</td>

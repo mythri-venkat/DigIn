@@ -99,7 +99,7 @@ def edit_item_profile(post_itemid):
 			curItem = FoodItem.query.filter_by(item_id=post_itemid).first()
 			#print "user name" , curuser.username
 			if curItem is not None:
-				print FoodItem.as_dict()
+				# print FoodItem.as_dict()
 				if 'name' in getJson:
 					editName = request.get_json()['name']
 					if editName is not None:

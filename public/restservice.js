@@ -24,7 +24,7 @@ angular.module('app')
        
         this.edititem=function(item_id,newitem){
             return $http({
-                url:strurl+'menu/'+item_id,
+                url:strurl+'menu/edit/'+item_id,
                 method:'POST',
                 data:newitem
             }).then(function(response){

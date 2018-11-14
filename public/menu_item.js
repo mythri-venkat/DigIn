@@ -43,9 +43,10 @@ angular.module('app')
 			}
 
             $scope.edititem = function () {
-            	restaurant.edititem($scope.newitem.item_id).then(function(response){
+            	restaurant.edititem($scope.newitem.item_id,$scope.newitem).then(function(response){
             		if(response){
-            			$scope.menuitems[idx]=$scope.newitem;
+						// for(var i=0;i<$scope.menuitems)
+            			// $scope.menuitems[idx]=$scope.newitem;
             			$scope.newitem = {};
             			$('#editmodal').modal('hide');
 					}

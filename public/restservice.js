@@ -2,7 +2,7 @@ angular.module('app')
     .service('restaurant', ['$http', function ($http) {
         var url = "http://127.0.0.1:5001/"
 
-        var rests=[]
+        
 
         this.getAll = function (offset, limit) {
             return $http.get(url + 'restaurants').then(function (response) {
@@ -61,7 +61,20 @@ angular.module('app')
         }
         this.getRestaurant = function (id) {
 
-            return rests[id];
+            return $http.get(url+'restaurant/'+id).then(
+                function(response){
+                    if(response.status == '200'){
+                        return response.data;
+                    }
+                    else{
+                        return false;
+                    }
+                },
+                function(error){
+                    console.log("error from server");
+                    return false;
+                }
+            )
         }
     }])
     .service('cart', ['$http', 'shared', function ($http, shared) {

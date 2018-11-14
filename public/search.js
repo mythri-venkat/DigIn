@@ -92,7 +92,7 @@ angular.module('app')
         }
 
         $scope.menu = function (idx) {
-            $location.path('restaurants/' + idx);
+            $location.path('restaurants/' + $scope.restaurants[idx].rest_id);
         }
 
     }])

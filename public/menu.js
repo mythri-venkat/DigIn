@@ -10,11 +10,16 @@ angular.module('app')
             shared.registerobserver(observelogin);
             $scope.$on('$routeChangeSuccess', function () {
                 observelogin();
-                $scope.restaurant = restaurant.getRestaurant($routeParams.id);
+                restaurant.getRestaurant($routeParams.id).then(function(response){
+                    if(response){
+                        $scope.restaurant = response;
+                        for (var i = 0; i < $scope.restaurant.items.length; i++) {
+                            $scope.quantity.push(1);
+                        }
+                    }
+                })
 
-                for (var i = 0; i < $scope.restaurant.items.length; i++) {
-                    $scope.quantity.push(1);
-                }
+                
             })
             $scope.isvalid = function (idx) {
 

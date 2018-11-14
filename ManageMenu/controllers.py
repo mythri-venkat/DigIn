@@ -54,7 +54,7 @@ def edit_profile(cust_id,rest_id):
 #@login_required
 def addToMenu(userid):
 	cur_user_id = request.get_json()[userid]
-	curuser = Users.query.filter_by(id=cur_user_id).first()
+	curuser = Users.query.filter_by(id=userid).first()
 	if curuser is not None:
 		user_restid = curuser.rest_id
 		restaurant = Restaurant.query.filter_by(rest_id = user_restid).first()
@@ -72,32 +72,20 @@ def addToMenu(userid):
 	return "Not authorized", 400
 
 
-
-# #@login_required
-# def delete_menu_item(rest_id):
-#     if request.method == 'POST':
-#         getJson = request.get_json()
-#         if getJson is not None:
-#             try:
-#                 db.session.query(FoodItem).filter(FoodItem.item_id==request.get_json()['item_id']).delete()
-#                 print "Inside delete"
-#                 db.session.commit()
-#                 return "success", 200
-#             except Exception as e:
-#                 print eif
-#                 print "EXCEPTION HAPPENED"
-#                 db.session.rollback()
-#                 return "failure", 404
-#         else:
-#             return "error", 404
-#
-#
-#
-# #sends count of orders of the restraunt
-# #@login_required
-# def get_count(rest_id):
-#     orders = Order.query.filter_by(rest_id=rest_id).all()
-#     count=0
-#     for order in orders:
-#         count=count+1
-#     return count
+@app.route('/menu/<itemid>',methods=['GET','POST'])
+#@login_required
+def deleteItem(itemid):
+	#cur_user_id = request.get_json()[userid]
+	curItem =  FoodItem.query.filter_by(item_id=itemid).first()
+	#Users.query.filter_by(id=cur_user_id).first()
+	if curItem is not None:
+		try:
+			db.session.delete(curItem)
+			db.session.commit()
+			return "SUCCESS", 200
+		except Exception as e:
+			print "EXCEPTION HAPPENED"
+			db.session.rollback()
+			return "failure", 404
+	else:
+		return "error", 404

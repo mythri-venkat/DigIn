@@ -20,6 +20,7 @@ angular.module('app')
             //     total += $scope.cartItems[i].item.price * $scope.cartItems[i].quantity;
             // }
             //$scope.total = total;
+            $scope.finaltotal = $scope.total;
             return $scope.total;
         }
 

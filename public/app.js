@@ -105,14 +105,29 @@ angular.module('app', ['ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap.pagin
 
         }
 
-        $scope.neworder = false;
-        $scope.ordercount=0;
-
+        // $scope.neworder = false;
+        // $scope.ordercount=0;
+        $scope.msgcount =0;
+        $scope.messages=[];
         var observeorder = function(){
-            if(orderservice.ordercount != $scope.ordercount){
-                $scope.neworder = true;
-                $scope.ordercount = orderservice.ordercount;
+            if(orderservice.messages.length > $scope.msgcount){
+
+                // $scope.neworder = true;
+                for(var i=$scope.msgcount;i<orderservice.messages.length;i++){
+                    $scope.messages.push(orderservice.messages[i]);
+                }
+                $scope.msgcount = $scope.messages.length;
             }
+        }
+
+        $scope.markread = function(){
+
+            orderservice.markread(shared.getUser().id).then(function(response){
+                if(response){
+                    $scope.messages=[];
+                    $scope.msgcount =0;
+                }
+            })
         }
 
         $scope.itemCount = cart.itemCount;
@@ -144,6 +159,7 @@ angular.module('app', ['ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap.pagin
 
             }
         }
+        // = ['order placed adljfd','adfakdjflaf'];
         $scope.logout = function () {
 
             shared.logout(shared.getUser()).then(function (response) {

@@ -309,8 +309,8 @@ angular.module('app')
                                         restaurant = {};
                                     }
                                 }
-                                else{
-                                    items[product_id].quantity-=qty;
+                                else {
+                                    items[product_id].quantity -= qty;
                                 }
                             }
 
@@ -406,7 +406,7 @@ angular.module('app')
                             cnt = 0
                             if (response.data.count) {
                                 cnt = response.data.count;
-                                vm.ordercount = cnt;
+                                // vm.ordercount = cnt;
                             }
                             if (response.data.count > 0)
                                 notifyrevenue();
@@ -436,7 +436,7 @@ angular.module('app')
                             if (response.data.count)
                                 cnt = response.data.count
 
-
+                            // for(var i=0;i<vm.orders.)
                             return { count: cnt, 'orders': vm.orders.splice(offset, offset + limit) };
                         }
                         else {
@@ -504,7 +504,7 @@ angular.module('app')
             })
         }
 
-        this.ordercount = 0;
+        // this.ordercount = 0;
 
         var obslen = [];
 
@@ -527,7 +527,8 @@ angular.module('app')
         this.checkorders = function (id) {
             if (id != undefined) {
                 vm.restid = id;
-                timercount = $interval(checkChange, 3000);
+                timercount = $interval(checkChange, 9000);
+                checkChange();
             }
         }
 
@@ -562,31 +563,33 @@ angular.module('app')
                     });
         }
 
-        this.rateorder = function(userid,orderid,restid,rating){
+        this.rateorder = function (userid, orderid, restid, rating) {
             return $http({
-                method:'POST',
-                url:strurl+'rating/'+userid,
-                data:{'order_id':orderid,'rest_id':restid,'rating':rating}
-            }).then(function(response){
-                if(response.status=='200'){
+                method: 'POST',
+                url: strurl + 'rating/' + userid,
+                data: { 'order_id': orderid, 'rest_id': restid, 'rating': rating }
+            }).then(function (response) {
+                if (response.status == '200') {
                     return true;
                 }
-                else{
+                else {
                     return false;
                 }
-            },function(error){
+            }, function (error) {
                 return false;
             })
         }
-
+        this.messages = [];
         function checkChange() {
             if (vm.restid)
-                $http.get(strurl + 'orders/count/' + vm.restid)
+                $http.get(strurl + 'notifications/' + vm.restid)
                     .then(function (response) {
                         if (response.status == '200') {
-                            if (vm.ordercount != response.data) {
-                                vm.ordercount = response.data;
-                                notifylen();
+                            if (response.data.count > 0) {
+                                if (vm.messages.length < response.data.count) {
+                                    vm.messages = response.data.messages;
+                                    notifylen();
+                                }
                             }
                         }
 
@@ -594,6 +597,18 @@ angular.module('app')
                         function (error) {
 
                         })
+        }
+
+        this.markread = function(id){
+            return $http.get(strurl+'notifications/read/'+id).then(function(response){
+                if(response.status =='200'){
+                    vm.messages = [];
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            })
         }
 
     }])

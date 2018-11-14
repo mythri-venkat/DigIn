@@ -51,7 +51,7 @@ def edit_profile(cust_id,rest_id):
 
 
 @app.route('/menu/<userid>',methods=['GET','POST'], endpoint='addToMenu')
-#@login_required
+
 def addToMenu(userid):
 	# cur_user_id = request.get_json()[userid]
 	curuser = Users.query.filter_by(id=userid).first()

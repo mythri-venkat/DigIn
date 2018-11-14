@@ -18,9 +18,9 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
     // });
 
     var watchlen = function(){
-        if($scope.orderCount != orderservice.ordercount){
+        // if($scope.orderCount != orderservice.ordercount){
             $scope.getOrders();
-        }
+        // }
     }
 
     orderservice.registerobserverlen(watchlen)

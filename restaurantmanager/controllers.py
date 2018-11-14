@@ -141,6 +141,11 @@ def updateConfirmationOrderStatus(order_id):
             if order is not None:
                 order.orderstatus = orderStatus
                 db.session.commit()
+                dctstat = { 1:"Order Placed",2:"Processing",3:"Delivered",4:"Cancelled"}
+                msgstat = 'Status of your order '+str(order.order_id)+' is '+dctstat[int(orderStatus)]
+                msg = Notification(user_id=order.custid,n_type=1,read_status=0,message=msgstat)
+                db.session.add(msg)
+                db.session.commit()
                 return "success"
             else:
                 return "no order present",400
@@ -166,17 +171,56 @@ def rateorder(id):
         db.session.commit()
         return "success"
 
-# @app.route('/notifications/<id>',methods=['GET'])
-# def getNotifications(id):
-#     user = Users.query.filter_by(id=id).first()
-#     if user is not None and user.authenticated == True:
-#         if user.role == 'restaurant':
-#             restid = user.rest_id
-#             msgs = Notification.query.filter_by(rest_id=restid,read_status=0).all()
-#             msgarr =[]
-#             for msg in msgs:
-#                 msgarr.append(msg.message)
-#             return json.dumps({'count':len(msgarr),'messages':msgarr})
-#     return "failed",400
+@app.route('/notifications/<id>',methods=['GET'])
+def getNotifications(id):
+    user = Users.query.filter_by(id=id).first()
+    if user is not None: #and user.authenticated == True:
+        if user.role == 'restaurant':
+            restid = user.rest_id
+            msgs = Notification.query.filter_by(rest_id=restid,read_status=0).all()
+            msgarr =[]
+            for msg in msgs:
+                msgarr.append(msg.message)
+            return json.dumps({'count':len(msgarr),'messages':msgarr})
+        elif user.role == 'customer':
+            msgs = Notification.query.filter_by(user_id=user.id,read_status=0).all()
+            msgarr =[]
+            for msg in msgs:
+                msgarr.append(msg.message)
+            return json.dumps({'count':len(msgarr),'messages':msgarr})
+        elif user.role=='admin':
+            msgs = Notification.query.filter_by(read_status=0).all()
+            msgarr =[]
+            for msg in msgs:
+                msgarr.append(msg.message)
+            return json.dumps({'count':len(msgarr),'messages':msgarr})
+    return "failed",400
+
+@app.route('/notifications/read/<id>')
+def updatestatusnotification(id):
+    user = Users.query.filter_by(id=id).first()
+    if user is not None and user.authenticated == True:
+        if user.role == 'restaurant':
+            restid = user.rest_id
+            msgs = Notification.query.filter_by(rest_id=restid,read_status=0).all()
+            
+            for msg in msgs:
+                msg.read_status=1
+            db.session.commit()
+            # return json.dumps({'count':len(msgarr),'messages':msgarr})
+        elif user.role == 'customer':
+            msgs = Notification.query.filter_by(user_id=user.id,read_status=0).all()
+            for msg in msgs:
+                msg.read_status=1
+            db.session.commit()
+        elif user.role=='admin':
+            msgs = Notification.query.filter_by(read_status=0).all()
+            for msg in msgs:
+                msg.read_status=1
+            db.session.commit()
+        return "success"
+    return "failure",400
+            
+
 
 

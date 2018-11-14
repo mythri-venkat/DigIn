@@ -8,7 +8,7 @@ from datetime import timedelta
 import json
 
 from DigIn import db, app
-from .models import Restaurant, FoodItem, Cart, Order, OrderItem
+from .models import Restaurant, FoodItem, Cart, Order, OrderItem,Notification
 from ..authentication.models import Users
 
 
@@ -296,5 +296,9 @@ def OrderAdd():
         curItem = OrderItem(order_id=cur_order_id, fooditem_id = cur_item_id, item_quantity = cur_item_quantity)
         db.session.add(curItem)
     orderCur.total_amount = totalAmount
+    db.session.commit()
+    msgstat = 'Order placed, orderId = '+str(cur_order_id)
+    msg = Notification(rest_id=cur_rest_id,read_status=0,n_type=2,message=msgstat)
+    db.session.add(msg)
     db.session.commit()
     return str(cur_order_id)

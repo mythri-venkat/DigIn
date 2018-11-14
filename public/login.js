@@ -12,14 +12,16 @@ angular.module('app').controller('loginctrl', ['$scope', '$location', '$cookies'
                 console.log(response);
                 $scope.loginfail=false;
                 if(response.role == 'customer'){
+                    orderservice.checkorders(response.id)
                     $location.path('/restaurants');
                 }
                 else if(response.role == 'restaurant'){
                     if(response.rest_id != undefined)
-                        orderservice.checkorders(response.rest_id)
+                        orderservice.checkorders(response.id)
                     $location.path('/manage');
                 }   
                 else if(response.role == 'admin'){
+                    orderservice.checkorders(response.id)
                     $location.path('/adminorders');
                 }
             }

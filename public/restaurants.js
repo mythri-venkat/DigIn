@@ -6,6 +6,7 @@ angular.module('app')
         $scope.currentPage = 1;
         $scope.notfound = false;
         $scope.showdelete = false;
+        
 
         $scope.$on('$routeChangeSuccess', function () {
             getRestaurants();    

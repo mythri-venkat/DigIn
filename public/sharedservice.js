@@ -104,6 +104,7 @@ angular.module('app')
             })
         }
 
+        
         this.logout = function (usr) {
             return $http.get(strurl + 'logout/' + usr.id).then(function (response) {
                 if (response.status == '200') {

@@ -7,10 +7,11 @@
 }
 .unchecked{
         color:wheat;
-    }
-    .checked{
+}
+
+.checked{
         color: orange;
-    }
+}
 </style>
 <div class="row mt-5 mb-5">
     <div class="col-md-4 offset-4">
@@ -46,13 +47,14 @@
                         <td ng-hide="showdetails[$index]">{{order.orderstatus}}</td>
                         <td ng-hide="showdetails[$index]">{{order.date_purchased}}</td>
                         <td ng-hide="showdetails[$index]">{{order.total_amount}}</td>
-                        <td ng-hide="showdetails[$index]"><span class="fa fa-star unchecked" ng-repeat="i in ratingarr" ng-class="{checked:(i<=order.rating),unchecked:(i>order.rating)}" ng-click="rateorder($event,$parent.$index,i)"></span></td>
+                        <td ng-hide="showdetails[$index]"><span class="fa fa-star unchecked" ng-repeat="i in ratingarr"
+                                ng-class="{checked:(i<=order.rating),unchecked:(i>order.rating)}" ng-click="rateorder($event,$parent.$index,i)"></span></td>
 
                         <!-- </tr> -->
                         <!-- <tr class="bg-light" > -->
                         <td class="bg-light" colspan="7" ng-click="show($index)" ng-show="showdetails[$index]">
                             <div class="col-md-12">
-                                
+
                                 <div class="row text-center">
                                     <div class="col-md-3 text-left">Id:<b>{{order.id}}</b></div>
                                     <div class="col-md-6">
@@ -74,7 +76,7 @@
                                                     <th>Rate</th>
                                                     <th>Cost</th>
                                                 </tr>
-                                            </thead> 
+                                            </thead>
                                             <tbody>
                                                 <tr ng-repeat="orderitem in order.items">
                                                     <td>{{orderitem.item.item_id}}</td>
@@ -102,6 +104,6 @@
 </div>
 
 <div class="footer navbar fixed-bottom text-center justify-content-center">
-        <pagination num-pages="noOfPages" current-page="currentPage" class="pagination-small"></pagination>
+    <pagination num-pages="noOfPages" current-page="currentPage" class="pagination-small"></pagination>
 
 </div>

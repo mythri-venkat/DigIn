@@ -33,7 +33,7 @@
 
                 <div>
                     <tr ng-repeat="order in orders | filter:searchOrder" ng-click="show($index)">
-                        <td ng-hide="showdetails[$index]"><img ng-src="{{order.image_url}}" src="imgs/1.jpg" class="avatar"></td>
+                        <td ng-hide="showdetails[$index]"><img ng-src="{{order.items[0].item.image_url}}" class="avatar"></td>
                         <td ng-hide="showdetails[$index]">{{order.order_id}}</td>
                         <td ng-hide="showdetails[$index]">{{order.restaurant.name}}</td>
                         <td ng-hide="showdetails[$index]">{{statusEnum[order.orderstatus]}}</td>

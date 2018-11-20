@@ -1,73 +1,75 @@
-<div class="row mt-5 mb-5">
-    <div class="col-md-3 offset-2 p-4 bg-light text-left">
-        <h3><b>Total Revenue:</b></h3>
-       
-        <h5>{{totalrevenue}}</h5>
+<div ng-init="getOrders()">
 
-    </div>
-    <div class="col-md-3 offset-2 p-4 bg-light text-right">
-        <h3><b>Total Orders:</b></h3>
-        
-        <h5>{{orderCount}}</h5>
-    </div>
+    <div class="row mt-5 mb-5">
+        <div class="col-md-3 offset-2 p-4 bg-light text-left">
+            <h3><b>Total Revenue:</b></h3>
 
+            <h5>{{totalrevenue}}</h5>
 
-</div>
+        </div>
+        <div class="col-md-3 offset-2 p-4 bg-light text-right">
+            <h3><b>Total Orders:</b></h3>
 
-<div class="row mt-5 mb-5">
-    <div class="col-md-4 offset-4">
-
-        <input type="text" class="form-control" ng-model="searchOrder" placeholder="Search for orders">
-        <div class="dropdown">
-            Filter Status:
-            <button class="btn btn-secondary dropdown-toggle btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                {{Filter.status==''&&'All'||Filter.status}}
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" ng-click="Filter.status=''">All</a>
-                <a class="dropdown-item" ng-click="Filter.status='Order Placed'">Order Placed</a>
-                <a class="dropdown-item" ng-click="Filter.status='Processing'">Processing</a>
-                <a class="dropdown-item" ng-click="Filter.status='Delivered'">Delivered</a>
-                <a class="dropdown-item" ng-click="Filter.status='Cancelled'">Cancelled</a>
-            </div>
+            <h5>{{orderCount}}</h5>
         </div>
 
 
     </div>
-</div>
-<div class="row justify-content-center margin-view">
-    <div class="col-md-8">
 
-        <label ng-show="notfound">No orders found</label>
-        <table class="table table-hover" ng-hide="notfound">
-            <thead>
-                <tr>
-                    <th ng-click="orderFilter=order.id">Id</th>
-                    <th ng-click="orderFilter=order.customer.name">Customer Name</th>
-                    <th ng-click="orderFilter=order.customer.address">Customer Address</th>
-                    <th ng-click="orderFilter=order.orderstatus">Status</th>
-                    <th ng-click="orderFilter=order.date_purchased">Order Date</th>
-                    <th ng-click="orderFilter.order.total_amount">Total</th>
-                </tr>
-            </thead>
-            <tbody>
+    <div class="row mt-5 mb-5">
+        <div class="col-md-4 offset-4">
 
-                <div>
-                    <tr ng-repeat="order in orders | filter:searchOrder | filter:Filter.status |orderBy : orderFilter "
-                        ng-click="show($index)">
-                        <td ng-hide="showdetails[$index]">{{order.order_id}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.customer.first_name}} {{order.user.last_name}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.customer.address}}</td>
-                        <td ng-hide="showdetails[$index]">{{statusEnum[order.orderstatus]}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.date_purchased}}</td>
-                        <td ng-hide="showdetails[$index]">{{order.total_amount}}</td>
+            <input type="text" class="form-control" ng-model="searchOrder" placeholder="Search for orders">
+            <div class="dropdown">
+                Filter Status:
+                <button class="btn btn-secondary dropdown-toggle btn-block" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{Filter.status==''&&'All'||Filter.status}}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" ng-click="Filter.status=''">All</a>
+                    <a class="dropdown-item" ng-click="Filter.status='Order Placed'">Order Placed</a>
+                    <a class="dropdown-item" ng-click="Filter.status='Processing'">Processing</a>
+                    <a class="dropdown-item" ng-click="Filter.status='Delivered'">Delivered</a>
+                    <a class="dropdown-item" ng-click="Filter.status='Cancelled'">Cancelled</a>
+                </div>
+            </div>
 
-                        <!-- </tr> -->
-                        <!-- <tr class="bg-light" > -->
-                        <td class="bg-light" colspan="6" ng-click="show($index)" ng-show="showdetails[$index]">
-                            <div class="col-md-12">
-                                <!-- <div class="row text-center">
+
+        </div>
+    </div>
+    <div class="row justify-content-center margin-view">
+        <div class="col-md-8">
+
+            <label ng-show="notfound">No orders found</label>
+            <table class="table table-hover" ng-hide="notfound">
+                <thead>
+                    <tr>
+                        <th ng-click="orderFilter=order.id">Id</th>
+                        <th ng-click="orderFilter=order.customer.name">Customer Name</th>
+                        <th ng-click="orderFilter=order.customer.address">Customer Address</th>
+                        <th ng-click="orderFilter=order.orderstatus">Status</th>
+                        <th ng-click="orderFilter=order.date_purchased">Order Date</th>
+                        <th ng-click="orderFilter=order.total_amount">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <div>
+                        <tr ng-repeat="order in orders | filter:searchOrder | filter:Filter.status |orderBy : orderFilter "
+                            ng-click="show($index)">
+                            <td ng-hide="showdetails[$index]">{{order.order_id}}</td>
+                            <td ng-hide="showdetails[$index]">{{order.customer.first_name}} {{order.customer.last_name}}</td>
+                            <td ng-hide="showdetails[$index]">{{order.customer.address}}</td>
+                            <td ng-hide="showdetails[$index]">{{order.orderstatus}}</td>
+                            <td ng-hide="showdetails[$index]">{{order.date_purchased}}</td>
+                            <td ng-hide="showdetails[$index]">{{order.total_amount}}</td>
+
+                            <!-- </tr> -->
+                            <!-- <tr class="bg-light" > -->
+                            <td class="bg-light" colspan="6" ng-click="show($index)" ng-show="showdetails[$index]">
+                                <div class="col-md-12">
+                                    <!-- <div class="row text-center">
                                     <div class="col-md-2">{{order.id}}</div>
                                     <div class="col-md-2">{{order.CustomerName}}</div>
                                     <div class="col-md-2">{{order.status}}</div>
@@ -75,67 +77,68 @@
                                     <div class="col-md-2">{{order.time}}</div>
                                     <div class="col-md-2">{{order.totalAmount}}</div>
                                 </div> -->
-                                <div class="row text-center">
-                                    <div class="col-md-3 text-left">Id:<b>{{order.order_id}}</b></div>
-                                    <div class="col-md-6">
+                                    <div class="row text-center">
+                                        <div class="col-md-3 text-left">Id:<b>{{order.order_id}}</b></div>
+                                        <div class="col-md-6">
 
-                                        <div class="dropdown">
-                                            Change Status:
-                                            <button class="btn btn-secondary dropdown-toggle btn-block" type="button" id="dropdownMenuButton"
-                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                {{statusEnum[order.orderstatus]}}
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item"  ng-click="changeStatus($index,1)">Order
-                                                    Placed</a>
-                                                <a class="dropdown-item" ng-click="changeStatus($index,2)">Processing</a>
-                                                <a class="dropdown-item"  ng-click="changeStatus($index,3)">Delivered</a>
-                                                <a class="dropdown-item"  ng-click="changeStatus($index,4)">Cancel</a>
+                                            <div class="dropdown">
+                                                Change Status:
+                                                <button class="btn btn-secondary dropdown-toggle btn-block" type="button"
+                                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    {{statusEnum[order.orderstatus]}}
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item" ng-click="changeStatus($index,1)">Order
+                                                        Placed</a>
+                                                    <a class="dropdown-item" ng-click="changeStatus($index,2)">Processing</a>
+                                                    <a class="dropdown-item" ng-click="changeStatus($index,3)">Delivered</a>
+                                                    <a class="dropdown-item" ng-click="changeStatus($index,4)">Cancel</a>
+                                                </div>
+
                                             </div>
 
+
+                                        </div>
+                                        <div class="col-md-3 text-right">
+                                            <span class="fa fa-close" ng-click="show($index)"></span>
                                         </div>
 
-
                                     </div>
-                                    <div class="col-md-3 text-right">
-                                        <span class="fa fa-close" ng-click="show($index)"></span>
-                                    </div>
-
-                                </div>
-                                <div class="row mt-4 text-center">
-                                    <div class="col-md-6 offset-3">
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th>Item Name</th>
-                                                    <th>Quantity</th>
-                                                    <th>Rate</th>
-                                                    <th>Cost</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-repeat="orderitem in order.items">
-                                                    <td>{{orderitem.item.item_id}}</td>
-                                                    <td>{{orderitem.item.name}}</td>
-                                                    <td>{{orderitem.quantity}}</td>
-                                                    <td>{{orderitem.item.price}}</td>
-                                                    <td>{{orderitem.quantity*orderitem.item.price}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="row mt-4 text-center">
+                                        <div class="col-md-6 offset-3">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Id</th>
+                                                        <th>Item Name</th>
+                                                        <th>Quantity</th>
+                                                        <th>Rate</th>
+                                                        <th>Cost</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="orderitem in order.items">
+                                                        <td>{{orderitem.item.item_id}}</td>
+                                                        <td>{{orderitem.item.name}}</td>
+                                                        <td>{{orderitem.quantity}}</td>
+                                                        <td>{{orderitem.item.price}}</td>
+                                                        <td>{{orderitem.quantity*orderitem.item.price}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
 
-                    </tr>
+                        </tr>
 
-                </div>
-            </tbody>
-        </table>
+                    </div>
+                </tbody>
+            </table>
 
-        <!-- <div class="list-group">
+            <!-- <div class="list-group">
             <div class="list-group-item" ng-repeat="order in orders | filter:searchOrder">
                 <div class="row" ng-click="show($index)">
                     <div class="col-md-12">
@@ -206,11 +209,13 @@
 
 
 
+        </div>
+
+
     </div>
+    <div class="footer navbar fixed-bottom text-center justify-content-center">
+        <pagination num-pages="noOfPages" current-page="currentPage" class="pagination-small"></pagination>
 
-
-</div>
-<div class="footer navbar fixed-bottom text-center justify-content-center">
-    <pagination num-pages="noOfPages" current-page="currentPage" class="pagination-small"></pagination>
+    </div>
 
 </div>

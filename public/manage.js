@@ -10,12 +10,20 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
     $scope.Filter.status = '';
     $scope.statusEnum = { 1:"Order Placed",2:"Processing",3:"Delivered",4:"Cancelled"};
     $scope.orderCount = 0;
-    $scope.$on('$routeChangeSuccess', function () {
-        //console.log(shared.getUser().id);
-        //console.log(user);
-        $scope.getOrders();
+    // $scope.$on('$routeChangeSuccess', function () {
+    //     //console.log(shared.getUser().id);
+    //     //console.log(user);
+    //     $scope.getOrders();
        
-    });
+    // });
+
+    var watchlen = function(){
+        if($scope.orderCount != orderservice.ordercount){
+            $scope.getOrders();
+        }
+    }
+
+    orderservice.registerobserverlen(watchlen)
 
     $scope.getOrders = function(){
         orderservice.getRestaurantOrders(shared.getUser().id, shared.getUser().rest_id,($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage)
@@ -35,6 +43,7 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
                 $scope.showdetails=[];
                 for (var i = 0; i < $scope.orders.length; i++) {
                     $scope.showdetails.push(false);
+                    $scope.orders[i].orderstatus = $scope.statusEnum[$scope.orders[i].orderstatus];
                 }
             }
 

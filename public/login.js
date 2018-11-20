@@ -1,4 +1,4 @@
-angular.module('app').controller('loginctrl', ['$scope', '$location', '$cookies', 'shared', function ($scope, $location, $cookies, shared) {
+angular.module('app').controller('loginctrl', ['$scope', '$location', '$cookies', 'shared','orderservice', function ($scope, $location, $cookies, shared,orderservice) {
     $scope.username = "";
     $scope.password = "";
     $scope.loginfail=false;
@@ -15,6 +15,8 @@ angular.module('app').controller('loginctrl', ['$scope', '$location', '$cookies'
                     $location.path('/restaurants');
                 }
                 else if(response.role == 'restaurant'){
+                    if(response.rest_id != undefined)
+                        orderservice.checkorders(response.rest_id)
                     $location.path('/manage');
                 }                
             }

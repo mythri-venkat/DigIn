@@ -44,7 +44,7 @@ angular.module('app')
         this.removeitem = function(item_id){
             return $http({
                 url:strurl+'menu/'+item_id,
-                method:'DELETE',
+                method:'DELETE'
             }).then(function(response){
                 if(response.status =='200'){
                     return response.data;
@@ -275,14 +275,17 @@ angular.module('app')
         }
 
 
-        this.removeItem = function (cust_id, product_id) {
+        this.removeItem = function (cust_id, product_id,qty) {
             console.log(product_id);
             console.log(Object.keys(items));
+            if(!qty){
+                qty=0;
+            }
             if (items[product_id]) {
                 $http({
                     method: 'POST',
                     url: strurl + "cart/delete",
-                    data: { "cust_id": cust_id, "product_id": product_id }
+                    data: { "cust_id": cust_id, "product_id": product_id,"quantity":qty }
                 })
                     .then(
                         function (response) {
@@ -338,7 +341,7 @@ angular.module('app')
             return restaurant;
         }
     }])
-    .service('orderservice', ['$http','shared', function ($http,shared) {
+    .service('orderservice', ['$http','shared','$interval', function ($http,shared,$interval) {
         this.id = 0;
         var strurl = "http://127.0.0.1:5001/"
 
@@ -381,9 +384,12 @@ angular.module('app')
                             console.log(response);
                             if (response.data.orderItems)
                             vm.orders = response.data.orderItems;
-                            cnt = 20
+                            cnt = 0
                             if (response.data.count)
-                                cnt = response.data.count
+                            {
+                                cnt = response.data.count;
+                                vm.ordercount = cnt;
+                            }
 
                             notifyrevenue();
                             return { count: cnt, 'orders': vm.orders.splice(offset, offset + limit) };
@@ -481,25 +487,55 @@ angular.module('app')
             })
         }
 
+        this.ordercount;
 
-        // var obs=[];
+        var obslen=[];
 
-        // this.registerobserver = function(cb,rest_id){
-        //     obs.push(cb);
-        //     this.id = rest_id;
-        //     $in
-        // }
+        this.registerobserverlen = function(cb){
+            obslen.push(cb);
 
+        }
+        
+        function notifylen(){
+            for(var i=0;i<obslen.length;i++){
+                obslen[i]();
+            }            
+        }
+
+        
         // var errorcount=0;
 
-        // function checkChange(){
-        //     $http.get(strurl+'orders/restaurant/count')
-        //     .then(function(response){
+        var timercount;
+        this.restid;
+        this.checkorders = function(id){
+            if(id != undefined){
+            vm.restid = id;
+            timercount = $interval(checkChange,3000);
+            }
+        }
 
-        //     },
-        //     function(error){
+        this.stoptimer = function() {
+            if (angular.isDefined(timercount)) {
+              $interval.cancel(timercount);
+              timercount = undefined;
+            }
+          };
 
-        //     })
-        // }
+        function checkChange(){
+            if(vm.restid)
+            $http.get(strurl+'orders/count/'+vm.restid)
+            .then(function(response){
+                if(response.status == '200'){
+                    if(vm.ordercount != response.data){
+                        vm.ordercount = response.data;
+                        notifylen();
+                    }
+                }
+
+            },
+            function(error){
+
+            })
+        }
 
     }])

@@ -96,3 +96,4 @@ class OrderItem(db.Model, TOJSON):
     @property
     def json(self):
         return to_json(self, self.__class__)
+

@@ -231,7 +231,7 @@ def removeFromCart():
         # we are just deleting the product not decrearing quantity
         # hence we are able to find a product we will just remove it
         # decreasing quantity need to implement later
-        # delet_prod_cnt = int(request.get_json()['quantity'])
+        delet_prod_cnt = int(request.get_json()['quantity'])
         # id  = user.id
         getProduct = Cart.query.filter_by(
             user_id=cust_id, product_id=productId).first()
@@ -242,8 +242,10 @@ def removeFromCart():
             # print "Error"
             # else:
             # else increment the qunatity and commit the session
-            # getProduct.quantity = getProduct.quantity - delet_prod_cnt
-            db.session.delete(getProduct)
+            if delet_prod_cnt != 0:
+                getProduct.quantity = getProduct.quantity - delet_prod_cnt
+            else:
+                db.session.delete(getProduct)
             db.session.commit()
 
     return "SUCCESS"

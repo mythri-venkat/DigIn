@@ -64,7 +64,8 @@ def addToMenu(userid):
 			name = request.get_json()['name']
 			price= request.get_json()['price']
 			description =request.get_json()['description']
-			cur_food =  FoodItem(name=name, price=price, description=description,rest_id=user_restid,quantity=1)
+			image_url =request.get_json()['image_url']
+			cur_food =  FoodItem(name=name, price=price, description=description,rest_id=user_restid,image_url=image_url,quantity=1)
 			db.session.add(cur_food)
 			db.session.commit()
 			return str(cur_food.item_id)
@@ -129,4 +130,18 @@ def edit_item_profile(post_itemid):
 			return "failed",400
 	else:
 		return "failed",400
+
+
+@app.route('/orders/count/<id>',methods=['GET'])
+def getlength(id):
+	count = Order.query.filter_by(rest_id = id).count()
+	return str(count)
+
+@app.route('/upload',methods=['POST'])
+def uploadimage():
+	import datetime
+	file = request.files['file']
+	filename = 'imgs/'+datetime.datetime.now().strftime('%b_%d_%Y_%H_%M_%P')
+	file.save('public/'+filename)
+	return filename
 

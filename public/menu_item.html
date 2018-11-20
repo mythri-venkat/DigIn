@@ -63,7 +63,16 @@
             </div>
             <div class="modal-body text-center">
 
-
+                <img ng-src={{newitem.image_url}} alt="food item" style="width:80%">
+                <div class="form-group">
+                    <label for="myFileField">Food item image: </label>
+                    <div class="input-group">
+                        <input type="file" file-model="myFile" class="form-control" id="myFileField" />
+                        <div class="input-group-append">
+                            <button ng-click="uploadFile()" class="btn btn-primary"><span class="fa fa-upload"></span></button>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label for="FoodItemName">Food Item Name:</label>
@@ -71,7 +80,7 @@
                 </div>
                 <div class="form-group">
                     <label for="Price">Price:</label>
-                    <input type="text" class="form-control" id="Price" ng-model="newitem.price" ng-pattern="/^[0-9]*$/" >
+                    <input type="text" class="form-control" id="Price" ng-model="newitem.price" ng-pattern="/^[0-9]*$/">
                 </div>
                 <div class="form-group">
                     <label for="Description">Description:</label>
@@ -103,7 +112,16 @@
             </div>
             <div class="modal-body text-center">
 
-
+                <img ng-src={{newitem.image_url}} alt="food item" style="width:80%">
+                <div class="form-group">
+                    <label for="myFileField">Food item image: </label>
+                    <div class="input-group">
+                        <input type="file" file-model="myFile" class="form-control" id="myFileField" />
+                        <div class="input-group-append">
+                            <button ng-click="uploadFile()" class="btn btn-primary"><span class="fa fa-upload"></span></button>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label for="FoodItemName">Food Item Name:</label>
@@ -124,6 +142,8 @@
 
                 </div>
 
+
             </div>
         </div>
     </div>
+</div>

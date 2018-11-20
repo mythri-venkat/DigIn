@@ -35,6 +35,6 @@ angular.module('app')
                 $scope.quantity[idx]=1;
             }
             $scope.remove = function(idx){
-                cart.removeItem(shared.getUser().id,$scope.restaurant.items[idx].item_id);
+                cart.removeItem(shared.getUser().id,$scope.restaurant.items[idx].item_id,$scope.quantity[idx]);
             }
         }])

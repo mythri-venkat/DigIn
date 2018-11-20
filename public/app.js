@@ -82,7 +82,7 @@ angular.module('app', ['ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap.pagin
 
     }])
 
-    .controller('ctrl', ['$scope', '$cookies', '$location', '$rootScope', 'shared', 'cart', function ($scope, $cookies, $location, $rootScope, shared, cart) {
+    .controller('ctrl', ['$scope', '$cookies', '$location', '$rootScope', 'shared', 'cart','orderservice', function ($scope, $cookies, $location, $rootScope, shared, cart,orderservice) {
 
         var observelogin = function () {
             //console.log()
@@ -95,6 +95,16 @@ angular.module('app', ['ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap.pagin
 
         }
 
+        $scope.neworder = false;
+        $scope.ordercount=0;
+
+        var observeorder = function(){
+            if(orderservice.ordercount != $scope.ordercount){
+                $scope.neworder = true;
+                $scope.ordercount = orderservice.ordercount;
+            }
+        }
+
         $scope.itemCount = cart.itemCount;
         var observecart = function () {
 
@@ -105,6 +115,10 @@ angular.module('app', ['ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap.pagin
         $scope.role = 'customer';
         shared.registerobserver(observelogin);
         cart.registerobserver(observecart);
+        orderservice.registerobserverlen(observeorder);
+        $scope.isActive = function (viewLocation) { 
+            return viewLocation === $location.path();
+        };
         $scope.init = function () {
 
             var usr = $cookies.getObject('usr');
@@ -125,6 +139,7 @@ angular.module('app', ['ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap.pagin
             shared.logout(shared.getUser()).then(function (response) {
                 if (response) {
                     $scope.loggedin = false;
+                    orderservice.stoptimer();
                     $location.path('/')
                 }
                 else{

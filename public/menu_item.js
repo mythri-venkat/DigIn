@@ -1,6 +1,6 @@
 angular.module('app')
-    .controller('menuitemctrl', ['$scope', 'shared', 'restaurant','$location', 
-    	function ($scope, shared, restaurant,$location) {
+    .controller('menuitemctrl', ['$scope', 'shared', 'restaurant','$location','fileUploadService', 
+    	function ($scope, shared, restaurant,$location,fileUploadService) {
     		$scope.newitem = {};
     		$scope.menuitems = [];
     		$scope.restaurant={};
@@ -72,7 +72,21 @@ angular.module('app')
 					}
             	})
             	// body...
-            }
+			}
+			
+			$scope.uploadFile = function(){
+				var file = $scope.myFile;
+				fileUploadService.uploadFileToUrl(file).then(function(response){
+					if(response){
+						$scope.newitem.image_url = response;
+						alert("file uploaded succesfully");
+					}
+					else{
+						alert("file upload failed");
+					}
+				})
+			}
 
-}]);
+}])
+
 

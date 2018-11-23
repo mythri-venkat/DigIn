@@ -309,6 +309,9 @@ angular.module('app')
                                         restaurant = {};
                                     }
                                 }
+                                else{
+                                    items[product_id].quantity-=qty;
+                                }
                             }
 
                         },
@@ -557,6 +560,23 @@ angular.module('app')
                     function (error) {
                         return false;
                     });
+        }
+
+        this.rateorder = function(userid,orderid,restid,rating){
+            return $http({
+                method:'POST',
+                url:strurl+'rating/'+userid,
+                data:{'order_id':orderid,'rest_id':restid,'rating':rating}
+            }).then(function(response){
+                if(response.status=='200'){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            },function(error){
+                return false;
+            })
         }
 
         function checkChange() {

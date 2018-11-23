@@ -81,6 +81,7 @@ class Order(db.Model, TOJSON):
     date_finished = db.Column(db.DateTime )
     total_amount = db.Column(db.Float,nullable=False)
     rest_id = db.Column(db.Integer, db.ForeignKey('Restaurant.rest_id'))
+    rating = db.Column(db.Integer,nullable=True,default="")
     @property
     def json(self):
         return to_json(self, self.__class__)
@@ -101,6 +102,7 @@ class OrderItem(db.Model, TOJSON):
 #     __tablename__ = 'notification'
 #     id = db.Column(db.Integer,primary_key=True)
 #     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+#     rest_id = db.Column(db.Integer, db.ForeignKey('Restaurant.rest_id'))
 #     n_type = db.Column(db.Integer)
 #     message = db.Column(db.String(255))
 #     read_status = db.Column(db.Integer)

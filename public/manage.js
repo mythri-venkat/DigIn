@@ -60,7 +60,7 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
         
         orderservice.changeStatus($scope.orders[idx].order_id, stat,shared.getUser().id).then(function(response){
             if(response){
-                $scope.orders[idx].orderstatus = stat;
+                $scope.orders[idx].orderstatus = $scope.statusEnum[stat];
                 alert("status changed successfully");
             }
             else{

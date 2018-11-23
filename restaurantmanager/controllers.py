@@ -11,7 +11,7 @@ import json
 from DigIn import db, app
 import helper
 
-from ..CartAndCheckout.models import Restaurant, FoodItem, Cart, Order, OrderItem
+from ..CartAndCheckout.models import Restaurant, FoodItem, Cart, Order, OrderItem,Notification
 from ..authentication.models import Users
 
 mod_manager = Blueprint('restaurantmanager', __name__)
@@ -146,3 +146,37 @@ def updateConfirmationOrderStatus(order_id):
                 return "no order present",400
         else:
             return "falied",400
+
+@app.route('/rating/<id>',methods=['GET','POST'])
+def rateorder(id):
+    user = Users.query.filter_by(id=id).first()
+    if user is not None and user.authenticated == True:
+        restid = request.get_json()['rest_id']
+        orderid = request.get_json()['order_id']
+        rating = request.get_json()['rating']
+        order = Order.query.filter_by(order_id=orderid).first()
+        order.rating = int(rating)
+        db.session.commit()
+        
+        avg = db.session.query(func.avg(Order.rating)).filter(Order.rest_id==restid).scalar()
+        print avg
+        
+        rest = Restaurant.query.filter_by(rest_id = restid).first()
+        rest.rating = avg
+        db.session.commit()
+        return "success"
+
+# @app.route('/notifications/<id>',methods=['GET'])
+# def getNotifications(id):
+#     user = Users.query.filter_by(id=id).first()
+#     if user is not None and user.authenticated == True:
+#         if user.role == 'restaurant':
+#             restid = user.rest_id
+#             msgs = Notification.query.filter_by(rest_id=restid,read_status=0).all()
+#             msgarr =[]
+#             for msg in msgs:
+#                 msgarr.append(msg.message)
+#             return json.dumps({'count':len(msgarr),'messages':msgarr})
+#     return "failed",400
+
+

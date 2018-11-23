@@ -51,7 +51,7 @@ angular.module('app')
 
 
     }])
-    .directive('fileModel', function ($parse) {
+    .directive('demoFileModel', function ($parse) {
         return {
             restrict: 'A', //the directive can be used as an attribute only
  

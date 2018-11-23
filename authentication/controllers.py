@@ -93,6 +93,23 @@ def logout(id):
     db.session.commit()
     return "SUCCESS"
 
-    # logout_user()
-    # flash('Goodbye!', 'info')
-    # return redirect(url_for('authentication.login'))
+@app.route('/users/<id>', methods=['GET','POST'])
+def getusers(id):
+    user = Users.query.filter_by(id=id).first()
+    userarr= []
+    if user is not None and user.authenticated and user.role == 'admin':
+        all_users =Users.query.all()
+        for curuser in all_users:
+            userarr.append(curuser.as_dict())
+        return json.dumps({"count":len(userarr),"users":userarr})
+
+@app.route('/users/delete/<id>/<user_id>',methods=['GET'])
+def deleteuser(id,user_id):
+    user = Users.query.filter_by(id=id).first()
+    if user is not None and user.authenticated and user.role == 'admin':
+        current_user = Users.query.filter_by(id=user_id).first()
+        if current_user is not None:
+            db.session.delete(current_user)
+            db.session.commit()
+            return "success"
+    return "failure",400

@@ -91,6 +91,19 @@ angular.module('app')
             })
         }
 
+        this.deleteuser = function(id,user_id){
+            return $http.get(strurl+'users/delete/'+id+"/"+user_id).then(function(response){
+                if(response.status == '200'){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            },function(error){
+                return false;
+            })
+        }
+
         this.logout = function (usr) {
             return $http.get(strurl + 'logout/' + usr.id).then(function (response) {
                 if (response.status == '200') {
@@ -118,5 +131,22 @@ angular.module('app')
             });
         };
 
+        this.getAllUsers = function(id,offset,limit){
+            return $http.get(strurl + "users/" + id)
+                .then(
+                    function (response) {
+                        if (response.status == '200') {
+                            console.log(response);
+                            
+                            return { count: response.data.count, 'users': response.data.users.splice(offset, offset + limit) };
+                        }
+                        else {
+                            return false;
+                        }
+                    },
+                    function (error) {
+                        return false;
+                    }); 
+        }
 
     }])

@@ -2,77 +2,77 @@ angular.module('app')
     .service('restaurant', ['$http', function ($http) {
         var strurl = "http://127.0.0.1:5001/";
 
-        this.additem=function(custid,newitem){
+        this.additem = function (custid, newitem) {
             return $http({
-                url:strurl+'menu/'+custid,
-                method:'POST',
-                data:newitem
-            }).then(function(response){
-                if(response.status =='200'){
-                    
+                url: strurl + 'menu/' + custid,
+                method: 'POST',
+                data: newitem
+            }).then(function (response) {
+                if (response.status == '200') {
+
                     return response.data;
                 }
-                else{
+                else {
                     alert("could not be added");
                     return false;
                 }
-       
-            },function(error){
-                alert(error);
-            })
-        }
-       
-        this.edititem=function(item_id,newitem){
-            return $http({
-                url:strurl+'menu/edit/'+item_id,
-                method:'POST',
-                data:newitem
-            }).then(function(response){
-                if(response.status =='200'){
-                    return response.data;
-                }
-                else{
-                    alert("could not be edited");
-                    return false;
-                }
-       
-            },function(error){
+
+            }, function (error) {
                 alert(error);
             })
         }
 
-        this.removeitem = function(item_id){
+        this.edititem = function (item_id, newitem) {
             return $http({
-                url:strurl+'menu/'+item_id,
-                method:'DELETE'
-            }).then(function(response){
-                if(response.status =='200'){
+                url: strurl + 'menu/edit/' + item_id,
+                method: 'POST',
+                data: newitem
+            }).then(function (response) {
+                if (response.status == '200') {
                     return response.data;
                 }
-                else{
+                else {
                     alert("could not be edited");
                     return false;
                 }
-                
-            },function(error){
+
+            }, function (error) {
                 alert(error);
             })
         }
-        
-        this.editprofile = function(restid,custid,rest){
-            console.log(rest);
+
+        this.removeitem = function (item_id) {
             return $http({
-                method:'POST',
-                url: strurl + 'restaurant/edit/'+custid+"/"+restid,
-                data:rest
-            }).then(function(response){
-                if(response.status =='200'){
-                    return true;
+                url: strurl + 'menu/' + item_id,
+                method: 'DELETE'
+            }).then(function (response) {
+                if (response.status == '200') {
+                    return response.data;
                 }
-                else{
+                else {
+                    alert("could not be edited");
                     return false;
                 }
-            },function(error){
+
+            }, function (error) {
+                alert(error);
+            })
+        }
+
+        this.editprofile = function (restid, custid, rest) {
+            console.log(rest);
+            return $http({
+                method: 'POST',
+                url: strurl + 'restaurant/edit/' + custid + "/" + restid,
+                data: rest
+            }).then(function (response) {
+                if (response.status == '200') {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }, function (error) {
                 return false;
 
             })
@@ -87,9 +87,9 @@ angular.module('app')
                     if (response.data.count)
                         cnt = response.data.count
 
-                    
+
                     return { count: cnt, 'restaurants': rests.splice(offset, offset + limit) };
-                    
+
                 }
                 else {
                     return false
@@ -120,23 +120,34 @@ angular.module('app')
 
         }
 
-       
+
         this.getRestaurant = function (id) {
 
-            return $http.get(strurl+'restaurant/'+id).then(
-                function(response){
-                    if(response.status == '200'){
+            return $http.get(strurl + 'restaurant/' + id).then(
+                function (response) {
+                    if (response.status == '200') {
                         return response.data;
                     }
-                    else{
+                    else {
                         return false;
                     }
                 },
-                function(error){
+                function (error) {
                     console.log("error from server");
                     return false;
                 }
             )
+        }
+
+        this.delete = function (cust_id, id) {
+            return $http.get(strurl + 'restaurants/' + cust_id + '/' + id).then(function (response) {
+                if (response.status == '200') {
+                    return true;
+                }
+                else {
+                    return true;
+                }
+            })
         }
     }])
     .service('cart', ['$http', 'shared', function ($http, shared) {
@@ -275,26 +286,28 @@ angular.module('app')
         }
 
 
-        this.removeItem = function (cust_id, product_id,qty) {
+        this.removeItem = function (cust_id, product_id, qty) {
             console.log(product_id);
             console.log(Object.keys(items));
-            if(!qty){
-                qty=0;
+            if (!qty) {
+                qty = 0;
             }
             if (items[product_id]) {
                 $http({
                     method: 'POST',
                     url: strurl + "cart/delete",
-                    data: { "cust_id": cust_id, "product_id": product_id,"quantity":qty }
+                    data: { "cust_id": cust_id, "product_id": product_id, "quantity": qty }
                 })
                     .then(
                         function (response) {
                             if (response.status == "200") {
-                                delete items[product_id];
-                                vm.itemCount -= 1;
-                                notify();
-                                if (items.length == 0) {
-                                    restaurant = {};
+                                if (qty == 0) {
+                                    delete items[product_id];
+                                    vm.itemCount -= 1;
+                                    notify();
+                                    if (items.length == 0) {
+                                        restaurant = {};
+                                    }
                                 }
                             }
 
@@ -341,57 +354,59 @@ angular.module('app')
             return restaurant;
         }
     }])
-    .service('orderservice', ['$http','shared','$interval', function ($http,shared,$interval) {
+    .service('orderservice', ['$http', 'shared', '$interval', function ($http, shared, $interval) {
         this.id = 0;
         var strurl = "http://127.0.0.1:5001/"
 
         this.orders;
         var vm = this;
 
-        this.revenue = function(){
-        
-            var revenue =0;
-            if(vm.orders && vm.orders.length > 0){
-                for(var i=0;i<vm.orders.length;i++){
-                    if(vm.orders[i].orderstatus == '3')
-                    revenue+=vm.orders[i].total_amount;
+        this.revenue = function () {
+
+            if (!shared.isloggedIn() || shared.getUser().role != 'restaurant')
+                return;
+
+            var revenue = 0;
+            if (vm.orders && vm.orders.length > 0) {
+                for (var i = 0; i < vm.orders.length; i++) {
+                    if (vm.orders[i].orderstatus == '3')
+                        revenue += vm.orders[i].total_amount;
                 }
             }
-            else{
-                vm.getRestaurantOrders(shared.getUser().id,shared.getUser().rest_id,0,10);
+            else {
+                vm.getRestaurantOrders(shared.getUser().id, shared.getUser().rest_id, 0, 10);
             }
             return revenue;
         }
 
-        var obs=[];
-        this.registerwatchrevenue = function(cb){
+        var obs = [];
+        this.registerwatchrevenue = function (cb) {
             obs.push(cb);
         }
 
-        function notifyrevenue(){
-            for(var i=0;i<obs.length;i++){
+        function notifyrevenue() {
+            for (var i = 0; i < obs.length; i++) {
                 obs[i]();
             }
         }
 
-        this.getRestaurantOrders = function (uid,id, offset, limit) {
+        this.getRestaurantOrders = function (uid, id, offset, limit) {
 
-            
-            return $http.get(strurl + "orders/restaurant/"+uid+"/"+ id)
+
+            return $http.get(strurl + "orders/restaurant/" + uid + "/" + id)
                 .then(
                     function (response) {
                         if (response.status == '200') {
                             console.log(response);
                             if (response.data.orderItems)
-                            vm.orders = response.data.orderItems;
+                                vm.orders = response.data.orderItems;
                             cnt = 0
-                            if (response.data.count)
-                            {
+                            if (response.data.count) {
                                 cnt = response.data.count;
                                 vm.ordercount = cnt;
                             }
-
-                            notifyrevenue();
+                            if (response.data.count > 0)
+                                notifyrevenue();
                             return { count: cnt, 'orders': vm.orders.splice(offset, offset + limit) };
                         }
                         else {
@@ -406,14 +421,14 @@ angular.module('app')
         }
 
         this.getCustomerOrders = function (id, offset, limit) {
-            
+
             return $http.get(strurl + "orders/customer/" + id)
                 .then(
                     function (response) {
                         if (response.status == '200') {
                             console.log(response);
                             if (response.data.orderItems)
-                            vm.orders = response.data.orderItems;
+                                vm.orders = response.data.orderItems;
                             cnt = 20
                             if (response.data.count)
                                 cnt = response.data.count
@@ -459,25 +474,24 @@ angular.module('app')
 
         }
 
-        this.changeStatus = function (orderid, stat,cust_id) {
+        this.changeStatus = function (orderid, stat, cust_id) {
             return $http({
                 method: 'POST',
                 url: strurl + 'orders/' + orderid,
-                data: { orderStatus: stat,custId:cust_id}
+                data: { orderStatus: stat, custId: cust_id }
             }).then(function (response) {
-                if (response.status == '200')
-                {
-                    for(var i=0;i<vm.orders.length;i++){
-                        if(vm.orders[i].order_id == orderid){
+                if (response.status == '200') {
+                    for (var i = 0; i < vm.orders.length; i++) {
+                        if (vm.orders[i].order_id == orderid) {
                             vm.orders[i].orderstatus = stat;
-                            
+
                         }
                     }
                     notifyrevenue();
                     return response.data;
 
                 }
-                    
+
                 else {
                     return false;
                 }
@@ -487,55 +501,79 @@ angular.module('app')
             })
         }
 
-        this.ordercount;
+        this.ordercount = 0;
 
-        var obslen=[];
+        var obslen = [];
 
-        this.registerobserverlen = function(cb){
+        this.registerobserverlen = function (cb) {
             obslen.push(cb);
 
         }
-        
-        function notifylen(){
-            for(var i=0;i<obslen.length;i++){
+
+        function notifylen() {
+            for (var i = 0; i < obslen.length; i++) {
                 obslen[i]();
-            }            
+            }
         }
 
-        
+
         // var errorcount=0;
 
         var timercount;
         this.restid;
-        this.checkorders = function(id){
-            if(id != undefined){
-            vm.restid = id;
-            timercount = $interval(checkChange,3000);
+        this.checkorders = function (id) {
+            if (id != undefined) {
+                vm.restid = id;
+                timercount = $interval(checkChange, 3000);
             }
         }
 
-        this.stoptimer = function() {
+        this.stoptimer = function () {
             if (angular.isDefined(timercount)) {
-              $interval.cancel(timercount);
-              timercount = undefined;
+                $interval.cancel(timercount);
+                timercount = undefined;
             }
-          };
+        };
 
-        function checkChange(){
-            if(vm.restid)
-            $http.get(strurl+'orders/count/'+vm.restid)
-            .then(function(response){
-                if(response.status == '200'){
-                    if(vm.ordercount != response.data){
-                        vm.ordercount = response.data;
-                        notifylen();
-                    }
-                }
+        this.getAllOrders = function (id, offset, limit) {
+            return $http.get(strurl + "orders/" + id)
+                .then(
+                    function (response) {
+                        if (response.status == '200') {
+                            console.log(response);
+                            if (response.data.orderItems)
+                                vm.orders = response.data.orderItems;
+                            cnt = 20
+                            if (response.data.count)
+                                cnt = response.data.count
 
-            },
-            function(error){
 
-            })
+                            return { count: cnt, 'orders': vm.orders.splice(offset, offset + limit) };
+                        }
+                        else {
+                            return false;
+                        }
+                    },
+                    function (error) {
+                        return false;
+                    });
+        }
+
+        function checkChange() {
+            if (vm.restid)
+                $http.get(strurl + 'orders/count/' + vm.restid)
+                    .then(function (response) {
+                        if (response.status == '200') {
+                            if (vm.ordercount != response.data) {
+                                vm.ordercount = response.data;
+                                notifylen();
+                            }
+                        }
+
+                    },
+                        function (error) {
+
+                        })
         }
 
     }])

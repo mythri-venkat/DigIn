@@ -18,7 +18,10 @@ angular.module('app').controller('loginctrl', ['$scope', '$location', '$cookies'
                     if(response.rest_id != undefined)
                         orderservice.checkorders(response.rest_id)
                     $location.path('/manage');
-                }                
+                }   
+                else if(response.role == 'admin'){
+                    $location.path('/adminorders');
+                }
             }
             else{
                 $scope.loginfail=true;                

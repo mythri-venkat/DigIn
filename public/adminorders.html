@@ -24,6 +24,7 @@
                     <th></th>
                     <th>Id</th>
                     <th>Restaurant Name</th>
+                    <th>Customer Name</th>
                     <th>Status</th>
                     <th>Date</th>
                     <th>Total</th>
@@ -36,14 +37,14 @@
                         <td ng-hide="showdetails[$index]"><img ng-src="{{order.items[0].item.image_url}}" class="avatar"></td>
                         <td ng-hide="showdetails[$index]">{{order.order_id}}</td>
                         <td ng-hide="showdetails[$index]">{{order.restaurant.name}}</td>
+                        <td ng-hide="showdetails[$index]">{{order.customer.first_name}} {{order.customer.last_name}}</td>
                         <td ng-hide="showdetails[$index]">{{order.orderstatus}}</td>
                         <td ng-hide="showdetails[$index]">{{order.date_purchased}}</td>
                         <td ng-hide="showdetails[$index]">{{order.total_amount}}</td>
-                        <!-- <td ng-hide="showdetails[$index]"><span class="fa fa-star unchecked" ng-repeat="i in ratingarr" ng-class="{checked:(i<=order.rating),unchecked:(i>order.rating)}" ng-click="rateorder($parent.$index,order.restaurant.rest_id,i)"></span></td> -->
 
                         <!-- </tr> -->
                         <!-- <tr class="bg-light" > -->
-                        <td class="bg-light" colspan="6" ng-click="show($index)" ng-show="showdetails[$index]">
+                        <td class="bg-light" colspan="7" ng-click="show($index)" ng-show="showdetails[$index]">
                             <div class="col-md-12">
                                 
                                 <div class="row text-center">

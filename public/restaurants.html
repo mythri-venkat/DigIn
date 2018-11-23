@@ -29,6 +29,7 @@
                         <h4 class="card-title">{{restaurants[$index].name}}</h4>
                         <p class="card-text">{{restaurants[$index].description}}</p>
                         <div class="card-footer"><small class="text-muted" ng-bind-html="ratingStr(restaurants[$index].rating)"></small></div>
+                        <div class="card-text bg-danger" ng-show="showdelete"><small><button class="btn btn-danger btn-block" ng-click="deleterest($index)"><span class="fa fa-trash"></span></button></small></div>
                     </div>
                 </div>
             </div>
@@ -39,6 +40,7 @@
                         <h4 class="card-title">{{restaurants[$index+1].name}}</h4>
                         <p class="card-text">{{restaurants[$index+1].description}}</p>
                         <div class="card-footer"><small class="text-muted" ng-bind-html="ratingStr(restaurants[$index+1].rating)"></small></div>
+                        <div class="card-text bg-danger" ng-show="showdelete"><small><button class="btn btn-danger btn-block" ng-click="deleterest($index+1)"><span class="fa fa-trash"></span></button></small></div>
                     </div>
                 </div>
             </div>
@@ -49,6 +51,8 @@
                         <h4 class="card-title">{{restaurants[$index+2].name}}</h4>
                         <p class="card-text">{{restaurants[$index+2].description}}</p>
                         <div class="card-footer"><small class="text-muted" ng-bind-html="ratingStr(restaurants[$index+2].rating)"></small></div>
+                        <div class="card-text bg-danger" ng-show="showdelete"><small><button class="btn btn-danger btn-block" ng-click="deleterest($event,$index+2)"><span class="fa fa-trash"></span></button></small></div>
+                        
                     </div>
                 </div>
             </div>

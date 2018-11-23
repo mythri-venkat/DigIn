@@ -65,6 +65,16 @@ angular.module('app', ['ngRoute', 'ngCookies', 'ngSanitize', 'ui.bootstrap.pagin
                 controller: 'changepwdctrl',
                 caseInsensitiveMatch: true
             })
+            .when('/users',{
+                templateUrl:'adminusers.html',
+                controller:'userctrl',
+                caseInsensitiveMatch:true
+            })
+            .when('/adminorders',{
+                templateUrl:'adminorders.html',
+                controller:'adminorderctrl',
+                caseInsensitiveMatch:true
+            })
             .otherwise({
                 redirectTo: '/search'
             })

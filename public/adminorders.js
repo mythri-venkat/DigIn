@@ -1,4 +1,4 @@
-angular.module('app').controller('ordersctrl', ['$scope', 'orderservice', 'shared', function ($scope, orderservice, shared) {
+angular.module('app').controller('adminorderctrl', ['$scope', 'orderservice', 'shared', function ($scope, orderservice, shared) {
     $scope.orders = [];
     $scope.notfound = false;
     $scope.showdetails = [];
@@ -14,8 +14,8 @@ angular.module('app').controller('ordersctrl', ['$scope', 'orderservice', 'share
     });
 
     $scope.getOrders = function(){
-        if(shared.getUser().role == 'customer')
-        orderservice.getCustomerOrders(shared.getUser().id,($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage)
+        if(shared.getUser().role == 'admin')
+        orderservice.getAllOrders(shared.getUser().id,($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage)
         .then(function(data){
             if (!data || data == []) {
                 $scope.notfound = true;
@@ -31,22 +31,19 @@ angular.module('app').controller('ordersctrl', ['$scope', 'orderservice', 'share
                 $scope.showdetails=[];
                 for (var i = 0; i < $scope.orders.length; i++) {
                     $scope.showdetails.push(false);
-                    // $scope.orders[i].rating = 0;
                     $scope.orders[i].orderstatus = $scope.statusEnum[$scope.orders[i].orderstatus];
                 }
             }
 
-        })       
+        })
+
+        
         
     }
 
-    $scope.ratingarr = [1,2,3,4,5];
-
     $scope.$watch('currentPage',$scope.getOrders);
 
-    // $scope.rateorder = function(idx,restid,rating){
-    //     $scope.orders[i].rating = rating;               
-    // }
+
 
     $scope.show = function (idx) {
         var b = $scope.showdetails[idx];

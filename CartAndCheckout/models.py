@@ -97,3 +97,11 @@ class OrderItem(db.Model, TOJSON):
     def json(self):
         return to_json(self, self.__class__)
 
+# class Notification(db.Model , TOJSON):
+#     __tablename__ = 'notification'
+#     id = db.Column(db.Integer,primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+#     n_type = db.Column(db.Integer)
+#     message = db.Column(db.String(255))
+#     read_status = db.Column(db.Integer)
+

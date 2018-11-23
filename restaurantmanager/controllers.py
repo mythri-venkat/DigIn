@@ -22,6 +22,38 @@ def enum(**enums):
 Orders = enum(ORDER_CREATED=1, ORDER_PROCESS=2, ORDER_FINISHED=3, ORDER_CANCEL=4)
 
 # display the orders based or customerId but it needs login
+@app.route("/orders/<cust_id>", methods=['GET'])
+# @login_required
+def retrieveOrders(cust_id):
+    print ("In cart")
+    user = Users.query.filter_by(id=cust_id).first()
+    if user is not None and user.authenticated==True and user.role == 'admin':
+        # cur_id = user.id
+        orders = Order.query.order_by(Order.orderstatus).all()
+        totalPrice = 0
+        Ordersarr = []
+        restid = None
+        for order in orders:
+            orderId = order.order_id
+            curuser = Users.query.filter_by(id = order.custid).first()
+            rest = Restaurant.query.filter_by(rest_id=order.rest_id).first()
+            # print "cartid id", curcart.id," product id", curcart.product_id
+            orderItems = OrderItem.query.filter_by(order_id=orderId).all()
+            orderItemArr = []
+            for orderItem in orderItems:
+                orderItemJSON = orderItem.as_dict()
+                fitem = FoodItem.query.filter_by(item_id=orderItem.fooditem_id).first()
+                orderItemArr.append({"item":fitem.as_dict(),"quantity":orderItem.item_quantity})
+            orderJSON = order.as_dict()
+            orderJSON.update({'items': orderItemArr,'customer':curuser.as_dict(),'restaurant':rest.as_dict()})
+            Ordersarr.append(orderJSON)
+        return (json.dumps({"count": len(Ordersarr), "orderItems": Ordersarr, "role": 'admin'}, default=str), 200)
+    else:
+        # ask user to login before it is able to see the cart as cart is for any user
+        return "Failed",400
+
+
+# display the orders based or customerId but it needs login
 @app.route("/orders/customer/<cust_id>", methods=['GET'])
 # @login_required
 def retrieveOrdersBasedOnCustomerId(cust_id):

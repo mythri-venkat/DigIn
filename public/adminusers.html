@@ -1,0 +1,56 @@
+<style>
+    .avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+</style>
+<div class="row mt-5 mb-5">
+    <div class="col-md-4 offset-4">
+
+        <input type="text" class="form-control" ng-model="searchOrder" placeholder="Search for users">
+
+
+    </div>
+</div>
+<div class="row justify-content-center margin-view">
+    <div class="col-md-8">
+
+        <label ng-show="notfound">No orders found</label>
+        <table class="table table-hover" ng-hide="notfound">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <div>
+                    <tr ng-repeat="user in users | filter:searchOrder">
+                        
+                        <td>{{user.id}}</td>
+                        <td>{{user.first_name}} {{user.last_name}}</td>
+                        <td>{{user.address}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.username}}</td>
+                        <td><button class="btn btn-danger" ng-click="deleteuser($index)"><span class="fa fa-trash"></span></button></td>
+                    </tr>
+
+                </div>
+            </tbody>
+        </table>
+
+    </div>
+
+
+</div>
+
+<div class="footer navbar fixed-bottom text-center justify-content-center">
+        <pagination num-pages="noOfPages" current-page="currentPage" class="pagination-small"></pagination>
+
+</div>

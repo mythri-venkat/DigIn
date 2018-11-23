@@ -1,17 +1,22 @@
 angular.module('app')
-    .controller('restctrl', ['$scope', '$location', '$filter', 'restaurant', function ($scope, $location, $filter, restaurant) {
+    .controller('restctrl', ['$scope', '$location', '$filter', 'restaurant','shared', function ($scope, $location, $filter, restaurant,shared) {
         $scope.restaurants = [];
         $scope.numPerPage = 9;
         $scope.noOfPages = 1;
         $scope.currentPage = 1;
         $scope.notfound = false;
+        $scope.showdelete = false;
 
         $scope.$on('$routeChangeSuccess', function () {
-            getRestaurants();           
-
+            getRestaurants();    
+            
         })
 
         function getRestaurants(){
+            if(shared.isloggedIn() && shared.getUser().role == 'admin'){
+                $scope.showdelete=true;
+            }       
+
             restaurant.getAll(($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage)
             .then(function (data) {
                 
@@ -55,6 +60,20 @@ angular.module('app')
             }
 
             return ratingStr;
+        }
+
+        $scope.deleterest = function($event,idx){
+            restaurant.delete(shared.getUser().id,$scope.restaurants[idx].rest_id).then(function(response){
+                if(response){
+                    alert("deleted successfully");
+                    $scope.restaurants.splice(idx,1);
+                }
+                else{
+                    alert("could not delete");
+                }
+            });
+            $event.stopPropagation();
+            $event.preventDefault();
         }
 
         $scope.menu = function (idx) {

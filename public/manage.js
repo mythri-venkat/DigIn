@@ -26,6 +26,7 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
     orderservice.registerobserverlen(watchlen)
 
     $scope.getOrders = function(){
+        $scope.totalrevenue = 0;
         orderservice.getRestaurantOrders(shared.getUser().id, shared.getUser().rest_id,($scope.currentPage - 1) * $scope.numPerPage, $scope.numPerPage)
         .then(function(data){
             if (!data || data == []) {
@@ -72,7 +73,7 @@ angular.module('app').controller('managectrl', ['$scope', 'orderservice', 'share
 
         })
     }
-    $scope.totalrevenue = orderservice.revenue();
+    
     function watchrevenue() {
         $scope.totalrevenue = orderservice.revenue();      
         

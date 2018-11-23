@@ -127,6 +127,18 @@ def getrest(id):
     else:
         return "no restaurant found", 400
 
+@app.route('/restaurants/<cust_id>/<id>',methods=['GET'])
+def deleterest(cust_id,id):
+    user = Users.query.filter_by(id=cust_id).first()
+    if user is not None and user.authenticated and user.role == 'admin':
+        rest = Restaurant.query.filter_by(rest_id=id).first()
+        if rest is not None:
+            db.session.delete(rest)
+            db.session.commit()
+            return "success"
+    return "failure",400
+
+
 
 @app.route("/cart/<id>", methods=['DELETE'])
 def clearCart(id):

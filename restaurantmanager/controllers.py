@@ -163,7 +163,7 @@ def rateorder(id):
         order.rating = int(rating)
         db.session.commit()
         
-        avg = db.session.query(func.avg(Order.rating)).filter(Order.rest_id==restid).scalar()
+        avg = db.session.query(func.avg(Order.rating)).filter(Order.rest_id==restid,Order.orderstatus == 3).scalar()
         print avg
         
         rest = Restaurant.query.filter_by(rest_id = restid).first()
